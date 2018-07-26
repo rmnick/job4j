@@ -1,1 +1,1 @@
-# job4j
+# It's my repository. I'm going to finish this course in 2 months.
