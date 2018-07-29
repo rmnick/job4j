@@ -12,7 +12,7 @@ public class Calculate{
 	
 /**
 * Method main
-* @param args args
+* @param args String[]
 */
 package ru.job4j.calculate;
 	public static void main(String[] args){
