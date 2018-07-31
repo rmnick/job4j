@@ -25,3 +25,7 @@ hs_err_pid*
 chapter_001/target
 
 target
+
+.idea
+*.iml
+
