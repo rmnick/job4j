@@ -23,10 +23,4 @@ public class Point {
     public double distanceTo(Point that) {
         return Math.sqrt(Math.pow(this.x - that.x, 2) + Math.pow(this.y - that.y, 2));
     }
-
-    public static void main(String[] args) {
-        Point a = new Point(1, 3);
-        Point b = new Point(2, 4);
-        System.out.println("The distance from a to b is " + a.distanceTo(b));
-    }
 }
