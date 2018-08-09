@@ -26,7 +26,7 @@ public class Triangle {
      * @return boolean possibility to exist.
      */
     private boolean exist(double ab, double ac, double bc) {
-        return ((ab + bc > ac) & (ab + ac > bc) & (ac + bc > ab));
+        return ((ab + bc > ac) && (ab + ac > bc) && (ac + bc > ab));
     }
     /**
      * Half the perimeter.
