@@ -7,10 +7,10 @@ package ru.job4j.array;
  */
 public class Check {
     public static boolean mono(boolean[] data) {
-        boolean result = false;
+        boolean result = true;
         for (int i = 1; i < data.length; i++) {
-            result = (data[i] == data[i - 1]);
-            if (!result) {
+            if (data[0] != data[i]) {
+                result = false;
                 break;
             }
         }
