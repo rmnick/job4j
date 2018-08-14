@@ -1,4 +1,4 @@
-package ru.job4j.TicTacToe;
+package ru.job4j.tictactoe;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;

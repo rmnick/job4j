@@ -1,4 +1,4 @@
-package ru.job4j.TicTacToe;
+package ru.job4j.tictactoe;
 
 public class Logic3T {
     private final Figure3T[][] table;
