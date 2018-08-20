@@ -26,7 +26,6 @@ public class Logic3T {
         if (rsl) {
             return  true;
         }
-
         //vertical check
         for (int i = 0; i < this.table.length; i++) {
             if (rsl) {
@@ -44,7 +43,6 @@ public class Logic3T {
         if (rsl) {
             return  true;
         }
-
         //diag check one
         for (int i = 0; i < this.table.length; i++) {
             if (!this.table[i][i].hasMarkX()) {
@@ -89,7 +87,6 @@ public class Logic3T {
         if (rsl) {
             return  true;
         }
-
         //vertical check
         for (int i = 0; i < this.table.length; i++) {
             if (rsl) {
@@ -107,7 +104,6 @@ public class Logic3T {
         if (rsl) {
             return  true;
         }
-
         //diag check one
         for (int i = 0; i < this.table.length; i++) {
             if (this.table[i][i].hasMarkO()) {
@@ -120,7 +116,6 @@ public class Logic3T {
         if (rsl) {
             return true;
         }
-
         //diag check two
         for (int i = 0; i < this.table.length; i++) {
             if (this.table[i][this.table.length - i - 1].hasMarkO()) {
