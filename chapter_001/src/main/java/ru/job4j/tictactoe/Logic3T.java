@@ -1,5 +1,7 @@
 package ru.job4j.tictactoe;
 
+import java.util.function.Predicate;
+
 public class Logic3T {
     private final Figure3T[][] table;
 
@@ -8,124 +10,25 @@ public class Logic3T {
     }
 
     public boolean isWinnerX() {
-        //horizontal check
-        boolean rsl = false;
-        for (int i = 0; i < this.table.length; i++) {
-            if (rsl) {
-                return true;
-            }
-            for (int j = 0; j < this.table.length; j++) {
-                if (this.table[i][j].hasMarkX()) {
-                    rsl = true;
-                } else {
-                    rsl = false;
-                    break;
-                }
-            }
-        }
-        if (rsl) {
-            return  true;
-        }
-        //vertical check
-        for (int i = 0; i < this.table.length; i++) {
-            if (rsl) {
-                return  true;
-            }
-            for (int j = 0; j < this.table.length; j++) {
-                if (!this.table[j][i].hasMarkX()) {
-                    rsl = false;
-                    break;
-                } else {
-                    rsl = true;
-                }
-            }
-        }
-        if (rsl) {
-            return  true;
-        }
-        //diag check one
-        for (int i = 0; i < this.table.length; i++) {
-            if (!this.table[i][i].hasMarkX()) {
-                rsl = false;
-                break;
-            } else {
-                rsl = true;
-            }
-        }
-        if (rsl) {
-            return true;
-        }
-
-        //diag check two
-        for (int i = 0; i < this.table.length; i++) {
-            if (this.table[i][this.table.length - i - 1].hasMarkX()) {
-                rsl = true;
-            } else {
-                rsl = false;
-                break;
-            }
-        }
-        return rsl;
+        return this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 0)
+                || this.fillBy(Figure3T::hasMarkX, 0, 1, 1, 0)
+                || this.fillBy(Figure3T::hasMarkX, 0, 2, 1, 0)
+                || this.fillBy(Figure3T::hasMarkX, 0, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkX, 1, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkX, 2, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 1)
+                || this.fillBy(Figure3T::hasMarkX, 2, 0, -1, 1);
     }
 
     public boolean isWinnerO() {
-        //horizont check
-        boolean rsl = false;
-        for (int i = 0; i < this.table.length; i++) {
-            if (rsl) {
-                return true;
-            }
-            for (int j = 0; j < this.table.length; j++) {
-                if (this.table[i][j].hasMarkO()) {
-                    rsl = true;
-                } else {
-                    rsl = false;
-                    break;
-                }
-            }
-        }
-        if (rsl) {
-            return  true;
-        }
-        //vertical check
-        for (int i = 0; i < this.table.length; i++) {
-            if (rsl) {
-                return true;
-            }
-            for (int j = 0; j < this.table.length; j++) {
-                if (this.table[j][i].hasMarkO()) {
-                    rsl = true;
-                } else {
-                    rsl = false;
-                    break;
-                }
-            }
-        }
-        if (rsl) {
-            return  true;
-        }
-        //diag check one
-        for (int i = 0; i < this.table.length; i++) {
-            if (this.table[i][i].hasMarkO()) {
-                rsl = true;
-            } else {
-                rsl = false;
-                break;
-            }
-        }
-        if (rsl) {
-            return true;
-        }
-        //diag check two
-        for (int i = 0; i < this.table.length; i++) {
-            if (this.table[i][this.table.length - i - 1].hasMarkO()) {
-                rsl = true;
-            } else {
-                rsl = false;
-                break;
-            }
-        }
-        return rsl;
+        return this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 0)
+                || this.fillBy(Figure3T::hasMarkO, 0, 1, 1, 0)
+                || this.fillBy(Figure3T::hasMarkO, 0, 2, 1, 0)
+                || this.fillBy(Figure3T::hasMarkO, 0, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkO, 1, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkO, 2, 0, 0, 1)
+                || this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 1)
+                || this.fillBy(Figure3T::hasMarkO, 2, 0, -1, 1);
     }
 
     public boolean hasGap() {
@@ -138,12 +41,39 @@ public class Logic3T {
                 if (!(this.table[i][j].hasMarkX() || this.table[i][j].hasMarkO())) {
                     rsl = true;
                     break;
-                } else {
-                    rsl = false;
                 }
             }
         }
         return rsl;
     }
+
+    public boolean fillByX(int startX, int startY, int deltaX, int deltaY) {
+        boolean result = true;
+        for (int index = 0; index != this.table.length; index++) {
+            Figure3T cell = this.table[startX][startY];
+            startX += deltaX;
+            startY += deltaY;
+            if (!cell.hasMarkX()) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public boolean fillBy(Predicate<Figure3T> predicate, int startX, int startY, int deltaX, int deltaY) {
+        boolean result = true;
+        for (int index = 0; index != this.table.length; index++) {
+            Figure3T cell = this.table[startX][startY];
+            startX += deltaX;
+            startY += deltaY;
+            if (!predicate.test(cell)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
 
 }
