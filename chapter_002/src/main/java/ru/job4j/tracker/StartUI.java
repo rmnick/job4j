@@ -42,9 +42,9 @@ public class StartUI {
             } else if (DELETE.equals(answer)) {
                 this.deleteItem();
             } else if (FIND_BY_ID.equals(answer)) {
-                this.findItembyId();
+                this.findItemById();
             } else if (FIND_BY_NAME.equals(answer)) {
-                this.findItembyName();
+                this.findItemByName();
             } else if (EXIT.equals(answer)) {
                 exit = true;
             }
@@ -85,14 +85,14 @@ public class StartUI {
         System.out.println("------------The task with " + id + " Id" + " has been deleted-----------");
     }
 
-    private void findItembyId() {
+    private void findItemById() {
         System.out.println("------------ Searching a task by Id --------------");
         String id = this.input.ask("Enter Id: ");
         Item item = this.tracker.findById(id);
         System.out.println(item.getName() + " " + item.getDescription() + " " + item.getId());
     }
 
-    private void findItembyName() {
+    private void findItemByName() {
         System.out.println("------------ Searching a task by name --------------");
         String name = this.input.ask("Enter name: ");
         Item[] items = this.tracker.findByName(name);
