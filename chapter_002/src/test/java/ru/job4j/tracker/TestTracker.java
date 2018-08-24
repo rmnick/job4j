@@ -13,8 +13,8 @@ public class TestTracker {
     @Test
     public void testWhenAddItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("first", "first task", 24L);
-        Item itemSecond = new Item("second", "second task", 245L);
+        Item itemFirst = new Item("first", "first task");
+        Item itemSecond = new Item("second", "second task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         assertThat(tr.getAll()[1], is(itemSecond));
@@ -22,10 +22,10 @@ public class TestTracker {
     @Test
     public void testWhenReplaceItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task", 24L);
-        Item itemSecond = new Item("two", "second task", 245L);
-        Item itemThird = new Item("three", "third task", 2555L);
-        Item item = new Item("new", "test item", 366L);
+        Item itemFirst = new Item("one", "first task");
+        Item itemSecond = new Item("two", "second task");
+        Item itemThird = new Item("three", "third task");
+        Item item = new Item("new", "test item");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
@@ -36,9 +36,9 @@ public class TestTracker {
     @Test
     public void testWhenDeleteItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task", 24L);
-        Item itemSecond = new Item("two", "second task", 245L);
-        Item itemThird = new Item("three", "third task", 2555L);
+        Item itemFirst = new Item("one", "first task");
+        Item itemSecond = new Item("two", "second task");
+        Item itemThird = new Item("three", "third task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
@@ -48,9 +48,9 @@ public class TestTracker {
     @Test
     public void testWhenFindAllItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task", 24L);
-        Item itemSecond = new Item("two", "second task", 245L);
-        Item itemThird = new Item("three", "third task", 2555L);
+        Item itemFirst = new Item("one", "first task");
+        Item itemSecond = new Item("two", "second task");
+        Item itemThird = new Item("three", "third task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
@@ -59,9 +59,9 @@ public class TestTracker {
     @Test
     public void testWhenFindByNameItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task", 24L);
-        Item itemSecond = new Item("two", "second task", 245L);
-        Item itemThird = new Item("three", "third task", 2555L);
+        Item itemFirst = new Item("one", "first task");
+        Item itemSecond = new Item("two", "second task");
+        Item itemThird = new Item("three", "third task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
@@ -70,9 +70,9 @@ public class TestTracker {
     @Test
     public void testWhenFindById() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task", 24L);
-        Item itemSecond = new Item("two", "second task", 245L);
-        Item itemThird = new Item("three", "third task", 2555L);
+        Item itemFirst = new Item("one", "first task");
+        Item itemSecond = new Item("two", "second task");
+        Item itemThird = new Item("three", "third task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);

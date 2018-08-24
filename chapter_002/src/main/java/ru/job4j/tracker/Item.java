@@ -15,10 +15,10 @@ public class Item {
 
     }
 
-    public Item(String name, String description, long date) {
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
-        this.date = date;
+        this.date = System.currentTimeMillis();
     }
 
     public void setName(String name) {
