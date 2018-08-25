@@ -1,6 +1,6 @@
-package ru.job4j.tracker;
+package ru.job4j.start;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  * @author Nick Rodionov
