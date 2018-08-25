@@ -86,7 +86,79 @@ public class StartUITest {
                         .add("5. Find items by name")
                         .add("6. Exit Program")
                         .add("Select: ")
+                        .toString()
                 )
         );
     }
+    @Test
+    public void whenFindByIdThenItemWithThisId() {
+        Tracker tracker = new Tracker();
+        Item itemFirst = tracker.addItem(new Item("first", "description first"));
+        Item itemSecond = tracker.addItem(new Item("second", "description second"));
+        Item itemThird = tracker.addItem(new Item("third", "description third"));
+
+        Input input = new StubInput(new String[]{"4", itemSecond.getId(), "6"});
+        StartUI start = new StartUI(input, tracker);
+        start.init();
+        assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
+                        .add("Menu")
+                        .add("0. Add new Item")
+                        .add("1. Show all items")
+                        .add("2. Edit item")
+                        .add("3. Delete item")
+                        .add("4. Find item by Id")
+                        .add("5. Find items by name")
+                        .add("6. Exit Program")
+                        .add("Select: ")
+                        .add("------------ Searching a task by Id --------------")
+                        .add(itemSecond.getName() + " " + itemSecond.getDescription() + " " + itemSecond.getId())
+                        .add("Menu")
+                        .add("0. Add new Item")
+                        .add("1. Show all items")
+                        .add("2. Edit item")
+                        .add("3. Delete item")
+                        .add("4. Find item by Id")
+                        .add("5. Find items by name")
+                        .add("6. Exit Program")
+                        .add("Select: ")
+                        .toString()
+                )
+        );
+    }
+    @Test
+    public void whenFindByNameThenItemsWithThisName() {
+        Tracker tracker = new Tracker();
+        Item itemFirst = tracker.addItem(new Item("first", "description first"));
+        Item itemSecond = tracker.addItem(new Item("second", "description second"));
+        Item itemThird = tracker.addItem(new Item("third", "description third"));
+
+        Input input = new StubInput(new String[]{"5", itemThird.getName(), "6"});
+        StartUI start = new StartUI(input, tracker);
+        start.init();
+        assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
+                        .add("Menu")
+                        .add("0. Add new Item")
+                        .add("1. Show all items")
+                        .add("2. Edit item")
+                        .add("3. Delete item")
+                        .add("4. Find item by Id")
+                        .add("5. Find items by name")
+                        .add("6. Exit Program")
+                        .add("Select: ")
+                        .add("------------ Searching a task by name --------------")
+                        .add(itemThird.getName() + " " + itemThird.getDescription() + " " + itemThird.getId())
+                        .add("Menu")
+                        .add("0. Add new Item")
+                        .add("1. Show all items")
+                        .add("2. Edit item")
+                        .add("3. Delete item")
+                        .add("4. Find item by Id")
+                        .add("5. Find items by name")
+                        .add("6. Exit Program")
+                        .add("Select: ")
+                        .toString()
+                )
+        );
+    }
+
 }
