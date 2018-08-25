@@ -29,6 +29,8 @@ public class FigureTest {
                 .append("    + +\n")
                 .append("  + + +\n")
                 .append("+ + + +\n")
-                .toString()));
+                .toString()
+                )
+        );
     }
 }
