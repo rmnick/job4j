@@ -1,5 +1,7 @@
 package ru.job4j.start;
 
+import java.util.StringJoiner;
+
 /**
  * @author Nick Rodionov
  * @since 2018.08.21
@@ -51,5 +53,14 @@ public class Item {
 
     public String getDescription() {
         return this.description;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(" ", "", "")
+                .add(this.name)
+                .add(this.description)
+                .add(this.id)
+                .toString();
     }
 }

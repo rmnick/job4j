@@ -18,22 +18,29 @@ public class Tracker {
         return item;
     }
 
-    public void replace(String id, Item item) {
+    public boolean replace(String id, Item item) {
+        boolean flag = false;
         for (int i = 0; i < this.position; i++) {
             if (this.items[i].getId().equals(id)) {
+                flag = true;
+                item.setId(id);
                 this.items[i] = item;
                 break;
             }
         }
+        return flag;
     }
 
-    public void delete(String id) {
+    public boolean delete(String id) {
+        boolean flag = false;
         for (int i = 0; i < this.position; i++) {
             if (this.items[i].getId().equals(id)) {
+                flag = true;
                 System.arraycopy(this.items, i + 1, this.items, i, this.items.length - i - 1);
                 this.position--;
             }
         }
+        return flag;
     }
 
     public Item[] findAll() {

@@ -37,14 +37,16 @@ public class TestTracker {
     @Test
     public void testWhenDeleteItem() {
         Tracker tr = new Tracker();
-        Item itemFirst = new Item("one", "first task");
-        Item itemSecond = new Item("two", "second task");
-        Item itemThird = new Item("three", "third task");
-        tr.addItem(itemFirst);
-        tr.addItem(itemSecond);
-        tr.addItem(itemThird);
-        tr.delete(itemSecond.getId());
-        assertThat(tr.getAll()[1], is(itemThird));
+        Item[] items = new Item[] {new Item("one", "first task"),
+                new Item("two", "second task"),
+                new Item("three", "third task")
+        };
+        tr.addItem(items[0]);
+        tr.addItem(items[1]);
+        tr.addItem(items[2]);
+        tr.delete(items[1].getId());
+        Item[] exm = new Item[] {items[0], items[2]};
+        assertThat(tr.findAll(), is(exm));
     }
     @Test
     public void testWhenFindAllItem() {

@@ -63,7 +63,7 @@ public class StartUI {
     private void showAll() {
         System.out.println("------------ All tasks --------------");
         for (Item item : this.tracker.findAll()) {
-            System.out.println(item.getName() + " " + item.getDescription() + " " + item.getId());
+            System.out.println(item.toString());
         }
     }
 
@@ -73,7 +73,6 @@ public class StartUI {
         String name = this.input.ask("Enter new name for task: ");
         String description = this.input.ask("Enter new description: ");
         Item item = new Item(name, description);
-        item.setId(id);
         this.tracker.replace(id, item);
         System.out.println("------------The task has been changed-----------");
     }
@@ -81,15 +80,18 @@ public class StartUI {
     private void deleteItem() {
         System.out.println("------------ Removing a task --------------");
         String id = this.input.ask("Enter Id: ");
-        this.tracker.delete(id);
-        System.out.println("------------The task with " + id + " Id" + " has been deleted-----------");
+        if (this.tracker.delete(id)) {
+            System.out.println("------------The task with " + id + " Id" + " has been deleted-----------");
+        } else {
+            System.out.println("------------There's no this id-----------");
+        }
     }
 
     private void findItemById() {
         System.out.println("------------ Searching a task by Id --------------");
         String id = this.input.ask("Enter Id: ");
         Item item = this.tracker.findById(id);
-        System.out.println(item.getName() + " " + item.getDescription() + " " + item.getId());
+        System.out.println(item.toString());
     }
 
     private void findItemByName() {
@@ -97,7 +99,7 @@ public class StartUI {
         String name = this.input.ask("Enter name: ");
         Item[] items = this.tracker.findByName(name);
         for (Item item : items) {
-            System.out.println(item.getName() + " " + item.getDescription() + " " + item.getId());
+            System.out.println(item.toString());
         }
     }
 
