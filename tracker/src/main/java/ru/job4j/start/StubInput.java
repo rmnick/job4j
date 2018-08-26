@@ -1,5 +1,7 @@
 package ru.job4j.start;
 
+import java.util.List;
+
 public class StubInput implements Input {
     private final String[] value;
     private int position = 0;
@@ -11,5 +13,9 @@ public class StubInput implements Input {
     @Override
     public String ask(String question) {
         return this.value[this.position++];
+    }
+
+    public int ask(String question, List<Integer> range) {
+        return -1;
     }
 }
