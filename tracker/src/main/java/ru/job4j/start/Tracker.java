@@ -38,6 +38,7 @@ public class Tracker {
                 flag = true;
                 System.arraycopy(this.items, i + 1, this.items, i, this.items.length - i - 1);
                 this.position--;
+                break;
             }
         }
         return flag;

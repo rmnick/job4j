@@ -129,7 +129,7 @@ public class StartUITest {
         );
     }
     @Test
-    public void whenDeleteThenTrackerHasDeletedValueByInvalidId() {
+    public void whenDeleteThenTrackerHasNotDeletedValueByInvalidId() {
         Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
