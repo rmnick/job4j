@@ -16,17 +16,16 @@ public class ConsolInput implements Input {
         return this.scanner.nextLine();
     }
 
-    public int ask(String question, List<Integer> list) {
+    public int ask(String question, List<Integer> range) {
         int key = Integer.valueOf(this.ask(question));
         boolean flag = false;
-        for (Integer item : list) {
+        for (Integer item : range) {
             if (item == key) {
                 flag = true;
                 break;
             }
-            //else {
-              //  key = -1;
-            //}
+        } if (!flag) {
+            throw new MenuOutException("out of range");
         }
         return key;
     }
