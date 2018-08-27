@@ -13,6 +13,7 @@ public class StartUI {
      */
     private Input input;
     private Tracker tracker;
+    private boolean flag = true;
 
     public StartUI(Input input, Tracker tracker) {
         this.input = input;
@@ -27,15 +28,23 @@ public class StartUI {
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
         List<Integer> range = new ArrayList<>();
-        menu.fillActions();
-        int key = 0;
+        menu.fillActions(this);
+        int key = -1;
         for (int i = 0; i < menu.getActionsLentgh(); i++) {
             range.add(i);
         }
-        while (key != 6) {
-            System.out.println();
+        do {
+            System.out.println(new StringBuilder()
+                    .append(System.lineSeparator())
+                    .append("Menu: ")
+            );
             menu.show();
             key = menu.select(input.ask("select: ", range));
         }
+        while (flag);
+    }
+
+    public void stop() {
+        this.flag = false;
     }
 }

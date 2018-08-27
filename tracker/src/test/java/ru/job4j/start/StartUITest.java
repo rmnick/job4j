@@ -16,6 +16,7 @@ public class StartUITest {
     private final PrintStream stdout = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final String menu = new StringJoiner(System.lineSeparator(), System.lineSeparator(), System.lineSeparator())
+            .add("Menu: ")
             .add("0. Add new Item")
             .add("1. Show all items")
             .add("2. Edit item")
