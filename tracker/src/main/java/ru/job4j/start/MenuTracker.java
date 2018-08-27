@@ -139,8 +139,11 @@ public class MenuTracker {
             String name = input.ask("Enter new name for task: ");
             String description = input.ask("Enter new description: ");
             Item item = new Item(name, description);
-            tracker.replace(id, item);
-            System.out.println("------------The task has been changed-----------");
+            if (tracker.replace(id, item)) {
+                System.out.println("------------ The task has been changed -----------");
+            } else {
+                System.out.println("------------ Id doesn't exist -----------");
+            }
         }
 
         @Override
@@ -164,9 +167,9 @@ public class MenuTracker {
             System.out.println("------------ Removing a task --------------");
             String id = input.ask("Enter Id: ");
             if (tracker.delete(id)) {
-                System.out.println("------------The task with " + id + " Id" + " has been deleted-----------");
+                System.out.println("------------ The task with " + id + " Id" + " has been deleted -----------");
             } else {
-                System.out.println("------------There's no this id-----------");
+                System.out.println("------------ Id doesn't exist -----------");
             }
         }
 
@@ -191,7 +194,11 @@ public class MenuTracker {
             System.out.println("------------ Searching a task by Id --------------");
             String id = input.ask("Enter Id: ");
             Item item = tracker.findById(id);
-            System.out.println(item.toString());
+            if (item != null) {
+                System.out.println(item.toString());
+            } else {
+                System.out.println("------------ Id doesn't exist --------------");
+            }
         }
 
         @Override

@@ -20,7 +20,7 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        StartUI start = new StartUI(new ConsolInput(), new Tracker());
+        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), new Tracker());
         start.init();
     }
 
@@ -33,9 +33,9 @@ public class StartUI {
             range.add(i);
         }
         while (key != 6) {
+            System.out.println();
             menu.show();
-            key = menu.select(input.ask("select:", range));
+            key = menu.select(input.ask("select: ", range));
         }
-
     }
 }

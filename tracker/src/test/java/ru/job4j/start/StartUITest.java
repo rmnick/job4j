@@ -8,13 +8,14 @@ import org.junit.After;
 import org.junit.Before;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.StringJoiner;
+import java.util.List;
 
 public class StartUITest {
     private final PrintStream stdout = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private final String menu = new StringJoiner(System.lineSeparator(), "", "")
-            .add("Menu")
+    private final String menu = new StringJoiner(System.lineSeparator(), System.lineSeparator(), System.lineSeparator())
             .add("0. Add new Item")
             .add("1. Show all items")
             .add("2. Edit item")
@@ -22,7 +23,6 @@ public class StartUITest {
             .add("4. Find item by Id")
             .add("5. Find items by name")
             .add("6. Exit Program")
-            .add("Select: ")
             .toString();
 
     @Test
@@ -86,6 +86,7 @@ public class StartUITest {
                         .add(itemFirst.getName() + " " + itemFirst.getDescription() + " " + itemFirst.getId())
                         .add(itemSecond.getName() + " " + itemSecond.getDescription() + " " + itemSecond.getId())
                         .add(menu)
+                        .add("------------ End of session --------------")
                         .toString()
                 )
         );
@@ -105,6 +106,7 @@ public class StartUITest {
                         .add("------------ Searching a task by Id --------------")
                         .add(itemSecond.getName() + " " + itemSecond.getDescription() + " " + itemSecond.getId())
                         .add(menu)
+                        .add("------------ End of session --------------")
                         .toString()
                 )
         );
@@ -124,12 +126,13 @@ public class StartUITest {
                         .add("------------ Searching a task by name --------------")
                         .add(itemThird.getName() + " " + itemThird.getDescription() + " " + itemThird.getId())
                         .add(menu)
+                        .add("------------ End of session --------------")
                         .toString()
                 )
         );
     }
     @Test
-    public void whenDeleteThenTrackerHasNotDeletedValueByInvalidId() {
+    public void whenDeleteByInvalidIdThenTrackerWontDelete() {
         Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
@@ -139,9 +142,24 @@ public class StartUITest {
         assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add(menu)
                         .add("------------ Removing a task --------------")
-                        .add("------------There's no this id-----------")
+                        .add("------------ Id doesn't exist -----------")
                         .add(menu)
+                        .add("------------ End of session --------------")
                         .toString()
+                )
+        );
+    }
+    @Test
+    public void whenInvalidInput() {
+        List<Integer> range = new ArrayList<Integer>();
+        ValidateInput input = new ValidateInput(
+                new StubInput(new String[] {"invalid", "1"})
+        );
+        input.ask("Enter", range);
+        assertThat(
+                this.out.toString(),
+                is(
+                        String.format("Please enter validate data again.%n")
                 )
         );
     }
