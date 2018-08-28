@@ -2,22 +2,24 @@ package ru.job4j.start;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class MenuTracker {
     /**
      * stores a reference to an object.
      */
-    private Input input;
+    private final Input input;
     /**
      * stores a reference to an object.
      */
-    private Tracker tracker;
+    private final Tracker tracker;
     /**
      * stores a reference to an object of type UserAction.
      */
-    private List<UserAction> actions = new ArrayList<>();
-
+    private final List<UserAction> actions = new ArrayList<>();
+    /**
+     * stores a reference to key of UserAction.
+     */
+    private final List<Integer> keys = new ArrayList<>();
     /**
      * Constructor.
      * @param input   an object of type Input.
@@ -40,13 +42,22 @@ public class MenuTracker {
      * Method creates array of actions.
      */
     public void fillActions(StartUI ui) {
-        this.actions.add(this.new AddItem());
-        this.actions.add(this.new ShowAll());
-        this.actions.add(this.new EditItem());
-        this.actions.add(this.new DeleteItem());
-        this.actions.add(new MenuTracker.FindById());
-        this.actions.add(new MenuTracker.FindByName());
-        this.actions.add(new ExitProgram(ui));
+        this.actions.add(this.new AddItem(0, "Add new Item"));
+        this.actions.add(this.new ShowAll(1, "Show all items"));
+        this.actions.add(this.new EditItem(2, "Edit item"));
+        this.actions.add(this.new DeleteItem(3, "Delete item"));
+        this.actions.add(new MenuTracker.FindById(4, "Find item by Id"));
+        this.actions.add(new MenuTracker.FindByName(5, "Find items by name"));
+        this.actions.add(new ExitProgram(6, "Exit Program", ui));
+    }
+
+    /**
+     * Method creates array of keys.
+     */
+    public void fillKeys() {
+        for (int i = 0; i < this.getActionsLentgh(); i++) {
+            this.keys.add(this.actions.get(i).key());
+        }
     }
 
     /**
@@ -64,6 +75,7 @@ public class MenuTracker {
      */
     public void show() {
         StringBuilder menu = new StringBuilder();
+        menu.append(System.lineSeparator()).append("Menu: ").append(System.lineSeparator());
         for (UserAction action : this.actions) {
             if (action != null) {
                 menu.append(action.info()).append(System.lineSeparator());
@@ -73,13 +85,19 @@ public class MenuTracker {
     }
 
     /**
+     * Method prints menu.
+     */
+    public List<Integer> getKeys() {
+        return this.keys;
+    }
+
+    /**
      * add
      */
-    public class AddItem implements UserAction {
+    public class AddItem extends BaseAction {
 
-        @Override
-        public int key() {
-           return 0;
+        public AddItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -91,21 +109,15 @@ public class MenuTracker {
             tracker.addItem(item);
             System.out.println("------------ Id of this task: " + item.getId() + "-----------");
         }
-
-        @Override
-        public String info() {
-            return "0. Add new Item";
-        }
     }
 
     /**
      * show
      */
-    public class ShowAll implements UserAction {
+    public class ShowAll extends BaseAction {
 
-        @Override
-        public int key() {
-            return 1;
+        public ShowAll(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -115,21 +127,15 @@ public class MenuTracker {
                 System.out.println(item.toString());
             }
         }
-
-        @Override
-        public String info() {
-            return "1. Show all items";
-        }
     }
 
     /**
      * edit
      */
-    public class EditItem implements UserAction {
+    public class EditItem extends BaseAction {
 
-        @Override
-        public int key() {
-            return 2;
+        public EditItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -145,21 +151,15 @@ public class MenuTracker {
                 System.out.println("------------ Id doesn't exist -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "2. Edit item";
-        }
     }
 
     /**
      * delete
      */
-    public class DeleteItem implements UserAction {
+    public class DeleteItem extends BaseAction {
 
-        @Override
-        public int key() {
-            return 3;
+        public DeleteItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -172,21 +172,15 @@ public class MenuTracker {
                 System.out.println("------------ Id doesn't exist -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "3. Delete item";
-        }
     }
 
     /**
      * findById
      */
-    public static class FindById implements UserAction {
+    public static class FindById extends BaseAction {
 
-        @Override
-        public int key() {
-            return 4;
+        public FindById(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -200,21 +194,15 @@ public class MenuTracker {
                 System.out.println("------------ Id doesn't exist --------------");
             }
         }
-
-        @Override
-        public String info() {
-            return "4. Find item by Id";
-        }
     }
 
     /**
      * findByName
      */
-    public static class FindByName implements UserAction {
+    public static class FindByName extends BaseAction {
 
-        @Override
-        public int key() {
-            return 5;
+        public FindByName(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -226,37 +214,23 @@ public class MenuTracker {
                 System.out.println(item.toString());
             }
         }
-
-        @Override
-        public String info() {
-            return "5. Find items by name";
-        }
     }
 }
 
 /**
  * exit
  */
-class ExitProgram implements UserAction {
+class ExitProgram extends BaseAction {
     private final StartUI ui;
 
-    public ExitProgram(StartUI ui) {
+    public ExitProgram(int key, String name, StartUI ui) {
+        super(key, name);
         this.ui = ui;
-    }
-
-    @Override
-    public int key() {
-        return 6;
     }
 
     @Override
     public void execute(Input input, Tracker tracker) {
         System.out.println("------------ End of session --------------");
         this.ui.stop();
-    }
-
-    @Override
-    public String info() {
-        return "6. Exit Program";
     }
 }

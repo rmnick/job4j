@@ -1,6 +1,5 @@
 package ru.job4j.start;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,8 +10,8 @@ public class StartUI {
     /**
      * list constants for menu.
      */
-    private Input input;
-    private Tracker tracker;
+    private final Input input;
+    private final Tracker tracker;
     private boolean flag = true;
 
     public StartUI(Input input, Tracker tracker) {
@@ -27,19 +26,12 @@ public class StartUI {
 
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
-        List<Integer> range = new ArrayList<>();
         menu.fillActions(this);
-        int key = -1;
-        for (int i = 0; i < menu.getActionsLentgh(); i++) {
-            range.add(i);
-        }
+        menu.fillKeys();
+        List<Integer> range = menu.getKeys();
         do {
-            System.out.println(new StringBuilder()
-                    .append(System.lineSeparator())
-                    .append("Menu: ")
-            );
             menu.show();
-            key = menu.select(input.ask("select: ", range));
+            menu.select(input.ask("select: ", range));
         }
         while (flag);
     }
