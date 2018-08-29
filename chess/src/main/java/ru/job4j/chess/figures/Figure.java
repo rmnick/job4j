@@ -1,4 +1,4 @@
-package ru.job4j.chess.firuges;
+package ru.job4j.chess.figures;
 
 public interface Figure {
     Cell position();
@@ -9,6 +9,7 @@ public interface Figure {
         return String.format(
                 "%s.png", this.getClass().getSimpleName()
         );
+
     }
 
     Figure copy(Cell dest);
