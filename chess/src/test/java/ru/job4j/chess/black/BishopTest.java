@@ -13,9 +13,9 @@ public class BishopTest {
     @Test
     public void bishopTest() {
         Logic l = new Logic();
-        Figure bish = new BishopBlack(Cell.B5);
+        Figure bish = new BishopBlack(Cell.A8);
 
-        Cell[] test = bish.way(Cell.B5, Cell.F1);
-        assertThat(test[1], is(Cell.D3));
+        Cell[] test = bish.way(Cell.A8, Cell.H1);
+        assertThat(test[5], is(Cell.G2));
     }
 }

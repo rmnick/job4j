@@ -30,42 +30,31 @@ public class BishopBlack implements Figure {
         if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))) {
             //условие для движения вправо вверх
             if ((dest.x > source.x) && (dest.y < source.y)) {
-                //инкремент(декремент) для движения в нужную сторону
-                int dX = 1;
-                int dY = -1;
-                for (int index = 0; index < steps.length; index++) {
-                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
-                    dY--;
-                    dX++;
-                }
+               steps = move(source.x, source.y, 1, -1, steps.length);
             }
+            //условие для движения влево вверх
             if ((dest.x < source.x) && (dest.y < source.y)) {
-                int dX = -1;
-                int dY = -1;
-                for (int index = 0; index < steps.length; index++) {
-                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
-                    dY--;
-                    dX--;
-                }
+                steps = move(source.x, source.y, -1, -1, steps.length);
             }
+            //условие для движения влево вниз
             if ((dest.x < source.x) && (dest.y > source.y)) {
-                int dX = -1;
-                int dY = 1;
-                for (int index = 0; index < steps.length; index++) {
-                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
-                    dY++;
-                    dX--;
-                }
+                steps = move(source.x, source.y, -1, 1, steps.length);
+
             }
+            //условие для движения вправо вниз
             if ((dest.x > source.x) && (dest.y > source.y)) {
-                int dX = 1;
-                int dY = 1;
-                for (int index = 0; index < steps.length; index++) {
-                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
-                    dY++;
-                    dX++;
-                }
+                steps = move(source.x, source.y, 1, 1, steps.length);
             }
+        }
+        return steps;
+    }
+
+    private Cell[] move(int sourceX, int sourceY, int dX, int dY, int length) {
+        Cell[] steps = new Cell[Math.abs(length)];
+        for (int index = 0; index < steps.length; index++) {
+            sourceX += dX;
+            sourceY += dY;
+            steps[index] = Cell.values()[8 * sourceX + sourceY];
         }
         return steps;
     }
