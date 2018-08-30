@@ -11,6 +11,7 @@ import ru.job4j.chess.figures.Figure;
  */
 public class BishopBlack implements Figure {
     private final Cell position;
+    public boolean flag = false;
 
     public BishopBlack(final Cell position) {
         this.position = position;
@@ -23,12 +24,49 @@ public class BishopBlack implements Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) {
-        Cell[] steps = new Cell[Math.abs(source.x - dest.x)];
-        if((Math.abs(source.x - dest.x)) == (Math.abs(source.y - dest.y))) {
-            for (int i = 0; i < steps.length; i++) {
-                     steps[i] = Cell.values()[8*(dest.x + i) + (dest.y + i)];
+        //кол-во шагов = кол-во cell
+        Cell[] steps = new Cell[Math.abs(dest.x - source.x)];
+        //проверка на движение по диагонали
+        if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))) {
+            //условие для движения вправо вверх
+            if ((dest.x > source.x) && (dest.y < source.y)) {
+                //инкремент(декремент) для движения в нужную сторону
+                int dX = 1;
+                int dY = -1;
+                for (int index = 0; index < steps.length; index++) {
+                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
+                    dY--;
+                    dX++;
                 }
             }
+            if ((dest.x < source.x) && (dest.y < source.y)) {
+                int dX = -1;
+                int dY = -1;
+                for (int index = 0; index < steps.length; index++) {
+                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
+                    dY--;
+                    dX--;
+                }
+            }
+            if ((dest.x < source.x) && (dest.y > source.y)) {
+                int dX = -1;
+                int dY = 1;
+                for (int index = 0; index < steps.length; index++) {
+                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
+                    dY++;
+                    dX--;
+                }
+            }
+            if ((dest.x > source.x) && (dest.y > source.y)) {
+                int dX = 1;
+                int dY = 1;
+                for (int index = 0; index < steps.length; index++) {
+                    steps[index] = Cell.values()[8 * (source.x + dX) + (source.y + dY)];
+                    dY++;
+                    dX++;
+                }
+            }
+        }
         return steps;
     }
 
@@ -36,9 +74,4 @@ public class BishopBlack implements Figure {
     public Figure copy(Cell dest) {
         return new BishopBlack(dest);
     }
-
-   // boolean diagCheck(int incr, int dX, int dY, Cell source, Cell dest) {
-     //   return ((dest.getX() + incr == source.getX() + dX + incr) && (dest.getY() == source.getY() + dY + incr));
-
-   // }
 }
