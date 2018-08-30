@@ -26,13 +26,13 @@ public class Logic {
             boolean flag = true;
            out: for (int i = 0; i < steps.length; i++) {
                 for (int j = 0; j < figures.length; j++) {
-                    if (steps[i].equals(figures[j].position())) {
+                    if (steps[i] == null || steps[i].equals(figures[j].position())) {
                         flag = false;
                         break out;
                     }
                 }
             }
-            if (steps.length > 0 && steps[steps.length - 1].equals(dest) && flag) {
+            if (flag && steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
                 this.figures[index] = this.figures[index].copy(dest);
             }
