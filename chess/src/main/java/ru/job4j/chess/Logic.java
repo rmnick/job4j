@@ -2,6 +2,9 @@ package ru.job4j.chess;
 
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
+import ru.job4j.chess.figures.OccupiedException;
+
+import java.util.Optional;
 
 /**
  * //TODO add comments.
@@ -20,17 +23,22 @@ public class Logic {
 
     public boolean move(Cell source, Cell dest) {
         boolean rst = false;
+        boolean flag = true;
         int index = this.findBy(source);
+        Cell[] steps = new Cell[0];
         if (index != -1) {
-            Cell[] steps = this.figures[index].way(source, dest);
-            boolean flag = true;
-           out: for (int i = 0; i < steps.length; i++) {
-                for (int j = 0; j < figures.length; j++) {
-                    if (steps[i] == null || steps[i].equals(figures[j].position())) {
-                        flag = false;
-                        break out;
+            try {
+                steps = this.figures[index].way(source, dest);
+                out: for (int i = 0; i < steps.length; i++) {
+                        for (int j = 0; j < figures.length; j++) {
+                            if (steps[i].equals(figures[j].position())) {
+                                flag = false;
+                                break out;
+                            }
+                        }
                     }
-                }
+            } catch (CellNullException nce) {
+                flag = false;
             }
             if (flag && steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;

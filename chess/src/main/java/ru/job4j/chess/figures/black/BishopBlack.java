@@ -1,5 +1,7 @@
 package ru.job4j.chess.figures.black;
 
+import ru.job4j.chess.CellNullException;
+import ru.job4j.chess.Logic;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
@@ -23,34 +25,37 @@ public class BishopBlack implements Figure {
     }
 
     @Override
-    public Cell[] way(Cell source, Cell dest) {
+    public Cell[] way(Cell source, Cell dest) throws CellNullException {
         //кол-во шагов = кол-во cell
-        Cell[] steps = new Cell[Math.abs(dest.x - source.x)];
+        Cell[] steps = new Cell[0];
         //проверка на движение по диагонали
         if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))) {
             //условие для движения вправо вверх
             if ((dest.x > source.x) && (dest.y < source.y)) {
-               steps = move(source.x, source.y, 1, -1, steps.length);
+               steps = move(source.x, source.y, dest.x, 1, -1);
             }
             //условие для движения влево вверх
             if ((dest.x < source.x) && (dest.y < source.y)) {
-                steps = move(source.x, source.y, -1, -1, steps.length);
+                steps = move(source.x, source.y, dest.x, -1, -1);
             }
             //условие для движения влево вниз
             if ((dest.x < source.x) && (dest.y > source.y)) {
-                steps = move(source.x, source.y, -1, 1, steps.length);
+                steps = move(source.x, source.y, dest.x, -1, 1);
 
             }
             //условие для движения вправо вниз
             if ((dest.x > source.x) && (dest.y > source.y)) {
-                steps = move(source.x, source.y, 1, 1, steps.length);
+                steps = move(source.x, source.y, dest.x, 1, 1);
             }
+        }
+        if (steps == null) {
+           throw new CellNullException("Cell is NULL");
         }
         return steps;
     }
 
-    private Cell[] move(int sourceX, int sourceY, int dX, int dY, int length) {
-        Cell[] steps = new Cell[Math.abs(length)];
+    private Cell[] move(int sourceX, int sourceY, int destX, int dX, int dY) {
+        Cell[] steps = new Cell[Math.abs(destX - sourceX)];
         for (int index = 0; index < steps.length; index++) {
             sourceX += dX;
             sourceY += dY;
@@ -62,5 +67,9 @@ public class BishopBlack implements Figure {
     @Override
     public Figure copy(Cell dest) {
         return new BishopBlack(dest);
+    }
+
+    private boolean contain(Logic board) {
+        return true;
     }
 }
