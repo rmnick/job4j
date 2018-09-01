@@ -2,9 +2,6 @@ package ru.job4j.chess;
 
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
-import ru.job4j.chess.figures.OccupiedException;
-
-import java.util.Optional;
 
 /**
  * //TODO add comments.
@@ -29,16 +26,11 @@ public class Logic {
         if (index != -1) {
             try {
                 steps = this.figures[index].way(source, dest);
-                out: for (int i = 0; i < steps.length; i++) {
-                        for (int j = 0; j < figures.length; j++) {
-                            if (steps[i].equals(figures[j].position())) {
-                                flag = false;
-                                break out;
-                            }
-                        }
-                    }
-            } catch (CellNullException nce) {
+            } catch (WrongWayException nce) {
                 flag = false;
+            }
+            if (flag) {
+                flag = this.occupied(steps);
             }
             if (flag && steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
@@ -64,5 +56,18 @@ public class Logic {
             }
         }
         return rst;
+    }
+
+    private boolean occupied(Cell[] steps) {
+        boolean flag = true;
+        out: for (int i = 0; i < steps.length; i++) {
+            for (int j = 0; j < figures.length; j++) {
+                if (figures[j] != null && steps[i].equals(figures[j].position())) {
+                    flag = false;
+                    break out;
+                }
+            }
+        }
+        return flag;
     }
 }

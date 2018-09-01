@@ -10,11 +10,10 @@ import ru.job4j.chess.figures.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class BishopBlack implements Figure {
+public class QueenBlack implements Figure {
     private final Cell position;
-    public boolean flag = false;
 
-    public BishopBlack(final Cell position) {
+    public QueenBlack(final Cell position) {
         this.position = position;
     }
 
@@ -26,12 +25,25 @@ public class BishopBlack implements Figure {
     @Override
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
         Cell[] steps;
-        if (!((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y)))) {
+        int length;
+        if (!(((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y)))
+                || ((Math.abs(dest.x - source.x)) == 0)
+                || ((Math.abs(dest.y - source.y)) == 0))) {
             throw new WrongWayException("Cell is NULL");
         }
-        int length = Math.abs(source.x - dest.x);
+        if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))
+                || (Math.abs(dest.y - source.y) == 0)) {
+            length = Math.abs(source.x - dest.x);
+        } else {
+            length = Math.abs(source.y - dest.y);
+        }
         steps = move(source.x, source.y, this.compare(dest.x, source.x), this.compare(dest.y, source.y), length);
         return steps;
+    }
+
+    @Override
+    public Figure copy(Cell dest) {
+        return new QueenBlack(dest);
     }
 
     private Cell[] move(int sourceX, int sourceY, int dX, int dY, int length) {
@@ -55,8 +67,4 @@ public class BishopBlack implements Figure {
         return  delt;
     }
 
-    @Override
-    public Figure copy(Cell dest) {
-        return new BishopBlack(dest);
-    }
 }
