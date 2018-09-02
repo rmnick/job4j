@@ -18,24 +18,20 @@ public class Logic {
         this.figures[this.index++] = figure;
     }
 
-    public boolean move(Cell source, Cell dest) {
+    public boolean move(Cell source, Cell dest) throws WrongWayException, FigureNotFoundException, OccupiedException {
         boolean rst = false;
-        boolean flag = true;
         int index = this.findBy(source);
-        Cell[] steps = new Cell[0];
-        if (index != -1) {
-            try {
-                steps = this.figures[index].way(source, dest);
-            } catch (WrongWayException nce) {
-                flag = false;
-            }
-            if (flag) {
-                flag = this.occupied(steps);
-            }
-            if (flag && steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-                rst = true;
-                this.figures[index] = this.figures[index].copy(dest);
-            }
+        Cell[] steps;
+        if (index == -1) {
+            throw new FigureNotFoundException("there's no figure");
+        }
+        steps = this.figures[index].way(source, dest);
+        if (!(this.occupied(steps))) {
+            throw new OccupiedException("field is occupied");
+        }
+        if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
+            rst = true;
+            this.figures[index] = this.figures[index].copy(dest);
         }
         return rst;
     }

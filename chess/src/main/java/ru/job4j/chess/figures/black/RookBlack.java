@@ -27,14 +27,14 @@ public class RookBlack implements Figure {
         Cell[] steps;
         int length;
         if (!(((Math.abs(dest.x - source.x)) == 0) || ((Math.abs(dest.y - source.y)) == 0))) {
-            throw new WrongWayException("Cell is NULL");
+            throw new WrongWayException();
         }
         if (Math.abs(dest.x - source.x) == 0) {
             length = Math.abs(source.y - dest.y);
         } else {
             length = Math.abs(source.x - dest.x);
         }
-        steps = move(source.x, source.y, this.compare(dest.x, source.x), this.compare(dest.y, source.y), length);
+        steps = move(source.x, source.y, Integer.compare(dest.x, source.x), Integer.compare(dest.y, source.y), length);
         return steps;
     }
 
@@ -51,16 +51,5 @@ public class RookBlack implements Figure {
             steps[index] = Cell.values()[8 * sourceX + sourceY];
         }
         return steps;
-    }
-
-    private int compare(int x, int y) {
-        int delt = 0;
-        if (x > y) {
-            delt = 1;
-        }
-        if (x < y) {
-            delt = -1;
-        }
-        return  delt;
     }
 }

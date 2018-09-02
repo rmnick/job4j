@@ -22,4 +22,11 @@ public class BishopTest {
         Cell[] test = bish.way(Cell.F5, Cell.C8);
         assertThat(test[2], is(Cell.C8));
     }
+    @Test
+    public void bishopTestMoveThenRightArrayCells() {
+        Figure bish = new BishopBlack(Cell.A8);
+        Cell[] test = bish.way(Cell.A8, Cell.H1);
+        Cell[] exmpl = new Cell[] {Cell.B7, Cell.C6, Cell.D5, Cell.E4, Cell.F3, Cell.G2, Cell.H1};
+        assertThat(test, is(exmpl));
+    }
 }

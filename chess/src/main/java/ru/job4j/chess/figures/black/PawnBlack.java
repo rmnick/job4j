@@ -26,7 +26,7 @@ public class PawnBlack implements Figure {
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
         Cell[] steps;
         if (!(source.y == dest.y + 1 && source.x == dest.x)) {
-            throw new WrongWayException("Cell is NULL");
+            throw new WrongWayException();
         }
         steps = new Cell[]{dest};
         return steps;

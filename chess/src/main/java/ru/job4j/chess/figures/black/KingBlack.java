@@ -28,7 +28,7 @@ public class KingBlack implements Figure {
         if (!(((Math.abs(dest.x - source.x) == 1) && (Math.abs(dest.y - source.y) == 1))
                 || ((Math.abs(dest.x - source.x) == 0) && (Math.abs(dest.y - source.y) == 1))
                 || ((Math.abs(dest.x - source.x) == 1) && (Math.abs(dest.y - source.y) == 0)))) {
-            throw new WrongWayException("Cell is NULL");
+            throw new WrongWayException();
         }
         steps = new Cell[] {dest};
         return steps;

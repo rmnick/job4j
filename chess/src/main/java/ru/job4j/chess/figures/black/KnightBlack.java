@@ -26,7 +26,7 @@ public class KnightBlack implements Figure {
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
         if (!((Math.abs(dest.x - source.x) == 2 && Math.abs(dest.y - source.y) == 1)
                 || ((Math.abs(dest.x - source.x)) == 1 && Math.abs(dest.y - source.y) == 2))) {
-            throw new WrongWayException("Cell is NULL");
+            throw new WrongWayException();
         }
         return new Cell[] {dest};
     }

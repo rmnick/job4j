@@ -29,7 +29,7 @@ public class QueenBlack implements Figure {
         if (!(((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y)))
                 || ((Math.abs(dest.x - source.x)) == 0)
                 || ((Math.abs(dest.y - source.y)) == 0))) {
-            throw new WrongWayException("Cell is NULL");
+            throw new WrongWayException();
         }
         if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))
                 || (Math.abs(dest.y - source.y) == 0)) {
@@ -37,7 +37,7 @@ public class QueenBlack implements Figure {
         } else {
             length = Math.abs(source.y - dest.y);
         }
-        steps = move(source.x, source.y, this.compare(dest.x, source.x), this.compare(dest.y, source.y), length);
+        steps = move(source.x, source.y, Integer.compare(dest.x, source.x), Integer.compare(dest.y, source.y), length);
         return steps;
     }
 
@@ -55,16 +55,4 @@ public class QueenBlack implements Figure {
         }
         return steps;
     }
-
-    private int compare(int x, int y) {
-        int delt = 0;
-        if (x > y) {
-            delt = 1;
-        }
-        if (x < y) {
-            delt = -1;
-        }
-        return  delt;
-    }
-
 }
