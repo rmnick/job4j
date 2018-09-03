@@ -21,12 +21,12 @@ public class Logic {
     public boolean move(Cell source, Cell dest) throws WrongWayException, FigureNotFoundException, OccupiedException {
         boolean rst = false;
         int index = this.findBy(source);
-        Cell[] steps;
         if (index == -1) {
             throw new FigureNotFoundException("there's no figure");
         }
+        Cell[] steps;
         steps = this.figures[index].way(source, dest);
-        if (!(this.occupied(steps))) {
+        if (this.occupied(steps)) {
             throw new OccupiedException("field is occupied");
         }
         if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
@@ -55,12 +55,15 @@ public class Logic {
     }
 
     private boolean occupied(Cell[] steps) {
-        boolean flag = true;
-        out: for (int i = 0; i < steps.length; i++) {
+        boolean flag = false;
+        for (int i = 0; i < steps.length; i++) {
+            if (flag) {
+                break;
+            }
             for (int j = 0; j < figures.length; j++) {
                 if (figures[j] != null && steps[i].equals(figures[j].position())) {
-                    flag = false;
-                    break out;
+                    flag = true;
+                    break;
                 }
             }
         }

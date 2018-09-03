@@ -8,6 +8,7 @@ import ru.job4j.chess.figures.black.PawnBlack;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class LogicTest {
     @Test
@@ -28,6 +29,7 @@ public class LogicTest {
         logic.add(bishop);
         try {
             logic.move(bishop.position(), Cell.G4);
+            fail();
         } catch (OccupiedException oce) {
             assertThat(oce.getMessage(), is("field is occupied"));
         }
@@ -52,8 +54,16 @@ public class LogicTest {
         logic.add(bishop);
         try {
             logic.move(Cell.E1, Cell.B7);
+            fail();
         } catch (FigureNotFoundException nfe) {
             assertThat(nfe.getMessage(), is("there's no figure"));
         }
+    }
+    @Test(expected = WrongWayException.class)
+    public void testLogicWhenExpectedWrongWayException() {
+        Logic logic = new Logic();
+        Figure bishop = new BishopBlack(Cell.C8);
+        logic.add(bishop);
+        logic.move(bishop.position(), Cell.C6);
     }
 }
