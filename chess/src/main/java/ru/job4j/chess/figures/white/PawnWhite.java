@@ -1,5 +1,6 @@
 package ru.job4j.chess.figures.white;
 
+import ru.job4j.chess.WrongWayException;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
@@ -23,8 +24,13 @@ public class PawnWhite implements Figure {
     }
 
     @Override
-    public Cell[] way(Cell source, Cell dest) {
-        return new Cell[]{dest};
+    public Cell[] way(Cell source, Cell dest) throws WrongWayException {
+        Cell[] steps;
+        if (!(source.y == dest.y - 1 && source.x == dest.x)) {
+            throw new WrongWayException();
+        }
+        steps = new Cell[]{dest};
+        return steps;
     }
 
     @Override

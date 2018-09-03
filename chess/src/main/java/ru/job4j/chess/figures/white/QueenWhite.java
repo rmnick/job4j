@@ -1,5 +1,6 @@
 package ru.job4j.chess.figures.white;
 
+import ru.job4j.chess.WrongWayException;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
@@ -22,12 +23,35 @@ public class QueenWhite implements Figure {
     }
 
     @Override
-    public Cell[] way(Cell source, Cell dest) {
-        return new Cell[]{dest};
-    }
-
+    public Cell[] way(Cell source, Cell dest) throws WrongWayException {
+        Cell[] steps;
+        int length;
+        if (!(((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y)))
+                || ((Math.abs(dest.x - source.x)) == 0)
+                || ((Math.abs(dest.y - source.y)) == 0))) {
+            throw new WrongWayException();
+        }
+        if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))
+                || (Math.abs(dest.y - source.y) == 0)) {
+            length = Math.abs(source.x - dest.x);
+        } else {
+            length = Math.abs(source.y - dest.y);
+        }
+        steps = move(source.x, source.y, Integer.compare(dest.x, source.x), Integer.compare(dest.y, source.y), length);
+        return steps;
+}
     @Override
     public Figure copy(Cell dest) {
         return new QueenWhite(dest);
+    }
+
+    private Cell[] move(int sourceX, int sourceY, int dX, int dY, int length) {
+        Cell[] steps = new Cell[length];
+        for (int index = 0; index < steps.length; index++) {
+            sourceX += dX;
+            sourceY += dY;
+            steps[index] = Cell.values()[8 * sourceX + sourceY];
+        }
+        return steps;
     }
 }
