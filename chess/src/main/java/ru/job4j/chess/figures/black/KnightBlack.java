@@ -1,6 +1,7 @@
 package ru.job4j.chess.figures.black;
 
 import ru.job4j.chess.WrongWayException;
+import ru.job4j.chess.figures.BaseFigure;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
@@ -10,22 +11,15 @@ import ru.job4j.chess.figures.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class KnightBlack implements Figure {
-    private final Cell position;
-
+public class KnightBlack extends BaseFigure {
     public KnightBlack(final Cell position) {
-        this.position = position;
-    }
-
-    @Override
-    public Cell position() {
-        return this.position;
+        super(position);
     }
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
-        if (!((Math.abs(dest.x - source.x) == 2 && Math.abs(dest.y - source.y) == 1)
-                || ((Math.abs(dest.x - source.x)) == 1 && Math.abs(dest.y - source.y) == 2))) {
+        if (!((calcDistance(source.x, dest.x) == 2 && calcDistance(source.y, dest.y) == 1)
+                || (calcDistance(source.x, dest.x) == 1 && calcDistance(source.y, dest.y) == 2))) {
             throw new WrongWayException();
         }
         return new Cell[] {dest};

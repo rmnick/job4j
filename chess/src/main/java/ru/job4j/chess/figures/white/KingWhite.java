@@ -1,6 +1,7 @@
 package ru.job4j.chess.figures.white;
 
 import ru.job4j.chess.WrongWayException;
+import ru.job4j.chess.figures.BaseFigure;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
@@ -10,28 +11,20 @@ import ru.job4j.chess.figures.Figure;
  * @version $Id$
  * @since 0.1
  */
-public class KingWhite implements Figure {
-    private final Cell position;
+public class KingWhite extends BaseFigure {
 
     public KingWhite(final Cell position) {
-        this.position = position;
-    }
-
-    @Override
-    public Cell position() {
-        return this.position;
+        super(position);
     }
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
-        Cell[] steps;
-        if (!(((Math.abs(dest.x - source.x) == 1) && (Math.abs(dest.y - source.y) == 1))
-                || ((Math.abs(dest.x - source.x) == 0) && (Math.abs(dest.y - source.y) == 1))
-                || ((Math.abs(dest.x - source.x) == 1) && (Math.abs(dest.y - source.y) == 0)))) {
+        if (!(((calcDistance(source.x, dest.x) == 1) && (calcDistance(source.y, dest.y) == 1))
+                || ((calcDistance(source.x, dest.x) == 0) && (calcDistance(source.y, dest.y) == 1))
+                || ((calcDistance(source.x, dest.x) == 1) && (calcDistance(source.y, dest.y) == 0)))) {
             throw new WrongWayException();
         }
-        steps = new Cell[] {dest};
-        return steps;
+        return new Cell[] {dest};
     }
 
     @Override

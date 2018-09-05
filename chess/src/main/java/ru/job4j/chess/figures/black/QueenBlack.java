@@ -1,44 +1,36 @@
 package ru.job4j.chess.figures.black;
 
 import ru.job4j.chess.WrongWayException;
+import ru.job4j.chess.figures.BaseFigure;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
 /**
  *
- * @author Petr Arsentev (parsentev@yandex.ru)
+ * @author Petr Arsentev, Nick Rodionov (parsentev@yandex.ru)
  * @version $Id$
  * @since 0.1
  */
-public class QueenBlack implements Figure {
-    private final Cell position;
+public class QueenBlack extends BaseFigure {
 
     public QueenBlack(final Cell position) {
-        this.position = position;
-    }
-
-    @Override
-    public Cell position() {
-        return this.position;
+        super(position);
     }
 
     @Override
     public Cell[] way(Cell source, Cell dest) throws WrongWayException {
-        Cell[] steps;
-        int length;
-        if (!(((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y)))
-                || ((Math.abs(dest.x - source.x)) == 0)
-                || ((Math.abs(dest.y - source.y)) == 0))) {
+        if (!((checkDiag(source, dest))
+                || (checkHorizon(source, dest))
+                || (checkVertical(source, dest)))) {
             throw new WrongWayException();
         }
-        if ((Math.abs(dest.x - source.x)) == (Math.abs(dest.y - source.y))
-                || (Math.abs(dest.y - source.y) == 0)) {
-            length = Math.abs(source.x - dest.x);
+        int length;
+        if ((checkDiag(source, dest)) || (checkHorizon(source, dest))) {
+            length = calcDistance(source.x, dest.x);
         } else {
-            length = Math.abs(source.y - dest.y);
+            length = calcDistance(source.y, dest.y);
         }
-        steps = move(source.x, source.y, Integer.compare(dest.x, source.x), Integer.compare(dest.y, source.y), length);
-        return steps;
+        return move(source.x, source.y, Integer.compare(dest.x, source.x), Integer.compare(dest.y, source.y), length);
     }
 
     @Override
@@ -46,13 +38,4 @@ public class QueenBlack implements Figure {
         return new QueenBlack(dest);
     }
 
-    private Cell[] move(int sourceX, int sourceY, int dX, int dY, int length) {
-        Cell[] steps = new Cell[length];
-        for (int index = 0; index < steps.length; index++) {
-            sourceX += dX;
-            sourceY += dY;
-            steps[index] = Cell.values()[8 * sourceX + sourceY];
-        }
-        return steps;
-    }
 }

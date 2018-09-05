@@ -1,4 +1,10 @@
 package ru.job4j.chess.figures;
+/**
+ *
+ * @author Nick Rodionov (parsentev@yandex.ru)
+ * @version $Id$
+ * @since 0.1
+ */
 
 public abstract class BaseFigure implements Figure {
    private final Cell position;
@@ -32,6 +38,10 @@ public abstract class BaseFigure implements Figure {
 
     public boolean checkVertical(Cell source, Cell dest) {
         return (Math.abs(dest.x - source.x) == 0);
+    }
+
+    public int calcDistance(int source, int dest) {
+        return Math.abs(dest - source);
     }
 
 }
