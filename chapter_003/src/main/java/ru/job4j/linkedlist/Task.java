@@ -1,4 +1,4 @@
-package ru.job4j.search.linkedlist;
+package ru.job4j.linkedlist;
 
 public class Task {
     private String desc;
