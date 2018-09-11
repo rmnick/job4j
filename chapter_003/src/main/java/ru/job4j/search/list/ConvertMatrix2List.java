@@ -13,4 +13,15 @@ public class ConvertMatrix2List {
         }
         return list;
     }
+
+    public List<Integer> toList(List<int[]> list) {
+        List<Integer> arrayList = new ArrayList<>();
+        for (int[]x : list) {
+            for (int y : x) {
+                arrayList.add(y);
+            }
+        }
+        return arrayList;
+
+    }
 }
