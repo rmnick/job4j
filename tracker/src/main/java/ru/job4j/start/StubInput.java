@@ -1,18 +1,18 @@
 package ru.job4j.start;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StubInput implements Input {
-    private final String[] value;
     private int position = 0;
-
-    public StubInput(final String[] value) {
-        this.value = value;
+    private final List<String> values;
+    public StubInput(final List<String> values) {
+      this.values = values;
     }
 
     @Override
     public String ask(String question) {
-        return this.value[this.position++];
+        return values.get(position++);
     }
 
     public int ask(String question, List<Integer> range) {

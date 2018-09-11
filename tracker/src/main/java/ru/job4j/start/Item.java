@@ -1,5 +1,6 @@
 package ru.job4j.start;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -62,5 +63,21 @@ public class Item {
                 .add(this.description)
                 .add(this.id)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return date == item.date &&
+                Objects.equals(name, item.name) &&
+                Objects.equals(description, item.description) &&
+                Objects.equals(id, item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, id, date);
     }
 }

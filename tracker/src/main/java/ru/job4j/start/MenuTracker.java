@@ -209,7 +209,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Searching a task by name --------------");
             String name = input.ask("Enter name: ");
-            Item[] items = tracker.findByName(name);
+            List<Item> items = tracker.findByName(name);
             for (Item item : items) {
                 System.out.println(item.toString());
             }

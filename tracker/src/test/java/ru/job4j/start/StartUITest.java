@@ -9,6 +9,7 @@ import org.junit.Before;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringJoiner;
 import java.util.List;
 
@@ -29,17 +30,17 @@ public class StartUITest {
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
         Tracker tracker = new Tracker();
-        Input input = new StubInput(new String[] {"0", "first", "first task", "6"});
+        Input input = new StubInput(Arrays.asList("0", "first", "first task", "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
-        assertThat(tracker.findAll()[0].getName(), is("first"));
+        assertThat(tracker.findAll().get(0).getName(), is("first"));
     }
 
     @Test
         public void whenUpdateThenTrackerHasUpdatedValue() {
             Tracker tracker = new Tracker();
             Item item = tracker.addItem(new Item("previous", "description"));
-            Input input = new StubInput(new String[] {"2", item.getId(), "replace task", "new description", "6"});
+            Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
             StartUI start = new StartUI(input, tracker);
             start.init();
             assertThat(tracker.findById(item.getId()).getName(), is("replace task"));
@@ -56,8 +57,8 @@ public class StartUITest {
         tracker.addItem(items[0]);
         tracker.addItem(items[1]);
         tracker.addItem(items[2]);
-        Item[] exm = new Item[] {items[0], items[2]};
-        Input input = new StubInput(new String[]{"3", items[1].getId(), "6"});
+        List<Item> exm = Arrays.asList(items[0], items[2]);
+        Input input = new StubInput(Arrays.asList("3", items[1].getId(), "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
         assertThat(tracker.findAll(), is(exm));
@@ -78,7 +79,7 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
-        Input input = new StubInput(new String[]{"1", "6"});
+        Input input = new StubInput(Arrays.asList("1", "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
         assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -99,7 +100,7 @@ public class StartUITest {
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Item itemThird = tracker.addItem(new Item("third", "description third"));
 
-        Input input = new StubInput(new String[]{"4", itemSecond.getId(), "6"});
+        Input input = new StubInput(Arrays.asList("4", itemSecond.getId(), "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
         assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -119,7 +120,7 @@ public class StartUITest {
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Item itemThird = tracker.addItem(new Item("third", "description third"));
 
-        Input input = new StubInput(new String[]{"5", itemThird.getName(), "6"});
+        Input input = new StubInput(Arrays.asList("5", itemThird.getName(), "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
         assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -137,7 +138,7 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
-        Input input = new StubInput(new String[]{"3", "12", "6"});
+        Input input = new StubInput(Arrays.asList("3", "12", "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
         assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -154,7 +155,7 @@ public class StartUITest {
     public void whenInvalidInput() {
         List<Integer> range = new ArrayList<Integer>();
         ValidateInput input = new ValidateInput(
-                new StubInput(new String[] {"invalid", "1"})
+                new StubInput(Arrays.asList("invalid", "1"))
         );
         input.ask("Enter", range);
         assertThat(

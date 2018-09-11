@@ -7,6 +7,9 @@ package ru.job4j.start;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -18,7 +21,7 @@ public class TestTracker {
         Item itemSecond = new Item("second", "second task");
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
-        assertThat(tr.getAll()[1], is(itemSecond));
+        assertThat(tr.getAll().get(1), is(itemSecond));
     }
     @Test
     public void testWhenReplaceItem() {
@@ -30,7 +33,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        item.setId(tr.getAll()[1].getId());
+        item.setId(tr.getAll().get(1).getId());
         tr.replace(itemSecond.getId(), item);
         assertThat(tr.findById(item.getId()).getName(), is("new"));
     }
@@ -45,8 +48,8 @@ public class TestTracker {
         tr.addItem(items[1]);
         tr.addItem(items[2]);
         tr.delete(items[1].getId());
-        Item[] exm = new Item[] {items[0], items[2]};
-        assertThat(tr.findAll(), is(exm));
+        List<Item> example = Arrays.asList(items[0], items[2]);
+        assertThat(tr.findAll(), is(example));
     }
     @Test
     public void testWhenFindAllItem() {
@@ -57,7 +60,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        assertThat(tr.findAll().length, is(3));
+        assertThat(tr.findAll().size(), is(3));
     }
     @Test
     public void testWhenFindByNameItem() {
@@ -68,7 +71,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        assertThat(tr.findByName("three")[0].getDescription(), is("third task"));
+        assertThat(tr.findByName("three").get(0).getDescription(), is("third task"));
     }
     @Test
     public void testWhenFindById() {
@@ -79,7 +82,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        assertThat(tr.findById(itemSecond.getId()), is(tr.getAll()[1]));
+        assertThat(tr.findById(itemSecond.getId()), is(tr.getAll().get(1)));
     }
 
 }
