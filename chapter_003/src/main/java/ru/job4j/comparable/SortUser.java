@@ -4,11 +4,7 @@ import java.util.*;
 
 public class SortUser {
     public Set<User> sort(final List<User> list) {
-        Set<User> set = new TreeSet<>();
-        for (User user : list) {
-            set.add(user);
-        }
-        return set;
+        return new TreeSet<User>(list);
     }
 
     public List<User> sortNameLength(final List<User> list) {
@@ -17,8 +13,7 @@ public class SortUser {
         result.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
-                return Integer.valueOf(o1.getName().length())
-                        .compareTo(Integer.valueOf(o2.getName().length()));
+                return Integer.compare(o1.getName().length(), o2.getName().length());
             }
         });
         return result;
@@ -32,7 +27,7 @@ public class SortUser {
             public int compare(User o1, User o2) {
                 int result = o1.getName().compareTo(o2.getName());
                 return result != 0 ? result
-                        : Integer.valueOf(o1.getAge()).compareTo(Integer.valueOf(o2.getAge()));
+                        : Integer.compare(o1.getAge(), o2.getAge());
             }
         });
         return arrayList;
