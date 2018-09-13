@@ -5,6 +5,9 @@ package ru.job4j.strategy;
  * @since 2018.08.25
  */
 import org.junit.Test;
+
+import java.util.StringJoiner;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -12,11 +15,11 @@ public class FigureTest {
     @Test
             public void whenDrawSquareThenSquare() {
         Square sqr = new Square();
-        assertThat(sqr.draw(), is(new StringBuilder()
-                .append("+ + + +\n")
-                .append("+     +\n")
-                .append("+     +\n")
-                .append("+ + + +\n")
+        assertThat(sqr.draw(), is(new StringJoiner(System.lineSeparator())
+                .add("+ + + +")
+                .add("+     +")
+                .add("+     +")
+                .add("+ + + +")
                 .toString()
                 )
         );
@@ -24,11 +27,11 @@ public class FigureTest {
     @Test
     public void whenDrawTriangleThenTriangle() {
         Triangle triangle = new Triangle();
-        assertThat(triangle.draw(), is(new StringBuilder()
-                .append("      +\n")
-                .append("    + +\n")
-                .append("  + + +\n")
-                .append("+ + + +\n")
+        assertThat(triangle.draw(), is(new StringJoiner(System.lineSeparator())
+                .add("      +")
+                .add("    + +")
+                .add("  + + +")
+                .add("+ + + +")
                 .toString()
                 )
         );

@@ -8,10 +8,13 @@ public class Square implements Shape {
     @Override
     public String draw() {
         StringBuilder str = new StringBuilder();
-        str.append("+ + + +\n");
-        str.append("+     +\n");
-        str.append("+     +\n");
-        str.append("+ + + +\n");
+        str.append("+ + + +");
+        str.append(System.lineSeparator());
+        str.append("+     +");
+        str.append(System.lineSeparator());
+        str.append("+     +");
+        str.append(System.lineSeparator());
+        str.append("+ + + +");
         return str.toString();
     }
 }
