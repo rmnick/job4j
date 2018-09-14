@@ -3,6 +3,7 @@ package ru.job4j.bank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class User {
     private String name;
@@ -37,5 +38,13 @@ public class User {
 
     public String getPassport() {
         return passport;
+    }
+
+    @Override
+    public String toString() {
+        return  new StringJoiner("; ", "(", ")")
+                .add(name)
+                .add(passport)
+                .toString();
     }
 }

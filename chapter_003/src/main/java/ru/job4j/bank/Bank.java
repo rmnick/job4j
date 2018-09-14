@@ -13,6 +13,10 @@ public class Bank {
         bank.remove(user);
     }
 
+    public Set<User> getUsers() {
+        return this.bank.keySet();
+    }
+
     public void addAccountToUser(String passport, Account account) {
         Set<User> set = bank.keySet();
         for (User key : set) {
