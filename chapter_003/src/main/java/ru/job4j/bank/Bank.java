@@ -49,37 +49,24 @@ public class Bank {
         return list;
     }
 
+    private Account getUserAccount(String passport, String requisite) {
+        Account account = null;
+        List<Account> list = this.getUserAccounts(passport);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getRequisites().equals(requisite)) {
+                    account = list.get(i);
+                    break;
+                }
+            }
+        }
+        return account;
+    }
+
     public boolean transferMoney(String srcPassport, String srcRequisite, String dstPassport, String dstRequisite, double amount) {
         boolean result = false;
-        List<Account> listOne = new ArrayList<>();
-        List<Account> listTwo = new ArrayList<>();
-        Set<User> set = bank.keySet();
-        Account src = null;
-        Account dst = null;
-        for (User key : set) {
-            if (key.getPassport().equals(srcPassport)) {
-                listOne = bank.get(key);
-                break;
-            }
-        }
-        for (User key : set) {
-            if (key.getPassport().equals(dstPassport)) {
-                listTwo = bank.get(key);
-                break;
-            }
-        }
-        for (int i = 0; i < listOne.size(); i++) {
-            if (listOne.get(i).getRequisites().equals(srcRequisite)) {
-                src = listOne.get(i);
-                break;
-            }
-        }
-        for (int i = 0; i < listTwo.size(); i++) {
-            if (listTwo.get(i).getRequisites().equals(dstRequisite)) {
-                dst = listTwo.get(i);
-                break;
-            }
-        }
+        Account src = getUserAccount(srcPassport, srcRequisite);
+        Account dst = getUserAccount(dstPassport, dstRequisite);
         if (src != null && dst != null && src.getValue() != 0 && src.getValue() >= amount) {
             src.setValue(src.getValue() - amount);
             dst.setValue(dst.getValue() + amount);
