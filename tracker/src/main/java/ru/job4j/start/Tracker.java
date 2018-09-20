@@ -3,6 +3,7 @@ package ru.job4j.start;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * @author Nick Rodionov
@@ -60,10 +61,10 @@ public class Tracker {
         return  temp;
     }
 
-    public Item findById(String id) {
+    public Item findById(Predicate<String> predicate) {
         Item result = null;
         for (Item i : this.items) {
-           if (i.getId().equals(id)) {
+           if (predicate.test(i.getId())) {
                result = i;
                break;
            }

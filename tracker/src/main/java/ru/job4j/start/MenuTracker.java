@@ -187,7 +187,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Searching a task by Id --------------");
             String id = input.ask("Enter Id: ");
-            Item item = tracker.findById(id);
+            Item item = tracker.findById(result -> result.equals(id));
             if (item != null) {
                 System.out.println(item.toString());
             } else {
