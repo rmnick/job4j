@@ -2,6 +2,7 @@ package ru.job4j.start;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class StubInput implements Input {
     private int position = 0;
