@@ -43,7 +43,7 @@ public class StartUITest {
             Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
             StartUI start = new StartUI(input, tracker);
             start.init();
-            assertThat(tracker.findById(item.getId()).getName(), is("replace task"));
+            assertThat(tracker.findById((id) -> id.equals(item.getId())).getName(), is("replace task"));
 
     }
 

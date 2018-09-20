@@ -209,10 +209,8 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Searching a task by name --------------");
             String name = input.ask("Enter name: ");
-            List<Item> items = tracker.findByName(name);
-            for (Item item : items) {
-                System.out.println(item.toString());
-            }
+            List<Item> items = tracker.findByName(result -> result.equals(name));
+            items.forEach(System.out :: println);
         }
     }
 }

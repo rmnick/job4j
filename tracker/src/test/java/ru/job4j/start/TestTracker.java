@@ -35,7 +35,7 @@ public class TestTracker {
         tr.addItem(itemThird);
         item.setId(tr.getAll().get(1).getId());
         tr.replace(itemSecond.getId(), item);
-        assertThat(tr.findById(item.getId()).getName(), is("new"));
+        assertThat(tr.findById((id) -> id.equals(item.getId())).getName(), is("new"));
     }
     @Test
     public void testWhenDeleteItem() {
@@ -71,7 +71,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        assertThat(tr.findByName("three").get(0).getDescription(), is("third task"));
+        assertThat(tr.findByName(name -> name.equals("three")).get(0).getDescription(), is("third task"));
     }
     @Test
     public void testWhenFindById() {
@@ -82,7 +82,7 @@ public class TestTracker {
         tr.addItem(itemFirst);
         tr.addItem(itemSecond);
         tr.addItem(itemThird);
-        assertThat(tr.findById(itemSecond.getId()), is(tr.getAll().get(1)));
+        assertThat(tr.findById((id) -> id.equals(itemSecond.getId())), is(tr.getAll().get(1)));
     }
 
 }

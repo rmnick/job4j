@@ -51,10 +51,10 @@ public class Tracker {
         return this.items;
     }
 
-    public List<Item> findByName(String key) {
+    public List<Item> findByName(Predicate<String> predicate) {
         List<Item> temp = new ArrayList<>();
         for (Item i : this.items) {
-            if (i.getName().equals(key)) {
+            if (predicate.test(i.getName())) {
                 temp.add(i);
             }
         }
