@@ -3,6 +3,9 @@ package ru.job4j.chess;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
 
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+
 /**
  * //TODO add comments.
  *
@@ -19,7 +22,7 @@ public class Logic {
     }
 
     public boolean move(Cell source, Cell dest) throws WrongWayException, FigureNotFoundException, OccupiedException {
-        int index = this.findBy(source);
+        int index = this.findBy(cell -> cell.equals(source));
         if (index == -1) {
             throw new FigureNotFoundException("there's no figure");
         }
@@ -38,10 +41,10 @@ public class Logic {
         this.index = 0;
     }
 
-    private int findBy(Cell cell) {
+    private int findBy(Predicate<Cell> predicate) {
         int rst = -1;
         for (int index = 0; index != this.figures.length; index++) {
-            if (this.figures[index] != null && this.figures[index].position().equals(cell)) {
+            if (this.figures[index] != null && predicate.test(this.figures[index].position())) {
                 rst = index;
                 break;
             }
