@@ -52,4 +52,10 @@ public class PhoneDictionaryTest {
         assertThat(persons.get(0).getName() + " " + persons.get(1).getName() + " " + persons.size(),
                 is("Petr Nick 2"));
     }
+    @Test
+    public void whenNull() {
+        PhoneDictionary phones = new PhoneDictionary();
+        List<Person> persons = phones.find("Ni");
+        assertThat(persons.size(), is(0));
+    }
 }
