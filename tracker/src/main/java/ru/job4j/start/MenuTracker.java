@@ -2,6 +2,7 @@ package ru.job4j.start;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MenuTracker {
     /**
@@ -73,7 +74,7 @@ public class MenuTracker {
     /**
      * Method prints menu.
      */
-    public void show() {
+    public void show(Consumer<String> consumer) {
         StringBuilder menu = new StringBuilder();
         menu.append(System.lineSeparator()).append("Menu: ").append(System.lineSeparator());
         for (UserAction action : this.actions) {
@@ -81,7 +82,7 @@ public class MenuTracker {
                 menu.append(action.info()).append(System.lineSeparator());
             }
         }
-        System.out.println(menu.toString());
+        consumer.accept(menu.toString());
     }
 
     /**

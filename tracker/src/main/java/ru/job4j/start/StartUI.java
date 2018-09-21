@@ -30,7 +30,7 @@ public class StartUI {
         menu.fillKeys();
         List<Integer> range = menu.getKeys();
         do {
-            menu.show();
+            menu.show(System.out::println);
             menu.select(input.ask("select: ", range));
         }
         while (flag);
