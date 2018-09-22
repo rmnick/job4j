@@ -29,9 +29,10 @@ public class SortUserTest {
         User nick = new User("Nickolay", 34);
         User dima = new User("Dimon", 12);
         User ivan = new User("Ivan", 27);
-        List<User> users = Arrays.asList(serg, nick, dima, ivan);
+        User ivanJunior = new User("Ivan", 7);
+        List<User> users = Arrays.asList(serg, nick, ivanJunior, dima, ivan);
         List<User> list = sortUser.sortNameLength(users);
-        assertThat(list.toString(), is("[Ivan(27), Dimon(12), Sergey(23), Nickolay(34)]"));
+        assertThat(list.toString(), is("[Ivan(27), Ivan(7), Dimon(12), Sergey(23), Nickolay(34)]"));
     }
     @Test
     public void whenListThenSortListByAllFields() {
