@@ -1,6 +1,7 @@
 package ru.job4j.linkedlist;
 
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class PriorityQueue {
     private LinkedList<Task> tasks = new LinkedList<>();
@@ -15,7 +16,14 @@ public class PriorityQueue {
         }
         tasks.add(index, task);
     }
-
+    /*
+    public void put(Task task) {
+        int index = tasks.stream()
+                .filter(item -> item.getPriority() > task.getPriority())
+                .map(item -> tasks.indexOf(item)).findFirst().get();
+        tasks.add(index, task);
+    }
+    */
     public Task take() {
         return this.tasks.poll();
     }
