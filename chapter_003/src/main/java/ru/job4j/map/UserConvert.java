@@ -18,6 +18,6 @@ public class UserConvert {
     */
     public Map<Integer, User> convertToHashMap(List<User> list) {
         return list.stream()
-                .collect(Collectors.toMap(user -> user.getId(), Function.identity(), (user1, user2) -> (user2), HashMap::new));
+                .collect(Collectors.toMap(user -> user.getId(), Function.identity()));
     }
 }
