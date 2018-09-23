@@ -19,8 +19,8 @@ public class SortUserTest {
         User dima = new User("Dima", 12);
         User ivan = new User("Ivan", 27);
         List<User> users = Arrays.asList(serg, nick, dima, ivan);
-        Set<User> set = sortUser.sort(users);
-        assertThat(set.toString(), is("[Dima(12), Sergey(23), Ivan(27), Nick(34)]"));
+        List<User> list = sortUser.sort(users);
+        assertThat(list.toString(), is("[Dima(12), Sergey(23), Ivan(27), Nick(34)]"));
     }
     @Test
     public void whenListThenSortListByNameLength() {

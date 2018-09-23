@@ -1,6 +1,7 @@
 package ru.job4j.bank;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Bank {
     private Map<User, List<Account>> bank = new HashMap<>();
@@ -17,6 +18,7 @@ public class Bank {
         return this.bank.keySet();
     }
 
+    /*
     public void addAccountToUser(String passport, Account account) {
         Set<User> set = bank.keySet();
         for (User key : set) {
@@ -26,7 +28,13 @@ public class Bank {
             }
         }
     }
-
+    */
+    public void addAccountToUser(String passport, Account account) {
+        bank.keySet().stream()
+                .filter(key -> key.getPassport().equals(passport))
+                .forEach(key -> bank.get(key).add(account));
+    }
+    /*
     public void deleteAccountFromUser(String passport, Account account) {
         Set<User> set = bank.keySet();
         for (User key : set) {
@@ -36,7 +44,13 @@ public class Bank {
             }
         }
     }
-
+    */
+    public void deleteAccountFromUser(String passport, Account account) {
+        bank.keySet().stream()
+                .filter(key -> key.getPassport().equals(passport))
+                .forEach(key -> bank.get(key).remove(account));
+    }
+    /*
     public List<Account> getUserAccounts(String passport) {
         List<Account> list = new ArrayList<>();
         Set<User> set = bank.keySet();
@@ -48,8 +62,14 @@ public class Bank {
         }
         return list;
     }
-
-    private Account getUserAccount(String passport, String requisite) {
+    */
+    public List<Account> getUserAccounts(String passport) {
+        return bank.keySet().stream()
+                .filter(key -> key.getPassport().equals(passport))
+                .map(key -> bank.get(key)).findFirst().get();
+    }
+    /*
+        private Account getUserAccount(String passport, String requisite) {
         Account account = null;
         List<Account> list = this.getUserAccounts(passport);
         if (list != null) {
@@ -61,6 +81,13 @@ public class Bank {
             }
         }
         return account;
+    }
+    */
+    private Account getUserAccount(String passport, String requisite) {
+        return this.getUserAccounts(passport).stream()
+                    .filter(account -> account.getRequisites().equals(requisite))
+                    .findFirst()
+                    .get();
     }
 
     public boolean transferMoney(String srcPassport, String srcRequisite, String dstPassport, String dstRequisite, double amount) {

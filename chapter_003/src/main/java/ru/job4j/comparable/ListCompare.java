@@ -1,5 +1,6 @@
 package ru.job4j.comparable;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class ListCompare implements Comparator<String> {
