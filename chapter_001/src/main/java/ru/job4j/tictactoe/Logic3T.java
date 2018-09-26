@@ -47,20 +47,6 @@ public class Logic3T {
         return rsl;
     }
 
-    public boolean fillByX(int startX, int startY, int deltaX, int deltaY) {
-        boolean result = true;
-        for (int index = 0; index != this.table.length; index++) {
-            Figure3T cell = this.table[startX][startY];
-            startX += deltaX;
-            startY += deltaY;
-            if (!cell.hasMarkX()) {
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
-
     public boolean fillBy(Predicate<Figure3T> predicate, int startX, int startY, int deltaX, int deltaY) {
         boolean result = true;
         for (int index = 0; index != this.table.length; index++) {
@@ -74,6 +60,4 @@ public class Logic3T {
         }
         return result;
     }
-
-
 }
