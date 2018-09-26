@@ -52,6 +52,18 @@ public class Logic3TTest {
         Logic3T desk = new Logic3T(exmpl);
         assertThat(desk.isWinnerX(), is(true));
     }
+
+    @Test
+    public void logicTestHorizontXNotWin() {
+        Figure3T[][] exmpl = {
+                {new Figure3T(true), new Figure3T(), new Figure3T()},
+                {new Figure3T(), new Figure3T(), new Figure3T(true)},
+                {new Figure3T(true), new Figure3T(true), new Figure3T()}
+        };
+
+        Logic3T desk = new Logic3T(exmpl);
+        assertThat(desk.isWinnerX(), is(false));
+    }
 }
 
 
