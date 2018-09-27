@@ -3,10 +3,10 @@ package ru.job4j.list;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ConvertMatrix2List {
+    /*
     public List<Integer> toList(int[][] array) {
        List<Integer> list = new ArrayList<>();
         for (int[] x : array) {
@@ -16,7 +16,12 @@ public class ConvertMatrix2List {
         }
         return list;
     }
+    */
+    public List<Integer> toList(int[][] array) {
+        return Arrays.stream(array).flatMapToInt(Arrays::stream).boxed().collect(Collectors.toList());
+    }
 
+/*
     public List<Integer> toList(List<int[]> list) {
         List<Integer> arrayList = new ArrayList<>();
         for (int[]x : list) {
@@ -27,4 +32,8 @@ public class ConvertMatrix2List {
         return arrayList;
 
     }
+*/
+     public List<Integer> toList(List<int[]> list) {
+         return list.stream().flatMapToInt(Arrays :: stream).boxed().collect(Collectors.toList());
+     }
 }
