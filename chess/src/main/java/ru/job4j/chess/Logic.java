@@ -22,7 +22,7 @@ public class Logic {
     }
 
     public boolean move(Cell source, Cell dest) throws WrongWayException, FigureNotFoundException, OccupiedException {
-        int index = this.findBy((figure, cell) -> figure != null && cell.equals(source));
+        int index = this.findBy((cell) -> cell.equals(source));
         if (index == -1) {
             throw new FigureNotFoundException("there's no figure");
         }
@@ -41,10 +41,10 @@ public class Logic {
         this.index = 0;
     }
 
-    private int findBy(BiPredicate<Figure, Cell> predicate) {
+    private int findBy(Predicate<Cell> predicate) {
         int rst = -1;
         for (int index = 0; index != this.figures.length; index++) {
-            if (predicate.test(this.figures[index], this.figures[index].position())) {
+            if (figures[index] != null && predicate.test(this.figures[index].position())) {
                 rst = index;
                 break;
             }
