@@ -14,10 +14,10 @@ public class EvenIterator implements Iterator {
     @Override
     public boolean hasNext() {
         boolean result = false;
-        int count = index;
-        while (count < arr.length) {
-            if (arr[count++] % 2 == 0) {
+        for (int counter = index; counter < arr.length; counter++) {
+            if (arr[counter] % 2 == 0) {
                 result = true;
+                index = counter;
                 break;
             }
         }
@@ -28,9 +28,6 @@ public class EvenIterator implements Iterator {
     public Object next() throws NoSuchElementException {
         if (!hasNext()) {
             throw new NoSuchElementException();
-        }
-        while (arr[index] % 2 != 0) {
-            index++;
         }
         return arr[index++];
     }
