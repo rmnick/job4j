@@ -35,18 +35,18 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
 
     @Override
     public T findById(String id) {
-        T user = null;
+        T element = null;
         Iterator<T> iterator = array.iterator();
         int index = 0;
         while (iterator.hasNext()) {
             T some = iterator.next();
             if (some != null && some.getId().equals(id)) {
-                user = array.get(index);
+                element = array.get(index);
                 break;
             }
             index++;
         }
-        return (T) user;
+        return element;
     }
 
     @Override
@@ -55,8 +55,8 @@ public abstract class AbstractStore<T extends Base> implements Store<T> {
         Iterator<T> iterator = array.iterator();
         int index = 0;
         while (iterator.hasNext()) {
-            T user = iterator.next();
-            if (user != null && user.getId().equals(id)) {
+            T element = iterator.next();
+            if (element != null && element.getId().equals(id)) {
                 array.delete(index);
                 result = true;
                 break;
