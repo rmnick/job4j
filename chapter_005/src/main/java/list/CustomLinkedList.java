@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 
 public class CustomLinkedList<E> implements Iterable<E> {
 
-    private int size = 0;
-    private Node<E> first;
-    private Node<E> last;
-    private int modCount = 0;
+    protected int size = 0;
+    protected Node<E> first;
+    protected Node<E> last;
+    protected int modCount = 0;
 
-    private static class Node<E> {
+    protected static class Node<E> {
 
         E value;
         Node<E> prev;
