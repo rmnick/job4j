@@ -37,7 +37,7 @@ public class CustomLinkedList<E> implements Iterable<E> {
         modCount++;
     }
 
-    public E get(int index) throws IndexOutOfBoundsException{
+    public E get(int index) throws IndexOutOfBoundsException {
 
         Node<E> result = first;
         if (index < 0 || index >= size) {
@@ -54,7 +54,7 @@ public class CustomLinkedList<E> implements Iterable<E> {
         return new Iterator<E>() {
 
             int expectedModCount = modCount;
-            Node<E> currentNode = first;
+            Node<E> pointer = new Node<>(null, null, first);
 
             @Override
             public boolean hasNext() throws ConcurrentModificationException {
@@ -62,19 +62,19 @@ public class CustomLinkedList<E> implements Iterable<E> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                if (currentNode != null && currentNode.next != null) {
+                if (pointer.next != null) {
                     result = true;
                 }
                 return result;
             }
 
             @Override
-            public E next() throws NoSuchElementException{
+            public E next() throws NoSuchElementException {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                currentNode = currentNode.next;
-                return currentNode.prev.value;
+                pointer = pointer.next;
+                return pointer.value;
             }
         };
     }
