@@ -35,7 +35,10 @@ public class SimpleArrayList<E> implements Iterable<E> {
             int index = 0;
             long expectedModCount = modCount;
             @Override
-            public boolean hasNext() {
+            public boolean hasNext() throws ConcurrentModificationException {
+                if (this.expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return index < array.length;
             }
 
@@ -43,9 +46,6 @@ public class SimpleArrayList<E> implements Iterable<E> {
             public E next() throws NoSuchElementException, ConcurrentModificationException {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
-                }
-                if (this.expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
                 }
                 return (E) array[index++];
             }
