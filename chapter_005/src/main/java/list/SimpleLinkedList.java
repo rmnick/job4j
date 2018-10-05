@@ -1,5 +1,7 @@
 package list;
 
+import java.util.NoSuchElementException;
+
 public class SimpleLinkedList<E> {
     private int size;
     private Node<E> first;
@@ -22,7 +24,10 @@ public class SimpleLinkedList<E> {
     /**
      * Remove from head
      */
-    public E delete() {
+    public E delete() throws NoSuchElementException {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
         Node<E> result = this.first;
         this.first = result.next;
         size--;
