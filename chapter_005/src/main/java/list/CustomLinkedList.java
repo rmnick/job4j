@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 
 public class CustomLinkedList<E> implements Iterable<E> {
 
-    protected int size = 0;
-    protected Node<E> first;
-    protected Node<E> last;
-    protected int modCount = 0;
+    private int size = 0;
+    private Node<E> first;
+    private Node<E> last;
+    private int modCount = 0;
 
-    protected static class Node<E> {
+    private static class Node<E> {
 
         E value;
         Node<E> prev;
@@ -47,6 +47,20 @@ public class CustomLinkedList<E> implements Iterable<E> {
             result = result.next;
         }
         return result.value;
+    }
+
+    /**
+    method for stack
+     */
+    public E removeLast() throws NoSuchElementException {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+        E result = last.value;
+        last.next = null;
+        last = last.prev;
+        size--;
+        return result;
     }
 
     public Iterator<E> iterator() {

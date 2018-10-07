@@ -1,22 +1,25 @@
 package list;
 
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 
-public class CustomStack<E> extends CustomLinkedList<E> {
+public class CustomStack<E> {
+    private final CustomLinkedList<E> list;
+
+    public CustomStack() {
+        this.list = new CustomLinkedList<>();
+    }
 
     public E push(E value) {
-        super.add(value);
+        this.list.add(value);
         return value;
     }
 
-    public E pop() throws EmptyStackException {
-        if (size == 0) {
+    public E poll() throws EmptyStackException {
+        try {
+            return this.list.removeLast();
+        } catch (NoSuchElementException e) {
             throw new EmptyStackException();
         }
-        E result = last.value;
-        last.next = null;
-        last = last.prev;
-        size--;
-        return result;
     }
 }

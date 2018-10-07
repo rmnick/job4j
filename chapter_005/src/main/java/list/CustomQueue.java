@@ -26,7 +26,7 @@ public class CustomQueue<E> {
             if (flagAdd) {
                 stackOutput = reverse(stackInput);
             }
-            result = stackOutput.pop();
+            result = stackOutput.poll();
             flagRem = true;
             flagAdd = false;
             size--;
@@ -37,7 +37,7 @@ public class CustomQueue<E> {
     private CustomStack<E> reverse(CustomStack<E> input) {
         CustomStack<E> result = new CustomStack<>();
         for (int i = 0; i < size; i++) {
-            result.push(input.pop());
+            result.push(input.poll());
         }
         return result;
     }
