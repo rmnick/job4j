@@ -22,4 +22,8 @@ public class CustomStack<E> {
             throw new EmptyStackException();
         }
     }
+
+    public int getSize() {
+        return list.getSize();
+    }
 }

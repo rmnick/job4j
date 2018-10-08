@@ -1,38 +1,27 @@
 package list;
 
 public class CustomQueue<E> {
-    private CustomStack<E> stack = new CustomStack<>();
-    private int size = 0;
-    private boolean flag = false;
+    private CustomStack<E> in = new CustomStack<>();
+    private CustomStack<E> out = new CustomStack<>();
 
     public void push(E value) {
-        if (flag) {
-            stack = reverse(stack);
-        }
-        stack.push(value);
-        size++;
+        in.push(value);
     }
 
     public E poll() {
-        E result;
-        if (size == 0) {
-            result = null;
-        } else {
-            if (!flag) {
-                stack = reverse(stack);
-            }
-            result = stack.poll();
-            size--;
+        E result = null;
+        if (out.getSize() == 0 && in.getSize() > 0) {
+            transfer();
+        }
+        if (out.getSize() > 0) {
+            result = out.poll();
         }
         return result;
     }
 
-    private CustomStack<E> reverse(CustomStack<E> input) {
-        CustomStack<E> result = new CustomStack<>();
-        for (int i = 0; i < size; i++) {
-            result.push(input.poll());
+    private void transfer() {
+        for (int i = in.getSize(); i > 0; i--) {
+            out.push(in.poll());
         }
-        flag = !flag;
-        return result;
     }
 }

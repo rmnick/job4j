@@ -63,6 +63,10 @@ public class CustomLinkedList<E> implements Iterable<E> {
         return result;
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
     public Iterator<E> iterator() {
 
         return new Iterator<E>() {
