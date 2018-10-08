@@ -12,17 +12,10 @@ public class SimpleSet<E> implements Iterable<E> {
     }
 
     public boolean add(E value) throws NullPointerException {
-        boolean result = true;
-        Iterator<E> iterator = this.iterator();
         if (value == null) {
             throw new NullPointerException();
         }
-        while (iterator.hasNext()) {
-            if (value.equals(iterator.next())) {
-                result = false;
-                break;
-            }
-        }
+        boolean result = !this.contains(value);
         if (result) {
             list.add(value);
         }
@@ -31,5 +24,17 @@ public class SimpleSet<E> implements Iterable<E> {
 
     public Iterator<E> iterator() {
         return list.iterator();
+    }
+
+    private boolean contains(E value) {
+        boolean result = false;
+        Iterator<E> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            if (value.equals(iterator.next())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 }
