@@ -11,7 +11,6 @@ import static  org.hamcrest.Matchers.is;
 
 public class SimpleArrayListTest {
     @Test
-    @Ignore
     public void addGetTests() {
         SimpleArrayList<Integer> list = new SimpleArrayList<>(4);
         list.add(1);
