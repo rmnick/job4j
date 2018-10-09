@@ -21,7 +21,7 @@ public class MapTest {
         assertThat(userTwo.equals(userOne), is(true));
         hashMap.put(userOne, dummy);
         hashMap.put(userTwo, dummy);
-        assertThat(userOne.hashCode() != userTwo.hashCode(), is(true));
+        assertThat(userOne.hashCode() == userTwo.hashCode(), is(true));
         System.out.println(hashMap);
     }
 }
