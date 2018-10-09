@@ -13,6 +13,14 @@ public class User {
         this.birthday = birthday;
     }
 
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + Integer.valueOf(children).hashCode();
+        result = 31 * result + birthday.hashCode();
+        return result;
+    }
+
     public String getName() {
         return name;
     }

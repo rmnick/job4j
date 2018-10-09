@@ -19,7 +19,7 @@ public class MapTest {
         User userTwo = new User("Sergei", 2, birthDate);
         hashMap.put(userOne, dummy);
         hashMap.put(userTwo, dummy);
-        assertThat(userOne.hashCode() != userTwo.hashCode(), is(true));
+        assertThat(userOne.hashCode() == userTwo.hashCode(), is(true));
         System.out.println(hashMap);
     }
 }
