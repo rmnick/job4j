@@ -14,11 +14,13 @@ public class User {
     }
 
     public int hashCode() {
-        /*int result = 17;
+        /*
+        int result = 17;
         result = 31 * result + name.hashCode();
         result = 31 * result + Integer.valueOf(children).hashCode();
         result = 31 * result + birthday.hashCode();
-        return result;*/
+        return result;
+        */
         return super.hashCode();
     }
 
