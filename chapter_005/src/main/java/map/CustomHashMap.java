@@ -9,34 +9,6 @@ public class CustomHashMap<K, V> implements Iterable<Map.Entry<K, V>> {
     private int size = 0;
     private int modCount = 0;
 
-    public int getTableLength() {
-        return table.length;
-    }
-    public int getSize() {
-        return this.size;
-    }
-
-    public List<V> getValues() {
-        List<V> values = new ArrayList<>();
-        for (Entry<K, V> e : table) {
-            if (e != null) {
-                values.add(e.getValue());
-            }
-        }
-        return values;
-    }
-
-    public Set<K> getKeys() {
-        Set<K> keys = new HashSet<>();
-        for (Entry<K, V> e : table) {
-            if (e != null) {
-                keys.add(e.getKey());
-            }
-        }
-        return keys;
-    }
-
-
     public CustomHashMap() {
         this.table = new Entry[16];
     }
@@ -70,10 +42,22 @@ public class CustomHashMap<K, V> implements Iterable<Map.Entry<K, V>> {
         }
     }
 
+    /**
+     * hash function from jdk 7
+     * @param h
+     * @return
+     */
     private int hash(int h) {
         h = h ^ (h >>> 20) ^ (h >>> 12);
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
+
+    /**
+     * index calculation from jdk 7
+     * @param h
+     * @param length
+     * @return
+     */
 
     private int indexFor(int h, int length) {
         return h & (length - 1);
@@ -183,6 +167,7 @@ public class CustomHashMap<K, V> implements Iterable<Map.Entry<K, V>> {
     public Iterator<Map.Entry<K, V>> iterator() {
         return new Iterator<Map.Entry<K, V>>() {
             int count = 0;
+            int index = 0;
             int expectedModCount = modCount;
             @Override
             public boolean hasNext() throws ConcurrentModificationException {
@@ -197,18 +182,48 @@ public class CustomHashMap<K, V> implements Iterable<Map.Entry<K, V>> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                for (int i = count; i < table.length; i++) {
+                for (int i = index; i < table.length; i++) {
                     if (table[i] != null) {
-                        //count = i;
-                        //count++;
+                        count++;
                         e = table[i];
-                        count = i + 1;
+                        index = i + 1;
                         break;
                     }
                 }
                 return e;
             }
         };
+    }
+
+    /**
+     *
+     * there's methods for tests(below):
+     * getTableLength - return length incapsulate array(base container)
+     * getValues and getKeys for print result in test
+     */
+
+    public int getTableLength() {
+        return table.length;
+    }
+
+    public List<V> getValues() {
+        List<V> values = new ArrayList<>();
+        for (Entry<K, V> e : table) {
+            if (e != null) {
+                values.add(e.getValue());
+            }
+        }
+        return values;
+    }
+
+    public Set<K> getKeys() {
+        Set<K> keys = new HashSet<>();
+        for (Entry<K, V> e : table) {
+            if (e != null) {
+                keys.add(e.getKey());
+            }
+        }
+        return keys;
     }
 
 }

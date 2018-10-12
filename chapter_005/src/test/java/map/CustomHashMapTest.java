@@ -2,6 +2,7 @@ package map;
 
 import org.junit.Test;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -97,13 +98,24 @@ public class CustomHashMapTest {
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next().getValue(), is("b"));
-       // assertThat(iterator.next().getValue(), is("c"));
-       // assertThat(iterator.hasNext(), is(false));
+        assertThat(iterator.next().getValue(), is("c"));
+        assertThat(iterator.hasNext(), is(false));
     }
     @Test(expected = NoSuchElementException.class)
     public void whenIteratorHasNotNextThenException() {
         CustomHashMap<Integer, String> map = new CustomHashMap<>();
         Iterator<Map.Entry<Integer, String>> iterator = map.iterator();
+        iterator.next();
+    }
+    @Test(expected = ConcurrentModificationException.class)
+    public void whenIteratorNextDuringChangingMapThenException() {
+        CustomHashMap<Integer, String> map = new CustomHashMap<>();
+        map.insert(1, "a");
+        map.insert(2, "b");
+        map.insert(3, "c");
+        Iterator<Map.Entry<Integer, String>> iterator = map.iterator();
+        iterator.next();
+        map.insert(4, "d");
         iterator.next();
     }
 }
