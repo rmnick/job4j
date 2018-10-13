@@ -95,4 +95,21 @@ public class SimpleTree<E extends Comparable<E>> implements Iterable<E> {
             }
         };
     }
+
+    public boolean isBinary() {
+        boolean result = true;
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(this.root);
+        while (!queue.isEmpty()) {
+            Node<E> temp = queue.poll();
+            if (temp.leaves().size() > 2) {
+                result = false;
+                break;
+            }
+            for (Node<E> e : temp.leaves()) {
+                queue.offer(e);
+            }
+        }
+        return result;
+    }
 }
