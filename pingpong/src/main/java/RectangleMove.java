@@ -13,7 +13,7 @@ public class RectangleMove implements Runnable {
     public void run() {
         int dX = makeDelta();
         int dY = makeDelta();
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             if (this.rect.getX() == PingPong.LIMIT_X - rect.getWidth()) {
                 dX = -1;
             }
