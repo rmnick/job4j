@@ -12,7 +12,7 @@ public class PingPong extends Application {
     @Override
     public void start(Stage stage) {
         Group group = new Group();
-        Rectangle rect = new Rectangle(100, 150, 10, 10);
+        Rectangle rect = new Rectangle(120, 150, 10, 10);
         group.getChildren().add(rect);
         Thread thread = new Thread(new RectangleMove(rect));
         thread.start();
