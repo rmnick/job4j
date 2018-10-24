@@ -13,12 +13,11 @@ public class RectangleMove implements Runnable {
     public void run() {
         int dX = makeDelta();
         int dY = makeDelta();
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                //e.printStackTrace();
-                break;
+               Thread.currentThread().interrupt();
             }
             if (this.rect.getX() == PingPong.LIMIT_X  || this.rect.getX() == 0) {
                 dX = -1 * dX;
