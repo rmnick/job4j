@@ -1,7 +1,7 @@
 package problems;
 public class CustomThread extends Thread {
     private Counter counter;
-    public CustomThread (Counter counter) {
+    public CustomThread(Counter counter) {
         this.counter = counter;
     }
     @Override
@@ -17,7 +17,7 @@ public class CustomThread extends Thread {
         }
         try {
             Thread.sleep(20000);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println(counter.count);
