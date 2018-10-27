@@ -1,10 +1,25 @@
 package userstore;
 
 import org.junit.Test;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class UserStoreTest {
+    public class AddThread extends Thread {
+        private UserStore store;
+        private final int id;
+        public AddThread(int id, UserStore store) {
+            this.id = id;
+            this.store = store;
+        }
+
+        @Override
+        public void run() {
+            store.add(new UserStore.User(id, 0));
+        }
+    }
+
 
     @Test
     public void addTest() {
@@ -16,6 +31,15 @@ public class UserStoreTest {
         assertThat(store.add(vasya), is(true));
         assertThat(store.add(petya), is(false));
         assertThat(store.size(), is(2));
+        for (int i = 3; i < 10000; i++) {
+            new AddThread(i, store).start();
+        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertThat(store.size(), is(9999));
     }
     @Test
     public void deleteTest() {
