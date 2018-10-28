@@ -9,9 +9,9 @@ public class SortUser {
     }
 
     /*
-    public List<User> sortNameLength(final List<User> list) {
+    public List<User> sortNameLength(final List<User> ru.job4j.list) {
         List<User> result = new ArrayList<>();
-        result.addAll(list);
+        result.addAll(ru.job4j.list);
         result.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
@@ -35,9 +35,9 @@ public class SortUser {
     }
 
     /*
-    public List<User> sortByAllFields(final List<User> list) {
+    public List<User> sortByAllFields(final List<User> ru.job4j.list) {
         List<User> arrayList = new ArrayList<>();
-        arrayList.addAll(list);
+        arrayList.addAll(ru.job4j.list);
         arrayList.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {

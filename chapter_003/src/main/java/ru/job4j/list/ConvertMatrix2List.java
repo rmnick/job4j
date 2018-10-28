@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 public class ConvertMatrix2List {
     /*
     public List<Integer> toList(int[][] array) {
-       List<Integer> list = new ArrayList<>();
+       List<Integer> ru.job4j.list = new ArrayList<>();
         for (int[] x : array) {
             for (int y : x) {
-                list.add(y);
+                ru.job4j.list.add(y);
             }
         }
-        return list;
+        return ru.job4j.list;
     }
     */
     public List<Integer> toList(int[][] array) {
@@ -22,9 +22,9 @@ public class ConvertMatrix2List {
     }
 
 /*
-    public List<Integer> toList(List<int[]> list) {
+    public List<Integer> toList(List<int[]> ru.job4j.list) {
         List<Integer> arrayList = new ArrayList<>();
-        for (int[]x : list) {
+        for (int[]x : ru.job4j.list) {
             for (int y : x) {
                 arrayList.add(y);
             }

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class StartUI {
     /**
-     * list constants for menu.
+     * ru.job4j.list constants for menu.
      */
     private final Input input;
     private final Tracker tracker;

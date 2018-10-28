@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 public class UserConvert {
     /*
-    public Map<Integer, User> convertToHashMap(List<User> list) {
-        Map<Integer, User> map = new HashMap<>();
-        for (User user : list) {
-            map.put(user.getId(), user);
+    public Map<Integer, User> convertToHashMap(List<User> ru.job4j.list) {
+        Map<Integer, User> ru.job4j.map = new HashMap<>();
+        for (User user : ru.job4j.list) {
+            ru.job4j.map.put(user.getId(), user);
         }
-        return map;
+        return ru.job4j.map;
     }
     */
     public Map<Integer, User> convertToHashMap(List<User> list) {

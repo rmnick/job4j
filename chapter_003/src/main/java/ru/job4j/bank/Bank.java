@@ -20,8 +20,8 @@ public class Bank {
 
     /*
     public void addAccountToUser(String passport, Account account) {
-        Set<User> set = bank.keySet();
-        for (User key : set) {
+        Set<User> ru.job4j.set = bank.keySet();
+        for (User key : ru.job4j.set) {
             if (key.getPassport().equals(passport)) {
                 bank.get(key).add(account);
                 break;
@@ -36,8 +36,8 @@ public class Bank {
     }
     /*
     public void deleteAccountFromUser(String passport, Account account) {
-        Set<User> set = bank.keySet();
-        for (User key : set) {
+        Set<User> ru.job4j.set = bank.keySet();
+        for (User key : ru.job4j.set) {
             if (key.getPassport().equals(passport)) {
                 bank.get(key).remove(account);
                 break;
@@ -52,15 +52,15 @@ public class Bank {
     }
     /*
     public List<Account> getUserAccounts(String passport) {
-        List<Account> list = new ArrayList<>();
-        Set<User> set = bank.keySet();
-        for (User key : set) {
+        List<Account> ru.job4j.list = new ArrayList<>();
+        Set<User> ru.job4j.set = bank.keySet();
+        for (User key : ru.job4j.set) {
             if (key.getPassport().equals(passport)) {
-                list = bank.get(key);
+                ru.job4j.list = bank.get(key);
                 break;
             }
         }
-        return list;
+        return ru.job4j.list;
     }
     */
     public List<Account> getUserAccounts(String passport) {
@@ -71,11 +71,11 @@ public class Bank {
     /*
         private Account getUserAccount(String passport, String requisite) {
         Account account = null;
-        List<Account> list = this.getUserAccounts(passport);
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getRequisites().equals(requisite)) {
-                    account = list.get(i);
+        List<Account> ru.job4j.list = this.getUserAccounts(passport);
+        if (ru.job4j.list != null) {
+            for (int i = 0; i < ru.job4j.list.size(); i++) {
+                if (ru.job4j.list.get(i).getRequisites().equals(requisite)) {
+                    account = ru.job4j.list.get(i);
                     break;
                 }
             }

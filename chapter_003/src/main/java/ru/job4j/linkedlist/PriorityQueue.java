@@ -20,7 +20,7 @@ public class PriorityQueue {
     public void put(Task task) {
         int index = tasks.stream()
                 .filter(item -> item.getPriority() > task.getPriority())
-                .map(item -> tasks.indexOf(item)).findFirst().get();
+                .ru.job4j.map(item -> tasks.indexOf(item)).findFirst().get();
         tasks.add(index, task);
     }
     */
