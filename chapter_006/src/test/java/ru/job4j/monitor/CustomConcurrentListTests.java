@@ -26,7 +26,7 @@ public class CustomConcurrentListTests {
     @Test
     public void whenAddingInIterationThereIsNotExceptionAndChangingSnapshot() {
         CustomConcurrentList<Integer> list = new CustomConcurrentList<>(new SimpleArrayList<>());
-        //create ru.job4j.list with 1000 elements
+        //create list with 1000 elements
         for (int i = 0; i < 1000; i++) {
             list.add(i);
         }
@@ -44,9 +44,9 @@ public class CustomConcurrentListTests {
             countNewList++;
             newIterator.next();
         }
-        //there is not changing in snapshot even if we making "add" operation
+        //there is not changing in snapshot even if we're making "add" operation
         assertThat(countSnapshot == 1000, is(true));
-        //some changing in our ru.job4j.list because we've made several "add" operation
+        //some changing list because we've made several "add" operation
         assertThat(countNewList != countSnapshot, is(true));
     }
 
