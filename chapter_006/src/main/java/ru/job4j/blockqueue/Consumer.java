@@ -10,7 +10,7 @@ public class Consumer<E> extends Thread {
     @Override
     public void run() {
         try {
-            this.queue.pool();
+            this.queue.poll();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

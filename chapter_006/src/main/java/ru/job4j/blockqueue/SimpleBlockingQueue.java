@@ -26,7 +26,7 @@ public class SimpleBlockingQueue<E> {
         }
     }
 
-    public E pool() throws InterruptedException {
+    public E poll() throws InterruptedException {
         synchronized (this) {
             E element;
             while (size == 0) {

@@ -16,7 +16,7 @@ public class SingleConsumer extends Thread {
     public void run() {
         try {
             for (int i = 0; i < 1000000; i++) {
-                this.queue.pool();
+                this.queue.poll();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
