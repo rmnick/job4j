@@ -42,10 +42,14 @@ public class SimpleBlockingQueue<E> {
     }
 
     /**
-     * method for test
+     * methods for test
      * @return int
      */
     public synchronized int getSize() {
         return this.size;
+    }
+
+    public synchronized boolean isEmpty() {
+        return this.queue.isEmpty();
     }
 }
