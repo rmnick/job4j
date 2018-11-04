@@ -7,7 +7,7 @@ import java.util.Iterator;
 @ThreadSafe
 public class CustomConcurrentList<E> implements Iterable<E> {
 @GuardedBy("this")
-    private SimpleArrayList<E> list;
+    private final SimpleArrayList<E> list;
 
     public CustomConcurrentList(SimpleArrayList<E> list) {
         this.list = list;
