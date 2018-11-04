@@ -9,9 +9,9 @@ import java.util.Queue;
 @ThreadSafe
 public class SimpleBlockingQueue<E> {
     @GuardedBy("this")
-    private Queue<E> queue = new LinkedList<>();
+    private final Queue<E> queue = new LinkedList<>();
     private static final int MAX_SIZE = 10;
-    private volatile int size = 0;
+    private int size = 0;
 
     public void offer(E value) throws InterruptedException {
         synchronized (this) {
