@@ -36,7 +36,8 @@ public class ParallelSearchWithInterrupt {
             producer.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            consumer.interrupt();
         }
-        consumer.interrupt();
     }
 }
