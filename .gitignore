@@ -25,6 +25,7 @@ hs_err_pid*
 chapter_001/target
 
 target
+chess/src/main/resources
 
 .idea
 *.iml
