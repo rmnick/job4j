@@ -23,6 +23,7 @@
         <module>chapter_005</module>
         <module>pingpong</module>
 		<module>chapter_006</module>
+        <module>bomberman</module>
     </modules>
 	 
 	<build>
