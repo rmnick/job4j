@@ -10,28 +10,30 @@ import static org.junit.Assert.assertThat;
 
 public class UnblockedCasheTest {
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
         UnblockedCashe map = new UnblockedCashe();
         Base model = new Base(1, 0, "0");
         map.add(model);
         AtomicReference<Exception> ex = new AtomicReference<>();
-        for (int i = 0; i < 100000; i++) {
-            new Thread(
-                    () -> {
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
                 String name = "1";
                 try {
                     map.change(1, name);
                 } catch (OptimisticException e) {
                     ex.set(e);
+                    System.out.println(model.getName());
                 }
-            }).start();
-        }
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //assertThat(ex.get().getMessage(), is("model is already changed"));
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (int i = 0; i < 500; i++) {
+                model.update(String.valueOf(i));
+            }
+        }).start();
+        Thread.sleep(3000);
+        assertThat(ex.get().getMessage(), is("model is already changed"));
     }
 
     @Test

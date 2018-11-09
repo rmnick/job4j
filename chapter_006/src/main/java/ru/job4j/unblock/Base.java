@@ -18,11 +18,20 @@ public class Base {
         return version;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public void incVersion() {
         this.version++;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void update(String name) {
+        this.name = name;
+        this.incVersion();
     }
 }
