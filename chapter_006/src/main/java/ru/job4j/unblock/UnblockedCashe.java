@@ -6,10 +6,10 @@ public class UnblockedCashe {
     private ConcurrentHashMap<Integer, Base> map = new ConcurrentHashMap<>();
 
     private void update(Base model) throws OptimisticException {
-        if (model.getVersion() != map.get(model.getId()).getVersion()) {
-            throw new OptimisticException("model is already changed");
-        }
         map.computeIfPresent(model.getId(), (key, value) -> {
+            if (model.getVersion() != value.getVersion()) {
+                throw new OptimisticException("model is already changed");
+            }
             model.incVersion();
             value = model;
             return value;
