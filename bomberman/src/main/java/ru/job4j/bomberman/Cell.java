@@ -8,16 +8,16 @@ public class Cell extends ReentrantLock {
 
     private final int positionY;
 
-    public Cell(final int positionX, final int positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+    public Cell(final int x, final int y) {
+        this.positionX = x;
+        this.positionY = y;
     }
 
-    public int getPositionX() {
+    public int getX() {
         return positionX;
     }
 
-    public int getPositionY() {
+    public int getY() {
         return positionY;
     }
 }

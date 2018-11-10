@@ -19,22 +19,20 @@ public class Board {
         }
     }
 
-    public boolean move(Cell source, Cell dest) {
+    public boolean move(Cell source, Cell dest) throws InterruptedException {
         boolean result = false;
-        try {
-            if (dest.tryLock(500, TimeUnit.MILLISECONDS)) {
-                result = true;
-                source.unlock();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return result;
+       if (dest.tryLock(500, TimeUnit.MILLISECONDS)) {
+           result = true;
+           source.unlock();
+       } else {
+           System.out.println("block");
+       }
+       return result;
     }
 
 
     /**
-     * for tests
+     * for tests and automatic movement of our hero
      * @return array[][] of Cell.
      */
     public Cell[][] getBoard() {
