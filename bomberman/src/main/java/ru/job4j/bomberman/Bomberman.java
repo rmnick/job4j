@@ -25,7 +25,6 @@ public class Bomberman implements Runnable {
 
     public void run() {
         int[] direction = this.direction();
-        this.position.lock();
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 if (correctStep(direction[0], this.position.getX())
@@ -46,6 +45,7 @@ public class Bomberman implements Runnable {
                 System.out.println("END");
                 Thread.currentThread().interrupt();
             }
+
         }
 
     }
@@ -63,6 +63,6 @@ public class Bomberman implements Runnable {
     }
 
     public Cell destCell(int[] direction) {
-        return board.getBoard()[step(position.getY(), direction[1])][step(position.getX(), direction[0])];
+        return board.board[step(position.getY(), direction[1])][step(position.getX(), direction[0])];
     }
 }

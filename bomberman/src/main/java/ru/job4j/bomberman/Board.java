@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Board {
 
-    private final Cell[][] board;
+    public final Cell[][] board;
 
 
     public final int size;
@@ -21,21 +21,17 @@ public class Board {
 
     public boolean move(Cell source, Cell dest) throws InterruptedException {
         boolean result = false;
-       if (dest.tryLock(500, TimeUnit.MILLISECONDS)) {
+        //lock starting position when we make our hero
+        if (!source.isHeldByCurrentThread()) {
+            source.lock();
+        }
+        //lock next Cell
+        if (dest.tryLock(500, TimeUnit.MILLISECONDS)) {
            result = true;
            source.unlock();
        } else {
            System.out.println("block");
        }
        return result;
-    }
-
-
-    /**
-     * for tests and automatic movement of our hero
-     * @return array[][] of Cell.
-     */
-    public Cell[][] getBoard() {
-        return this.board;
     }
 }
