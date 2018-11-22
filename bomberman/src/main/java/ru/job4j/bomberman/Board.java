@@ -6,6 +6,7 @@ public class Board {
 
     public final Cell[][] board;
 
+    public boolean gameOver = false;
 
     public final int size;
 
@@ -19,6 +20,7 @@ public class Board {
         }
     }
 
+    /*
     public boolean move(Cell source, Cell dest) throws InterruptedException {
         boolean result = false;
         //lock starting position when we make our hero
@@ -34,4 +36,5 @@ public class Board {
        }
        return result;
     }
+    */
 }

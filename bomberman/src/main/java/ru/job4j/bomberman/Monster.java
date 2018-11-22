@@ -3,6 +3,7 @@ package ru.job4j.bomberman;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class Monster implements Runnable {
 
@@ -12,13 +13,10 @@ public class Monster implements Runnable {
 
     private final List<int[]> directions;
 
-    private Boolean gameOver;
 
-
-    public Monster(final Board board, final Cell startPosition, Boolean gameOver) {
+    public Monster(final Board board, final Cell startPosition) {
         this.board = board;
         this.position = startPosition;
-        this.gameOver = gameOver;
         int[] left = {-1, 0};
         int[] right = {1, 0};
         int[] up = {0, -1};
@@ -32,15 +30,10 @@ public class Monster implements Runnable {
             try {
                 if (correctStep(direction[0], this.position.getX())
                         && correctStep(direction[1], this.position.getY())) {
-                    if (board.move(this.position, destCell(direction))) {
+                    if (this.move(this.position, destCell(direction))) {
                         this.position = destCell(direction);
                         System.out.printf("monster %s steps on %d : %d\n", Thread.currentThread().getName(), this.position.getX(), this.position.getY());
                     } else {
-                        if (destCell(direction).getNameOwner().equals("Hero")) {
-                            System.out.println("Game Over");
-                            gameOver = true;
-                            Thread.currentThread().interrupt();
-                        }
                         direction = this.direction();
                         System.out.printf("monster %s changes direction because of block\n", Thread.currentThread().getName());
                     }
@@ -56,6 +49,26 @@ public class Monster implements Runnable {
 
         }
 
+    }
+
+    private boolean move(Cell source, Cell dest) throws InterruptedException {
+        boolean result = false;
+        //lock starting position when we make our monster
+        if (!source.isHeldByCurrentThread()) {
+            source.lock();
+        }
+        //lock next Cell
+        if (dest.tryLock(1000, TimeUnit.MILLISECONDS)) {
+            result = true;
+            source.unlock();
+        } else {
+            if (dest.getNameOwner().equals("main")) {
+                System.out.printf("GAME OVER! Bomberman's captured  by %s \n", Thread.currentThread().getName());
+                board.gameOver = true;
+            }
+            System.out.printf("%s 's blocked \n", Thread.currentThread().getName());
+        }
+        return result;
     }
 
     private int[] direction() {
