@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Bomberman implements Runnable {
+public class Monster implements Runnable {
 
     private final Board board;
 
@@ -12,10 +12,13 @@ public class Bomberman implements Runnable {
 
     private final List<int[]> directions;
 
+    private Boolean gameOver;
 
-    public Bomberman(final Board board, final Cell startPosition) {
+
+    public Monster(final Board board, final Cell startPosition, Boolean gameOver) {
         this.board = board;
         this.position = startPosition;
+        this.gameOver = gameOver;
         int[] left = {-1, 0};
         int[] right = {1, 0};
         int[] up = {0, -1};
@@ -31,23 +34,23 @@ public class Bomberman implements Runnable {
                         && correctStep(direction[1], this.position.getY())) {
                     if (board.move(this.position, destCell(direction))) {
                         this.position = destCell(direction);
-                        System.out.printf("Hero steps on %d : %d\n", this.position.getX(), this.position.getY());
+                        System.out.printf("monster %s steps on %d : %d\n", Thread.currentThread().getName(), this.position.getX(), this.position.getY());
                     } else {
-                        if (destCell(direction).getNameOwner().startsWith("monster")) {
-                            direction = this.direction();
-                            System.out.println("Hero changes direction because of monster!!!!!!!!!!!!!!");
-                        } else {
-                            direction = this.direction();
-                            System.out.println("Hero changes direction because of block");
+                        if (destCell(direction).getNameOwner().equals("Hero")) {
+                            System.out.println("Game Over");
+                            gameOver = true;
+                            Thread.currentThread().interrupt();
                         }
+                        direction = this.direction();
+                        System.out.printf("monster %s changes direction because of block\n", Thread.currentThread().getName());
                     }
                     Thread.sleep(500);
                 } else {
                     direction = this.direction();
-                    System.out.println("Hero changes direction because of the end of field");
+                    System.out.printf("monster %s changes direction because of the end of field\n", Thread.currentThread().getName());
                 }
             } catch (InterruptedException e) {
-                System.out.println("Hero is dead");
+                System.out.printf("monster %s is stop\n", Thread.currentThread().getName());
                 Thread.currentThread().interrupt();
             }
 
@@ -69,9 +72,5 @@ public class Bomberman implements Runnable {
 
     public Cell destCell(int[] direction) {
         return board.board[step(position.getY(), direction[1])][step(position.getX(), direction[0])];
-    }
-
-    private enum Direction {
-        LEFT, RIGHT, UP, DOWN;
     }
 }

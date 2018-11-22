@@ -20,4 +20,8 @@ public class Cell extends ReentrantLock {
     public int getY() {
         return positionY;
     }
+
+    public String getNameOwner() {
+        return this.getOwner().getName();
+    }
 }
