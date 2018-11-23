@@ -1,9 +1,7 @@
 package ru.job4j.bomberman;
 
-import java.util.concurrent.TimeUnit;
-
 public enum Difficulty {
-    EASY(10, 1, 3, 500), MEDIUM(15, 2, 5, 300), HARD(20, 3, 7, 200), GOD_MODE(5, 3, 1, 0);
+    EASY(10, 1, 3, 1000), MEDIUM(15, 2, 5, 500), HARD(20, 3, 7, 200), GOD_MODE(5, 3, 1, 10);
 
     public int sizeBoard;
     public int numberOfMonsters;

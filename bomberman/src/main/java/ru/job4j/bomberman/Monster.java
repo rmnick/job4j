@@ -13,10 +13,13 @@ public class Monster implements Runnable {
 
     private final List<int[]> directions;
 
+    private int speed;
 
-    public Monster(final Board board, final Cell startPosition) {
+
+    public Monster(final Board board, final Cell startPosition, int speed) {
         this.board = board;
         this.position = startPosition;
+        this.speed = speed;
         int[] left = {-1, 0};
         int[] right = {1, 0};
         int[] up = {0, -1};
@@ -37,11 +40,12 @@ public class Monster implements Runnable {
                         direction = this.direction();
                         System.out.printf("monster %s changes direction because of block\n", Thread.currentThread().getName());
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(speed);
                 } else {
                     direction = this.direction();
                     System.out.printf("monster %s changes direction because of the end of field\n", Thread.currentThread().getName());
                 }
+                Thread.sleep(speed);
             } catch (InterruptedException e) {
                 System.out.printf("monster %s is stop\n", Thread.currentThread().getName());
                 Thread.currentThread().interrupt();
@@ -58,7 +62,7 @@ public class Monster implements Runnable {
             source.lock();
         }
         //lock next Cell
-        if (dest.tryLock(1000, TimeUnit.MILLISECONDS)) {
+        if (dest.tryLock(speed, TimeUnit.MILLISECONDS)) {
             result = true;
             source.unlock();
         } else {

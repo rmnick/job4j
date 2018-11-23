@@ -4,7 +4,7 @@ public class Blocks implements Runnable {
 
     private Cell[] cells;
 
-    public Blocks (Cell[] cells) {
+    public Blocks(Cell[] cells) {
         this.cells = cells;
     }
 
@@ -14,6 +14,8 @@ public class Blocks implements Runnable {
             for (Cell cell : cells) {
                 cell.lock();
             }
+            Thread.yield();
         }
+        System.out.printf("Blocks disappeared");
     }
 }
