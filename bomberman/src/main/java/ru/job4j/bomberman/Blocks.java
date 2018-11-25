@@ -16,6 +16,5 @@ public class Blocks implements Runnable {
             }
             Thread.yield();
         }
-        System.out.printf("Blocks disappeared");
     }
 }

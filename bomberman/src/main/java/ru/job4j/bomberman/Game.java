@@ -43,7 +43,7 @@ public class Game {
         Cell[] cells = new Cell[difficulty.numberOfBlocks];
         for (int i = 0; i < difficulty.numberOfBlocks; i++) {
             int[] coordinates = generateCoordinates(difficulty);
-            System.out.printf("cell with coordinate %d : %d has a block \n", coordinates[0], coordinates[1]);
+            System.out.printf("cell with coordinate %d : %d has a block \n", coordinates[1], coordinates[0]);
             cells[i] = board.board[coordinates[0]][coordinates[1]];
             try {
                 Thread.sleep(500);
@@ -65,31 +65,26 @@ public class Game {
                 || Arrays.equals(coordinates, new int[]{0, 0}))) ? coordinates : generateCoordinates(difficulty);
     }
 
-    public void start(Directions dir) throws InterruptedException {
+    public void start() throws InterruptedException {
         System.out.println("START GAME");
         Thread block = new Thread(blocks);
+        block.setDaemon(true);
         block.start();
         Thread.sleep(2000);
         for (Thread thread : monsters) {
+            thread.setDaemon(true);
             thread.start();
         }
-        while (!board.gameOver) {
-            hero.command(dir);
-        }
-        for (Thread thread : monsters) {
-            thread.interrupt();
-        }
-        block.interrupt();
+        new Thread(hero, "BOMBERMAN").start();
     }
 
     public static void main(String[] args) {
         //you can use for levels of difficulty (EASY, MEDIUM, HARD, GOD_MOD)
        Game game = new Game(Difficulty.HARD);
        try {
-           game.start(Directions.UP);
+           game.start();
        } catch (InterruptedException e) {
            e.printStackTrace();
        }
-
     }
 }

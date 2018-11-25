@@ -33,14 +33,13 @@ public class Monster implements Runnable {
             try {
                 if (correctStep(direction[0], this.position.getX())
                         && correctStep(direction[1], this.position.getY())) {
-                    if (this.move(this.position, destCell(direction))) {
+                    if (board.move(this.position, destCell(direction))) {
                         this.position = destCell(direction);
                         System.out.printf("monster %s steps on %d : %d\n", Thread.currentThread().getName(), this.position.getX(), this.position.getY());
                     } else {
                         direction = this.direction();
                         System.out.printf("monster %s changes direction because of block\n", Thread.currentThread().getName());
                     }
-                    Thread.sleep(speed);
                 } else {
                     direction = this.direction();
                     System.out.printf("monster %s changes direction because of the end of field\n", Thread.currentThread().getName());
@@ -50,29 +49,8 @@ public class Monster implements Runnable {
                 System.out.printf("monster %s is stop\n", Thread.currentThread().getName());
                 Thread.currentThread().interrupt();
             }
-
         }
 
-    }
-
-    private boolean move(Cell source, Cell dest) throws InterruptedException {
-        boolean result = false;
-        //lock starting position when we make our monster
-        if (!source.isHeldByCurrentThread()) {
-            source.lock();
-        }
-        //lock next Cell
-        if (dest.tryLock(speed, TimeUnit.MILLISECONDS)) {
-            result = true;
-            source.unlock();
-        } else {
-            if (dest.getNameOwner().equals("main")) {
-                System.out.printf("GAME OVER! Bomberman's captured  by %s \n", Thread.currentThread().getName());
-                board.gameOver = true;
-            }
-            System.out.printf("%s 's blocked \n", Thread.currentThread().getName());
-        }
-        return result;
     }
 
     private int[] direction() {

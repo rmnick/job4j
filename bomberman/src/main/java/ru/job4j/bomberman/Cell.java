@@ -21,7 +21,4 @@ public class Cell extends ReentrantLock {
         return positionY;
     }
 
-    public String getNameOwner() {
-        return this.getOwner().getName();
-    }
 }

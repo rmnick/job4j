@@ -1,8 +1,6 @@
 package ru.job4j.bomberman;
 
-import java.util.concurrent.TimeUnit;
-
-public class Bomberman {
+public class Bomberman implements Runnable {
 
     private final Board board;
 
@@ -34,17 +32,26 @@ public class Bomberman {
         }
 
     }
+    //just for tests
+    public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                command(Directions.RIGHT);
+                Thread.sleep(100);
+                if (this.position.hasQueuedThreads()) {
+                    Thread.currentThread().interrupt();
+                    System.out.println("GAME OVER !");
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
     private void move(Directions dir) throws InterruptedException {
-        //lock start position
-        if (!this.position.isHeldByCurrentThread()) {
-            this.position.lock();
-        }
-        //movement logic
         if (correctStep(dir.x, this.position.getX())
                 && correctStep(dir.y, this.position.getY())) {
-            if (this.destCell(dir).tryLock(500, TimeUnit.MILLISECONDS)) {
-                this.position.unlock();
+            if (board.move(this.position, destCell(dir))) {
                 this.position = this.destCell(dir);
                 System.out.printf("Bomberman steps on %d : %d \n", this.position.getX(), this.position.getY());
             }

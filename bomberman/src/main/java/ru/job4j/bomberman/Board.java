@@ -6,8 +6,6 @@ public class Board {
 
     public final Cell[][] board;
 
-    public boolean gameOver = false;
-
     public final int size;
 
     public Board(final int size) {
@@ -20,7 +18,7 @@ public class Board {
         }
     }
 
-    /*
+
     public boolean move(Cell source, Cell dest) throws InterruptedException {
         boolean result = false;
         //lock starting position when we make our hero
@@ -32,9 +30,8 @@ public class Board {
            result = true;
            source.unlock();
        } else {
-           System.out.println("block");
+           System.out.printf("%s is blocked\n", Thread.currentThread().getName());
        }
        return result;
     }
-    */
 }
