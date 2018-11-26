@@ -25,8 +25,15 @@ public class Board {
         if (!source.isHeldByCurrentThread()) {
             source.lock();
         }
+        int time = 500;
+        Thread sourceThread = source.getThread();
+        Thread destThread = dest.getThread();
+        if (sourceThread.getName().contains("Monster")
+                && !(destThread != null && destThread.getName().contains("Blocks"))) {
+            time = 5000;
+        }
         //lock next Cell
-        if (dest.tryLock(500, TimeUnit.MILLISECONDS)) {
+        if (dest.tryLock(time, TimeUnit.MILLISECONDS)) {
            result = true;
            source.unlock();
        } else {

@@ -21,4 +21,8 @@ public class Cell extends ReentrantLock {
         return positionY;
     }
 
+    public Thread getThread() {
+        return super.getOwner();
+    }
+
 }

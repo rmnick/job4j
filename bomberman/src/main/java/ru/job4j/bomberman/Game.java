@@ -67,7 +67,7 @@ public class Game {
 
     public void start() throws InterruptedException {
         System.out.println("START GAME");
-        Thread block = new Thread(blocks);
+        Thread block = new Thread(blocks, "Blocks");
         block.setDaemon(true);
         block.start();
         Thread.sleep(2000);
@@ -79,7 +79,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        //you can use for levels of difficulty (EASY, MEDIUM, HARD, GOD_MOD)
+        //you can use for levels of difficulty (EASY, MEDIUM, HARD, GOD_MODE)
        Game game = new Game(Difficulty.HARD);
        try {
            game.start();
