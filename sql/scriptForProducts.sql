@@ -1,4 +1,4 @@
---create and insert example
+﻿--create and insert example
 /*
 create database example;
 create table types (id serial primary key, name varchar(500));
@@ -31,7 +31,7 @@ insert into products (name, id_type, expired_date, price, number) values
 --select sum(p.number) from products as p inner join types as t on t.id = p.id_type where t.name = 'milk';
 --6
 --select p.name, p.price, t.name from products as p inner join types as t on t.id = p.id_type where t.name = 'cheese' or t.name = 'milk';
---7
---select t.name from types as t inner join products as p on t.id = p.id_type where p.number > 10;
+--7 
+--select t.name from types t where 3 = (select count(*) from products p where p.id_type = t.id);
 --8
 --select p.id, p.name, p.price, p.expired_date, t.name from products as p inner join types as t on t.id = p.id_type;
