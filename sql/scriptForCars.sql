@@ -1,4 +1,4 @@
-
+﻿
 /*
 --create
 create table engine(
@@ -46,8 +46,12 @@ select c.id, c.name, e.name, t.name, b.name from cars as c
 left outer join engine as e on c.id_engine = e.id 
 left outer join transmission as t on c.id_transmission = t.id
 left outer join body_car as b on c.id_body_car = b.id;
-
+--split queries
 select e.name from cars as c right outer join engine as e on c.id_engine = e.id where c.id is null; 
 select t.name from cars as c right outer join transmission as t on c.id_transmission = t.id where c.id is null; 
 select b.name from cars as c right outer join body_car as b on c.id_body_car = b.id where c.id is null; 
+--union query
+select e.name from cars as c right outer join engine as e on c.id_engine = e.id where c.id is null union 
+select t.name from cars as c right outer join transmission as t on c.id_transmission = t.id where c.id is null union 
+select b.name from cars as c right outer join body_car as b on c.id_body_car = b.id where c.id is null;
 */
