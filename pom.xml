@@ -24,6 +24,7 @@
         <module>pingpong</module>
 		<module>chapter_006</module>
         <module>bomberman</module>
+        <module>chapter_007</module>
     </modules>
 	 
 	<build>
