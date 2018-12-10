@@ -12,7 +12,7 @@ public class MenuTracker {
     /**
      * stores a reference to an object.
      */
-    private final Tracker tracker;
+    private final ITracker tracker;
     /**
      * stores a reference to an object of type UserAction.
      */
@@ -26,7 +26,7 @@ public class MenuTracker {
      * @param input   an object of type Input.
      * @param tracker an object of type Tracker.
      */
-    public MenuTracker(Input input, Tracker tracker) {
+    public MenuTracker(Input input, ITracker tracker) {
         this.input = input;
         this.tracker = tracker;
     }
@@ -102,7 +102,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ Adding a new task --------------");
             String name = input.ask("Enter a name for the new task: ");
             String description = input.ask("Enter a description: ");
@@ -122,7 +122,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ All tasks --------------");
             for (Item item : tracker.findAll()) {
                 System.out.println(item.toString());
@@ -140,7 +140,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ Editing a task --------------");
             String id = input.ask("Enter Id: ");
             String name = input.ask("Enter new name for task: ");
@@ -164,7 +164,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ Removing a task --------------");
             String id = input.ask("Enter Id: ");
             if (tracker.delete(id)) {
@@ -185,7 +185,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ Searching a task by Id --------------");
             String id = input.ask("Enter Id: ");
             Item item = tracker.findById(result -> result.equals(id));
@@ -207,7 +207,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             System.out.println("------------ Searching a task by name --------------");
             String name = input.ask("Enter name: ");
             List<Item> items = tracker.findByName(result -> result.equals(name));
@@ -228,7 +228,7 @@ class ExitProgram extends BaseAction {
     }
 
     @Override
-    public void execute(Input input, Tracker tracker) {
+    public void execute(Input input, ITracker tracker) {
         System.out.println("------------ End of session --------------");
         this.ui.stop();
     }

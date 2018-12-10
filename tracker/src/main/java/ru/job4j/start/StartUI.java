@@ -11,16 +11,16 @@ public class StartUI {
      * ru.job4j.list constants for menu.
      */
     private final Input input;
-    private final Tracker tracker;
+    private final ITracker tracker;
     private boolean flag = true;
 
-    public StartUI(Input input, Tracker tracker) {
+    public StartUI(Input input, ITracker tracker) {
         this.input = input;
         this.tracker = tracker;
     }
 
     public static void main(String[] args) {
-        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), new Tracker());
+        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), Tracker.getInstance());
         start.init();
     }
 
