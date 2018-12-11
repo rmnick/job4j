@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class TestTracker {
     @Test
     public void testWhenAddItem() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item itemFirst = new Item("first", "first task");
         Item itemSecond = new Item("second", "second task");
         tr.addItem(itemFirst);
@@ -25,7 +25,7 @@ public class TestTracker {
     }
     @Test
     public void testWhenReplaceItem() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item itemFirst = new Item("one", "first task");
         Item itemSecond = new Item("two", "second task");
         Item itemThird = new Item("three", "third task");
@@ -39,7 +39,7 @@ public class TestTracker {
     }
     @Test
     public void testWhenDeleteItem() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item[] items = new Item[] {new Item("one", "first task"),
                 new Item("two", "second task"),
                 new Item("three", "third task")
@@ -53,7 +53,7 @@ public class TestTracker {
     }
     @Test
     public void testWhenFindAllItem() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item itemFirst = new Item("one", "first task");
         Item itemSecond = new Item("two", "second task");
         Item itemThird = new Item("three", "third task");
@@ -64,7 +64,7 @@ public class TestTracker {
     }
     @Test
     public void testWhenFindByNameItem() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item itemFirst = new Item("one", "first task");
         Item itemSecond = new Item("two", "second task");
         Item itemThird = new Item("three", "third task");
@@ -75,7 +75,7 @@ public class TestTracker {
     }
     @Test
     public void testWhenFindById() {
-        Tracker tr = Tracker.getInstance();
+        Tracker tr = new Tracker();
         Item itemFirst = new Item("one", "first task");
         Item itemSecond = new Item("two", "second task");
         Item itemThird = new Item("three", "third task");

@@ -4,8 +4,8 @@ import ru.job4j.start.ITracker;
 import ru.job4j.start.Item;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.lang.reflect.Executable;
+import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -33,7 +33,33 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     @Override
     public Item addItem(Item item) {
-       return null;
+        Item result = null;
+        String add = "insert into items(name, description, date) values(?, ?, ?);";
+        PreparedStatement st = null;
+        try {
+            if (connection == null) {
+                this.init();
+            }
+            st = connection.prepareStatement(add, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setTimestamp(3, new Timestamp(item.getDate()));
+            st.executeUpdate();
+            ResultSet key = st.getGeneratedKeys();
+            int id = 0;
+            while (key.next()) {
+                id = (key.getInt(1));
+            }
+            item.setId(String.valueOf(id));
+            System.out.println(id);
+            st.close();
+            result = item;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override

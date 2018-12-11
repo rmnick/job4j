@@ -29,7 +29,7 @@ public class StartUITest {
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Input input = new StubInput(Arrays.asList("0", "first", "first task", "6"));
         StartUI start = new StartUI(input, tracker);
         start.init();
@@ -38,18 +38,18 @@ public class StartUITest {
 
     @Test
         public void whenUpdateThenTrackerHasUpdatedValue() {
-            Tracker tracker = Tracker.getInstance();
-            Item item = tracker.addItem(new Item("previous", "description"));
-            Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
-            StartUI start = new StartUI(input, tracker);
-            start.init();
-            assertThat(tracker.findById((id) -> id.equals(item.getId())).getName(), is("replace task"));
+        Tracker tracker = new Tracker();
+        Item item = tracker.addItem(new Item("previous", "description"));
+        Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
+        StartUI start = new StartUI(input, tracker);
+        start.init();
+        assertThat(tracker.findById((id) -> id.equals(item.getId())).getName(), is("replace task"));
 
     }
 
     @Test
     public void whenDeleteThenTrackerHasDeletedValueByValidId() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Item[] items = new Item[] {new Item("one", "first task"),
                 new Item("two", "second task"),
                 new Item("three", "third task")
@@ -76,7 +76,7 @@ public class StartUITest {
 
     @Test
     public void whenShowAllThenShow() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Input input = new StubInput(Arrays.asList("1", "6"));
@@ -95,7 +95,7 @@ public class StartUITest {
     }
     @Test
     public void whenFindByIdThenItemWithThisId() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Item itemThird = tracker.addItem(new Item("third", "description third"));
@@ -115,7 +115,7 @@ public class StartUITest {
     }
     @Test
     public void whenFindByNameThenItemsWithThisName() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Item itemThird = tracker.addItem(new Item("third", "description third"));
@@ -135,7 +135,7 @@ public class StartUITest {
     }
     @Test
     public void whenDeleteByInvalidIdThenTrackerWontDelete() {
-        Tracker tracker = Tracker.getInstance();
+        Tracker tracker = new Tracker();
         Item itemFirst = tracker.addItem(new Item("first", "description first"));
         Item itemSecond = tracker.addItem(new Item("second", "description second"));
         Input input = new StubInput(Arrays.asList("3", "12", "6"));

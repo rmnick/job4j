@@ -1,4 +1,4 @@
-package ru.job4j.examples;
+/*package ru.job4j.examples;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +15,7 @@ public class Query {
         LOG.warn("warn message");
         LOG.error("error message");
         */
+/*
         String url = "jdbc:postgresql://localhost:5432/test?user=postgres&password=123";
         Connection conn = null;
         try {
@@ -40,6 +41,7 @@ public class Query {
             st.execute("drop table manager;");
             System.out.println("is done");
             */
+/*
             st.close();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -54,3 +56,4 @@ public class Query {
         }
     }
 }
+*/

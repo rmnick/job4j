@@ -1,5 +1,7 @@
 package ru.job4j.start;
 
+import ru.job4j.tracker.TrackerSQL;
+
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), Tracker.getInstance());
+        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), new TrackerSQL());
         start.init();
     }
 

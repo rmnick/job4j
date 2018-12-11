@@ -10,11 +10,11 @@ import java.util.function.Predicate;
  * @since 2018.08.21
  */
 
-public class Tracker implements ITracker{
-    private static Tracker tracker;
+public class Tracker implements ITracker {
+    //private static Tracker tracker;
     private List<Item> items = new ArrayList<>();
     private static final Random RN = new Random();
-
+/*
     private Tracker() {
     }
 
@@ -28,6 +28,7 @@ public class Tracker implements ITracker{
         }
         return tracker;
     }
+*/
 
     public Item addItem(Item item) {
         item.setId(this.generateId());
