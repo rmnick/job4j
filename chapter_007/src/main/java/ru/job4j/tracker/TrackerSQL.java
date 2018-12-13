@@ -4,16 +4,15 @@ import ru.job4j.start.ITracker;
 import ru.job4j.start.Item;
 
 import java.io.InputStream;
-import java.lang.reflect.Executable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class TrackerSQL implements ITracker, AutoCloseable {
-    //private Connection connection;
+    private Connection connection;
     private Properties config;
 
     public TrackerSQL() {
@@ -23,9 +22,18 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+        try (Connection connection = DriverManager.getConnection(
+                config.getProperty("url"),
+                config.getProperty("username"),
+                config.getProperty("password"))) {
+            String checkUpdate = "create table if not exists items(id serial primary key, name varchar(200), description varchar(500), date timestamp);";
+            PreparedStatement st = connection.prepareStatement(checkUpdate);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    /*
     public boolean init() {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
@@ -41,7 +49,6 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         }
         return this.connection != null;
     }
-    */
 
     @Override
     public Item addItem(Item item) {
@@ -51,6 +58,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
                 config.getProperty("url"),
                 config.getProperty("username"),
                 config.getProperty("password"))) {
+            connection.setAutoCommit(false);
             PreparedStatement st = connection.prepareStatement(add, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, item.getName());
             st.setString(2, item.getDescription());
@@ -58,12 +66,12 @@ public class TrackerSQL implements ITracker, AutoCloseable {
             st.executeUpdate();
             ResultSet rs = st.getGeneratedKeys();
             int id = 0;
-            while (rs.next()) {
-                id = (rs.getInt(1));
+            if (!rs.next()) {
+                throw new NoSuchElementException();
             }
+            id = (rs.getInt(1));
             item.setId(String.valueOf(id));
-            st.close();
-            rs.close();
+            connection.commit();
             result = item;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -146,12 +154,55 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     @Override
     public List<Item> findByName(Predicate<String> predicate) {
-        return null;
+        List<Item> list = new ArrayList<>();
+        String select = "select i.id, i.name, i.description, i.date from items as i;";
+        try (Connection connection = DriverManager.getConnection(
+                config.getProperty("url"),
+                config.getProperty("username"),
+                config.getProperty("password"))) {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(select);
+            while (rs.next()) {
+                if (predicate.test(String.valueOf(rs.getInt(2)))) {
+                    Item item = new Item(rs.getString(2), rs.getString(3));
+                    Timestamp date = rs.getTimestamp(4);
+                    item.setId(String.valueOf(rs.getInt(1)));
+                    item.setDate(date.getTime());
+                    list.add(item);
+                }
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     @Override
     public Item findById(Predicate<String> predicate) {
-        return null;
+        Item item = null;
+        String select = "select i.id, i.name, i.description, i.date from items as i;";
+        try (Connection connection = DriverManager.getConnection(
+                config.getProperty("url"),
+                config.getProperty("username"),
+                config.getProperty("password"))) {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(select);
+            while (rs.next()) {
+                if (predicate.test(String.valueOf(rs.getInt(1)))) {
+                    item = new Item(rs.getString(2), rs.getString(3));
+                    Timestamp date = rs.getTimestamp(4);
+                    item.setId(String.valueOf(rs.getInt(1)));
+                    item.setDate(date.getTime());
+                }
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return item;
     }
 
     @Override
