@@ -2,6 +2,7 @@ package ru.job4j.start;
 
 import ru.job4j.tracker.TrackerSQL;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -22,8 +23,13 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        StartUI start = new StartUI(new ValidateInput(new ConsolInput()), new TrackerSQL());
-        start.init();
+        try (TrackerSQL tracker = new TrackerSQL()) {
+            StartUI start = new StartUI(new ValidateInput(new ConsolInput()), tracker);
+            start.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void init() {
