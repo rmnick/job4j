@@ -1,4 +1,6 @@
-package ru.job4j.start;
+package ru.job4j.tracker;
+
+import ru.job4j.start.*;
 
 import java.util.List;
 
@@ -6,7 +8,7 @@ import java.util.List;
  * @author Nick Rodionov
  * @since 2018.08.23
  */
-public class StartUI implements IStartUI {
+public class StartUISQL implements IStartUI {
     /**
      * ru.job4j.list constants for menu.
      */
@@ -14,14 +16,19 @@ public class StartUI implements IStartUI {
     private final ITracker tracker;
     private boolean flag = true;
 
-    public StartUI(Input input, ITracker tracker) {
+    public StartUISQL(Input input, ITracker tracker) {
         this.input = input;
         this.tracker = tracker;
     }
 
     public static void main(String[] args) {
-            StartUI start = new StartUI(new ValidateInput(new ConsolInput()), new Tracker());
+        try (TrackerSQL tracker = new TrackerSQL()) {
+            StartUI start = new StartUI(new ValidateInput(new ConsolInput()), tracker);
             start.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void init() {

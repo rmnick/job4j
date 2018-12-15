@@ -48,12 +48,21 @@ public class SQLTest {
         System.setOut(this.stdout);
     }
 
+    @Test
+    public void init() {
+        try (TrackerSQL tracker = new TrackerSQL()) {
+            assertThat(tracker.init(), is(true));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
         try (TrackerSQL tracker = new TrackerSQL()) {
             Input input = new StubInput(Arrays.asList("0", "first", "first task", "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(tracker.findAll().get(0).getName(), is("first"));
         } catch (Exception e) {
@@ -66,7 +75,7 @@ public class SQLTest {
         try (TrackerSQL tracker = new TrackerSQL()) {
             Item item = tracker.addItem(new Item("previous", "description"));
             Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(tracker.findById((id) -> id.equals(item.getId())).getName(), is("replace task"));
         } catch (Exception e) {
@@ -87,7 +96,7 @@ public class SQLTest {
             tracker.addItem(items[2]);
             List<Item> exm = Arrays.asList(items[0], items[2]);
             Input input = new StubInput(Arrays.asList("3", items[1].getId(), "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(tracker.findAll(), is(exm));
         } catch (Exception e) {
@@ -101,7 +110,7 @@ public class SQLTest {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Input input = new StubInput(Arrays.asList("1", "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                             .add(menu)
@@ -126,7 +135,7 @@ public class SQLTest {
             Item itemThird = tracker.addItem(new Item("third", "description third"));
 
             Input input = new StubInput(Arrays.asList("4", itemSecond.getId(), "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                             .add(menu)
@@ -141,7 +150,7 @@ public class SQLTest {
             e.printStackTrace();
         }
     }
-/*
+
     @Test
     public void whenFindByNameThenItemsWithThisName() {
         try (TrackerSQL tracker = new TrackerSQL()) {
@@ -150,7 +159,7 @@ public class SQLTest {
             Item itemThird = tracker.addItem(new Item("third", "description third"));
 
             Input input = new StubInput(Arrays.asList("5", itemThird.getName(), "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                             .add(menu)
@@ -172,7 +181,7 @@ public class SQLTest {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Input input = new StubInput(Arrays.asList("3", "12", "6"));
-            StartUI start = new StartUI(input, tracker);
+            IStartUI start = new StartUISQL(input, tracker);
             start.init();
             assertThat(new String(out.toByteArray()), is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                             .add(menu)
@@ -187,5 +196,5 @@ public class SQLTest {
             e.printStackTrace();
         }
     }
-    */
+
 }

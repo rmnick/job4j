@@ -42,7 +42,7 @@ public class MenuTracker {
     /**
      * Method creates array of actions.
      */
-    public void fillActions(StartUI ui) {
+    public void fillActions(IStartUI ui) {
         this.actions.add(this.new AddItem(0, "Add new Item"));
         this.actions.add(this.new ShowAll(1, "Show all items"));
         this.actions.add(this.new EditItem(2, "Edit item"));
@@ -220,9 +220,9 @@ public class MenuTracker {
  * exit
  */
 class ExitProgram extends BaseAction {
-    private final StartUI ui;
+    private final IStartUI ui;
 
-    public ExitProgram(int key, String name, StartUI ui) {
+    public ExitProgram(int key, String name, IStartUI ui) {
         super(key, name);
         this.ui = ui;
     }

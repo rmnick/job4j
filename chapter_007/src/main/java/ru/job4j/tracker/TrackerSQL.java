@@ -83,12 +83,22 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public boolean delete(String id) {
         boolean result = false;
-        String delete = "delete from items where id = ?;";
-        try (PreparedStatement st = connection.prepareStatement(delete)) {
-            Integer valueOfId = Integer.valueOf(id);
-            st.setInt(1, valueOfId);
-            st.execute();
-            result = true;
+        Integer valueOfId = null;
+        try {
+            valueOfId = Integer.valueOf(id);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        String select = String.format("select count(id) from items where id = %d;", valueOfId);
+        String delete = String.format("delete from items where id = %d;", valueOfId);
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(select);
+            if (rs.next()) {
+                if (rs.getInt(1) != 0) {
+                    st.execute(delete);
+                    result = true;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -124,7 +134,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         String select = "select i.id, i.name, i.description, i.date from items as i;";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(select)) {
             while (rs.next()) {
-                if (predicate.test(String.valueOf(rs.getInt(2)))) {
+                if (predicate.test(rs.getString(2))) {
                     Item item = new Item(rs.getString(2), rs.getString(3));
                     Timestamp date = rs.getTimestamp(4);
                     item.setId(String.valueOf(rs.getInt(1)));
