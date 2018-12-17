@@ -22,7 +22,7 @@ public class StartUISQL implements IStartUI {
     }
 
     public static void main(String[] args) {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             StartUI start = new StartUI(new ValidateInput(new ConsolInput()), tracker);
             start.init();
         } catch (Exception e) {

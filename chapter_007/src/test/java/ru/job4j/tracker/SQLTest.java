@@ -9,9 +9,12 @@ import org.junit.Before;
 import ru.job4j.start.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.StringJoiner;
 import java.util.List;
 
@@ -29,14 +32,6 @@ public class SQLTest {
             .add("6. Exit Program")
             .toString();
 
-    @Before
-    public void clear() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
-            tracker.clearDB();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Before
     public void loadOutput() {
@@ -47,20 +42,25 @@ public class SQLTest {
     public void backOutput() {
         System.setOut(this.stdout);
     }
-
-    @Test
-    public void init() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
-            assertThat(tracker.init(), is(true));
+/*
+    public Connection init() {
+        try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
+            Properties config = new Properties();
+            config.load(in);
+            Class.forName(config.getProperty("driver-class-name"));
+            return DriverManager.getConnection(
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
+            );
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
-
-
+*/
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Input input = new StubInput(Arrays.asList("0", "first", "first task", "6"));
             IStartUI start = new StartUISQL(input, tracker);
             start.init();
@@ -72,7 +72,7 @@ public class SQLTest {
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item item = tracker.addItem(new Item("previous", "description"));
             Input input = new StubInput(Arrays.asList("2", item.getId(), "replace task", "new description", "6"));
             IStartUI start = new StartUISQL(input, tracker);
@@ -86,7 +86,7 @@ public class SQLTest {
 
     @Test
     public void whenDeleteThenTrackerHasDeletedValueByValidId() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item[] items = new Item[]{new Item("one", "first task"),
                     new Item("two", "second task"),
                     new Item("three", "third task")
@@ -106,7 +106,7 @@ public class SQLTest {
 
     @Test
     public void whenShowAllThenShow() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Input input = new StubInput(Arrays.asList("1", "6"));
@@ -129,7 +129,7 @@ public class SQLTest {
 
     @Test
     public void whenFindByIdThenItemWithThisId() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Item itemThird = tracker.addItem(new Item("third", "description third"));
@@ -153,7 +153,7 @@ public class SQLTest {
 
     @Test
     public void whenFindByNameThenItemsWithThisName() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Item itemThird = tracker.addItem(new Item("third", "description third"));
@@ -177,7 +177,7 @@ public class SQLTest {
 
     @Test
     public void whenDeleteByInvalidIdThenTrackerWontDelete() {
-        try (TrackerSQL tracker = new TrackerSQL()) {
+        try (TrackerSQL tracker = new TrackerSQL(ConnectionRollBack.create(TrackerSQL.init()))) {
             Item itemFirst = tracker.addItem(new Item("first", "description first"));
             Item itemSecond = tracker.addItem(new Item("second", "description second"));
             Input input = new StubInput(Arrays.asList("3", "12", "6"));

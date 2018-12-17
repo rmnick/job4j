@@ -12,15 +12,18 @@ import java.util.Properties;
 import java.util.function.Predicate;
 
 public class TrackerSQL implements ITracker, AutoCloseable {
-    private Connection connection;
-    private Properties config;
+    private final Connection connection;
 
-    public TrackerSQL() {
+    public TrackerSQL(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static Connection init() {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
-            this.config = new Properties();
+            Properties config = new Properties();
             config.load(in);
             Class.forName(config.getProperty("driver-class-name"));
-            this.connection = DriverManager.getConnection(
+            return DriverManager.getConnection(
                     config.getProperty("url"),
                     config.getProperty("username"),
                     config.getProperty("password")
@@ -28,16 +31,6 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-        String checkUpdate = "create table if not exists items(id serial primary key, name varchar(200), description varchar(500), date timestamp);";
-        try (PreparedStatement st = connection.prepareStatement(checkUpdate)) {
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean init() {
-        return this.connection != null;
     }
 
     @Override
