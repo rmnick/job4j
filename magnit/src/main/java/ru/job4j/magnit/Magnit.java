@@ -16,7 +16,7 @@ public class Magnit {
         config.init();
         Magnit magnit = new Magnit(config);
         Connection connection  = magnit.createNewDatabase("url");
-        magnit.generate(100, connection);
+        magnit.generate(10, connection);
 
 
     }
