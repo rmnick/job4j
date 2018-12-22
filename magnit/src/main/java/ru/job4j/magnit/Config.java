@@ -6,7 +6,7 @@ import java.util.Properties;
 public class Config {
     private final Properties values = new Properties();
 
-    public void init() {
+    public Config() {
         try (InputStream in = Config.class.getClassLoader().getResourceAsStream("app.properties")) {
             values.load(in);
         } catch (Exception e) {
