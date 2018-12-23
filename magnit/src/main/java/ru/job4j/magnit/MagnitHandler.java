@@ -24,6 +24,6 @@ public class MagnitHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        System.out.println(String.format("end; result equals %d\r\n", summ));
+        System.out.println(String.format("end;\nresult equals %d\n", summ));
     }
 }
