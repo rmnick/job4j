@@ -14,10 +14,10 @@ public class Magnit {
     }
 
     public static void main(String[] args) throws Exception {
-       // File source = new File("C:\\projects\\job4j\\magnit\\src\\main\\resources\\source.xml");
-       // File result = new File("C:\\projects\\job4j\\magnit\\src\\main\\resources\\result.xml");
-        File source = new File("/home/nick/work/job4j/magnit/src/main/resources/source.xml");
-        File result = new File("/home/nick/work/job4j/magnit/src/main/resources/result.xml");
+         File source = new File("C:\\projects\\job4j\\magnit\\src\\main\\resources\\source.xml");
+         File result = new File("C:\\projects\\job4j\\magnit\\src\\main\\resources\\result.xml");
+        //File source = new File("/home/nick/work/job4j/magnit/src/main/resources/source.xml");
+        //File result = new File("/home/nick/work/job4j/magnit/src/main/resources/result.xml");
         int n = 1000000;
         Config config = new Config();
         Magnit magnit = new Magnit(config);
