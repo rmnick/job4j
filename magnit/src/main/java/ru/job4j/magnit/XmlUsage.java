@@ -51,20 +51,20 @@ public class XmlUsage {
     }
 
 
-    public void createXML(Config config, File file) throws Exception {
+    public void createXML(Connection connection, File file) throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Entries.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(
-                new Entries(createFields(config)), file
+                new Entries(createFields(connection)), file
         );
     }
 
-    public List<Field> createFields(Config config) {
+    public List<Field> createFields(Connection connection) {
         List<Field> fields = new ArrayList<>();
         String select = "select field from entries";
-        try (Connection connection = DriverManager.getConnection(config.get("url"));
-             Statement st = connection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
+            connection.setAutoCommit(false);
             System.out.println("extract entries from table");
             try (ResultSet rs = st.executeQuery(select)) {
                 while (rs.next()) {
@@ -74,6 +74,7 @@ public class XmlUsage {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
