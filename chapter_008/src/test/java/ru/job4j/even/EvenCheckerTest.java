@@ -22,7 +22,7 @@ public class EvenCheckerTest {
     }
 
     @Test
-    public void whenInputStreamDoesntHaveEvenSimbolThenTrue() {
+    public void whenInputStreamDoesntHaveEvenSimbolThenFalse() {
         EvenChecker checker = new EvenChecker();
         String source = "dasd1ad*.,asd, dasd, , dsda 33d";
         try (InputStream in = new ByteArrayInputStream(source.getBytes())) {
@@ -44,9 +44,20 @@ public class EvenCheckerTest {
     }
 
     @Test
-    public void whenInputStreamDoesntHaveEvenNumberThenTrue() {
+    public void whenInputStreamDoesntHaveEvenNumberThenFalse() {
         EvenChecker checker = new EvenChecker();
         String source = "d41asdad21*.,as3d, da63sd, , 211dsda 33d";
+        try (InputStream in = new ByteArrayInputStream(source.getBytes())) {
+            assertThat(checker.findEvenNumber(in), is(false));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void whenInputNumbersHasZeroThenFalse() {
+        EvenChecker checker = new EvenChecker();
+        String source = "d41a0sdad21*.,as3d, da63sd, , 211dsd0a 33d";
         try (InputStream in = new ByteArrayInputStream(source.getBytes())) {
             assertThat(checker.findEvenNumber(in), is(false));
         } catch (IOException e) {

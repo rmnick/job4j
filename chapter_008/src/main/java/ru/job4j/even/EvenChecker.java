@@ -50,32 +50,4 @@ public class EvenChecker {
             }
         return result;
     }
-/*
-    public boolean findEvenNumberTwo(InputStream in) {
-        boolean result = false;
-        boolean flag = false;
-        try {
-            int data = in.read();
-            while (data != -1) {
-                char digit = 1;
-                char c = (char) data;
-                if (Character.isDigit(c)) {
-                    digit = c;
-                    flag = true;
-                } else {
-                    flag = false;
-                    }
-                if (!flag && Integer.parseInt(String.valueOf(digit)) % 2 == 0) {
-
-                }
-                data = in.read();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    */
-
  }
