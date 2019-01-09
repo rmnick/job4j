@@ -1,7 +1,6 @@
 package ru.job4j.sort;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
@@ -9,19 +8,9 @@ import java.util.stream.Collectors;
 
 public class Sorter {
 
-    public static void main(String[] args) {
-        String namePath = "/home/nick/work/job4j/chapter_008/";
-        try (RandomAccessFile out = new RandomAccessFile(String.format("%sout.txt", namePath), "rw");
-             RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", namePath), "rw")) {
-            int sizeOfsource = 53;
-            long pointer = 0;
-            int sizeOfSegment = 5;
-            List<RandomAccessFile> list = new ArrayList<>();
-            List<String> storage = new ArrayList();
-            /**
-             * fill source file
-             */
-            for (int i = 0; i < sizeOfsource; i++) {
+    public void createSource(String namePath, int sizeOfSource) {
+        try (RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", namePath), "rw")) {
+            for (int i = 0; i < sizeOfSource; i++) {
                 StringBuilder str = new StringBuilder();
                 int n = (int) (Math.random() * 30);
                 for (int j = 0; j <= n; j++) {
@@ -29,12 +18,22 @@ public class Sorter {
                 }
                 source.write((str.toString() + System.lineSeparator()).getBytes());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sort(String namePath, int sizeOfSegment) {
+        try (RandomAccessFile out = new RandomAccessFile(String.format("%sout.txt", namePath), "rw");
+             RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", namePath), "rw")) {
+            long pointer = 0;
+            List<RandomAccessFile> list = new ArrayList<>();
+            List<String> storage = new ArrayList();
             /**
              * split source file on small sorted segments
              */
-            source.seek(0);
             int countSegments = 0;
-            RandomAccessFile temp = null;
+            RandomAccessFile temp;
             while (pointer < source.length()) {
                 int count = 0;
                 while (count < sizeOfSegment && pointer < source.length()) {
@@ -58,8 +57,6 @@ public class Sorter {
                 }
                 countSegments++;
                 storage.clear();
-                //list.add(temp);
-               // temp.close();
             }
             /**
              * make list of segments and array of their pointers
@@ -73,17 +70,20 @@ public class Sorter {
              */
             int flag = 0;
             while (out.length() < source.length()) {
-                String shablon = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                String temporary = null;
                 for (int i = 0; i < countSegments; i++) {
                     temp = list.get(i);
                     pointerOfSegments[i] = temp.getFilePointer();
                     String s = temp.readLine();
-                    if (s != null && s.length() < shablon.length()) {
-                        shablon = s;
+                    if (temporary == null) {
+                        temporary = s;
+                    }
+                    if (s != null && s.length() <= temporary.length()) {
+                        temporary = s;
                         flag = i;
                     }
                 }
-                out.write((shablon + System.lineSeparator()).getBytes());
+                out.write((temporary + System.lineSeparator()).getBytes());
                 /**
                  * put the pointer on right place
                  */
@@ -92,12 +92,12 @@ public class Sorter {
                         list.get(j).seek(pointerOfSegments[j]);
                     }
                 }
-
             }
-
+            for (RandomAccessFile raf : list) {
+                raf.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
