@@ -15,25 +15,33 @@ import java.util.stream.Collectors;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class SorterTest {
+public class StringSorterTest {
+    String path = "src/test/resources/";
+
+    @Before
+    public void createPath() {
+            File directory = new File(path);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+    }
 
     @After
     public void deleteAllFilesFolder() {
-        String path = "src/test/resources/";
         File index = new File(path);
         String[]entries = index.list();
         for (String s : entries) {
             File currentFile = new File(index.getPath(), s);
             currentFile.delete();
         }
+        index.delete();
     }
 
     @Test
     public void test() {
-        String path = "src/test/resources/";
-        Sorter sorter = new Sorter();
-        sorter.createSource(path, 53);
-        sorter.sort(path, 5);
+        StringSorter stringSorter = new StringSorter();
+        stringSorter.createSource(path, 53);
+        stringSorter.sort(path, 5);
         List<String> listSource = new ArrayList<>();
         List<String> listOut = new ArrayList<>();
         try {

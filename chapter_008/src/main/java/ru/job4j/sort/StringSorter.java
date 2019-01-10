@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Sorter {
+public class StringSorter {
 
     public void createSource(String namePath, int sizeOfSource) {
         try (RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", namePath), "rw")) {
