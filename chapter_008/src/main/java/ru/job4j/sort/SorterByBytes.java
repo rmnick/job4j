@@ -13,6 +13,7 @@ public class SorterByBytes {
         int sizeOfSource = 100;
 
         String path = "chapter_008/src/main/resources/";
+       /*
         File directory = new File(path);
         if (!directory.exists()) {
             directory.mkdir();
@@ -32,6 +33,11 @@ public class SorterByBytes {
 
         split(50, "chapter_008/src/main/resources/source.txt");
         sort(path);
+        */
+
+       File one = new File("/home/nick/work/job4j/chapter_008/src/main/resources/0.txt");
+       File two = new File("/home/nick/work/job4j/chapter_008/src/main/resources/1.txt");
+       merge(one, two, 0);
 
     }
 
@@ -107,7 +113,30 @@ public class SorterByBytes {
         try (RandomAccessFile rafOne = new RandomAccessFile(one, "rw");
              RandomAccessFile rafTwo = new RandomAccessFile(two, "rw");
              RandomAccessFile out = new RandomAccessFile(new File(String.format("%s%d%s", one.getPath(), count, one.getName())), "rw")) {
-            System.out.println("a");
+            long size = rafOne.length() + rafTwo.length();
+            long pointerOne = 0;
+            long pointerTwo = 0;
+            String oneStr;
+            String twoStr;
+            while (out.length() < size) {
+                pointerOne = rafOne.getFilePointer();
+                pointerTwo = rafTwo.getFilePointer();
+                oneStr = rafOne.readLine();
+                twoStr = rafTwo.readLine();
+                if (oneStr == null) {
+                    rafOne.seek(pointerOne);
+                    out.write((twoStr + System.lineSeparator()).getBytes());
+                } else if (twoStr == null) {
+                    rafTwo.seek(pointerTwo);
+                    out.write((oneStr + System.lineSeparator()).getBytes());
+                } else if (oneStr.length() > twoStr.length()) {
+                    rafOne.seek(pointerOne);
+                    out.write((twoStr + System.lineSeparator()).getBytes());
+                } else {
+                    rafTwo.seek(pointerTwo);
+                    out.write((oneStr + System.lineSeparator()).getBytes());
+                }
+            }
         } catch (IOException e) {
 
         }
