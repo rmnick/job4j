@@ -4,20 +4,33 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SorterByBytes {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int sizeOfSource = 100;
-
         String path = "chapter_008/src/main/resources/";
-       /*
+
+        create(path, sizeOfSource);
+        split(300, "chapter_008/src/main/resources/source.txt");
+        sort(path);
+        mergeAll("chapter_008/src/main/resources/");
+
+    }
+
+    /**
+     * create folder if that doesnt exist
+     * create source file and fill it
+     * @param path
+     * @param sizeOfSource
+     */
+    public static void create(String path, int sizeOfSource) {
         File directory = new File(path);
         if (!directory.exists()) {
             directory.mkdir();
         }
+
         try (RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", path), "rw")) {
             for (int i = 0; i < sizeOfSource; i++) {
                 StringBuilder str = new StringBuilder();
@@ -30,25 +43,23 @@ public class SorterByBytes {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        split(50, "chapter_008/src/main/resources/source.txt");
-        sort(path);
-        */
-
-       File one = new File("/home/nick/work/job4j/chapter_008/src/main/resources/0.txt");
-       File two = new File("/home/nick/work/job4j/chapter_008/src/main/resources/1.txt");
-       merge(one, two, 0);
-
     }
 
+    /**
+     * split file into smaller pieces according to the specified size
+     * @param size
+     * @param path
+     */
     public static void split(long size, String path) {
         File fileOne = null;
         File fileTwo = null;
-        long flag = 0;
+        long flag;
         try (RandomAccessFile raf = new RandomAccessFile(path, "rw")) {
+            File file = new File(path);
+            System.out.println(file.length());
             flag = raf.length() / 2;
             String temp;
-            fileOne = new File(String.format("chapter_008/src/main/resources/%dright.txt", flag));
+            fileOne = new File(String.format("%s/%dright.txt", file.getParent(), flag));
             BufferedWriter bwOne = new BufferedWriter(new FileWriter(fileOne));
             while (raf.getFilePointer() < flag) {
                 temp = raf.readLine();
@@ -56,7 +67,7 @@ public class SorterByBytes {
             }
             bwOne.flush();
 
-            fileTwo = new File(String.format("chapter_008/src/main/resources/%dleft.txt", flag));
+            fileTwo = new File(String.format("%s/%dleft.txt", file.getParent(), flag));
             BufferedWriter bwTwo = new BufferedWriter(new FileWriter(fileTwo));
             while ((temp = raf.readLine()) != null) {
                 bwTwo.write(temp + System.lineSeparator());
@@ -65,54 +76,91 @@ public class SorterByBytes {
 
             bwOne.close();
             bwTwo.close();
+
+            file.delete();
         } catch (IOException e) {
             e.printStackTrace();
         }
         File file = new File(path);
         file.delete();
 
-        if (fileOne != null && fileOne.length() > size) {
-            split(flag, fileOne.getPath());
+        if (fileOne.length() > size) {
+            split(size, fileOne.getPath());
         }
 
-        if (fileTwo != null && fileTwo.length() > size) {
-            split(flag, fileTwo.getPath());
+        if (fileTwo.length() > size) {
+            split(size, fileTwo.getPath());
         }
     }
 
-    public static void sort(String path) throws IOException {
-        List<String> list = new ArrayList<>();
-        File index = new File(path);
-        String[]entries = index.list();
-        int n = 0;
-        for (String s : entries) {
-            File currentFile = new File(index.getPath(), s);
-            list = Files.lines(Paths.get(currentFile.getPath())).sorted().collect(Collectors.toList());
-            currentFile.delete();
-            BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path, String.format("%d.txt", n))));
-            n++;
-            for (String str : list) {
-                System.out.println(str);
-                bw.write(str + System.lineSeparator());
+    /**
+     * sort every file contents one by one in folder
+     * delete old, create new
+     * @param path
+     */
+    public static void sort(String path) {
+        try {
+            List<String> list;
+            File index = new File(path);
+            String[] entries = index.list();
+            int n = 0;
+            for (String s : entries) {
+                File currentFile = new File(index.getPath(), s);
+                list = Files.lines(Paths.get(currentFile.getPath())).sorted().collect(Collectors.toList());
+                currentFile.delete();
+                BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path, String.format("%d.txt", n))));
+                n++;
+                for (String str : list) {
+                    bw.write(str + System.lineSeparator());
+                }
+                bw.flush();
+                bw.close();
             }
-            bw.flush();
-            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * call method "merge" for all files in that folder
+     * @param path
+     */
     public static void mergeAll(String path) {
         File dir = new File(path);
         File[] files = dir.listFiles();
-        for (int i = 0, j = 1; j < files.length - 2; i = i + 2, j = j + 2) {
-            System.out.println("a");
+        List<File> list = new ArrayList<>();
+        List<File> out = new ArrayList<>();
+        for (File file : files) {
+            if (file.exists()) {
+                list.add(file);
+            }
         }
-
+        while (out.size() != 1) {
+            out.clear();
+            System.out.println(list.size());
+            for (int i = 0, j = 1; j < list.size(); i = i + 2, j = j + 2) {
+                out.add(merge(list.get(i), list.get(j), i + j));
+            }
+            System.out.println(out.size());
+            list.clear();
+            for (File file : out) {
+                list.add(file);
+            }
+        }
     }
 
-    public static void merge(File one, File two, int count) {
+    /**
+     * merge two file by order and return one
+     * @param one
+     * @param two
+     * @param count
+     * @return
+     */
+    public static File merge(File one, File two, int count) {
+        File result = null;
         try (RandomAccessFile rafOne = new RandomAccessFile(one, "rw");
              RandomAccessFile rafTwo = new RandomAccessFile(two, "rw");
-             RandomAccessFile out = new RandomAccessFile(new File(String.format("%s%d%s", one.getPath(), count, one.getName())), "rw")) {
+             RandomAccessFile out = new RandomAccessFile(new File(String.format("%s/%d%s", one.getParent(), count, one.getName())), "rw")) {
             long size = rafOne.length() + rafTwo.length();
             long pointerOne = 0;
             long pointerTwo = 0;
@@ -123,13 +171,7 @@ public class SorterByBytes {
                 pointerTwo = rafTwo.getFilePointer();
                 oneStr = rafOne.readLine();
                 twoStr = rafTwo.readLine();
-                if (oneStr == null) {
-                    rafOne.seek(pointerOne);
-                    out.write((twoStr + System.lineSeparator()).getBytes());
-                } else if (twoStr == null) {
-                    rafTwo.seek(pointerTwo);
-                    out.write((oneStr + System.lineSeparator()).getBytes());
-                } else if (oneStr.length() > twoStr.length()) {
+                if (oneStr == null || (oneStr != null && twoStr != null && oneStr.length() > twoStr.length())) {
                     rafOne.seek(pointerOne);
                     out.write((twoStr + System.lineSeparator()).getBytes());
                 } else {
@@ -137,8 +179,12 @@ public class SorterByBytes {
                     out.write((oneStr + System.lineSeparator()).getBytes());
                 }
             }
+            result = new File(String.format("%s/%d%s", one.getParent(), count, one.getName()));
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
+        one.delete();
+        two.delete();
+        return result;
     }
 }
