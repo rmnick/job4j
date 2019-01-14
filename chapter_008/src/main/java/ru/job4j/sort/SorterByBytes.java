@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 public class SorterByBytes {
     public static void main(String[] args) {
-        int sizeOfSource = 100;
+        int sizeOfSource = 1000;
         String path = "chapter_008/src/main/resources/";
 
         create(path, sizeOfSource);
-        split(300, "chapter_008/src/main/resources/source.txt");
+        split(1000, "chapter_008/src/main/resources/source.txt");
         sort(path);
-        mergeAll("chapter_008/src/main/resources/");
+        //mergeAll("chapter_008/src/main/resources/");
 
     }
 
@@ -56,7 +56,7 @@ public class SorterByBytes {
         long flag;
         try (RandomAccessFile raf = new RandomAccessFile(path, "rw")) {
             File file = new File(path);
-            System.out.println(file.length());
+            //System.out.println(file.length());
             flag = raf.length() / 2;
             String temp;
             fileOne = new File(String.format("%s/%dright.txt", file.getParent(), flag));
@@ -77,12 +77,12 @@ public class SorterByBytes {
             bwOne.close();
             bwTwo.close();
 
-            file.delete();
+            Files.delete(Paths.get(path));
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        File file = new File(path);
-        file.delete();
 
         if (fileOne.length() > size) {
             split(size, fileOne.getPath());
@@ -137,14 +137,17 @@ public class SorterByBytes {
         }
         while (out.size() != 1) {
             out.clear();
-            System.out.println(list.size());
+            //System.out.println(list.size());
             for (int i = 0, j = 1; j < list.size(); i = i + 2, j = j + 2) {
+                System.out.println(list.get(i) + " " + list.get(j));
                 out.add(merge(list.get(i), list.get(j), i + j));
             }
-            System.out.println(out.size());
+           // System.out.println(out.size());
             list.clear();
             for (File file : out) {
-                list.add(file);
+                if (file.exists()) {
+                    list.add(file);
+                }
             }
         }
     }
@@ -180,11 +183,11 @@ public class SorterByBytes {
                 }
             }
             result = new File(String.format("%s/%d%s", one.getParent(), count, one.getName()));
+            Files.delete(Paths.get(one.getPath()));
+            Files.delete(Paths.get(two.getPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        one.delete();
-        two.delete();
         return result;
     }
 }
