@@ -146,11 +146,10 @@ public class SorterByBytes {
     }
 
     /**
-     * merge two file by order and return one
+     * merge two file by order
      * @param one
      * @param two
      * @param count
-     * @return
      */
     private void merge(File one, File two, int count) {
         try (RandomAccessFile rafOne = new RandomAccessFile(one, "rw");
