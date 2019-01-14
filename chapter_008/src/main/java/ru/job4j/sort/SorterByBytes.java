@@ -8,16 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SorterByBytes {
-    public static void main(String[] args) {
-        int sizeOfSource = 1000;
-        String path = "chapter_008/src/main/resources/";
-
-        create(path, sizeOfSource);
-        split(1000, "chapter_008/src/main/resources/source.txt");
-        sort(path);
-        //mergeAll("chapter_008/src/main/resources/");
-
-    }
 
     /**
      * create folder if that doesnt exist
@@ -25,13 +15,12 @@ public class SorterByBytes {
      * @param path
      * @param sizeOfSource
      */
-    public static void create(String path, int sizeOfSource) {
+    public void create(String path, String name, int sizeOfSource) {
         File directory = new File(path);
         if (!directory.exists()) {
             directory.mkdir();
         }
-
-        try (RandomAccessFile source = new RandomAccessFile(String.format("%ssource.txt", path), "rw")) {
+        try (RandomAccessFile source = new RandomAccessFile(String.format("%s%s%s.txt", path, File.separator, name), "rw")) {
             for (int i = 0; i < sizeOfSource; i++) {
                 StringBuilder str = new StringBuilder();
                 int n = (int) (Math.random() * 30);
@@ -46,20 +35,28 @@ public class SorterByBytes {
     }
 
     /**
-     * split file into smaller pieces according to the specified size
-     * @param size
+     * main method
      * @param path
+     * @param size
+     * @return
      */
-    public static void split(long size, String path) {
-        File fileOne = null;
-        File fileTwo = null;
-        long flag;
-        try (RandomAccessFile raf = new RandomAccessFile(path, "rw")) {
-            File file = new File(path);
-            //System.out.println(file.length());
-            flag = raf.length() / 2;
+    public void run(String path, long size) {
+        splitAll(path, size);
+        sort(path);
+        mergeAll(path);
+    }
+
+    /**
+     * split file into smaller pieces according to the specified size
+     * @param file
+     */
+    private void split(File file, int n) {
+        File source = new File(file.getPath());
+        try (RandomAccessFile raf = new RandomAccessFile(file.getPath(), "rw")) {
+            long flag = raf.length() / 2;
             String temp;
-            fileOne = new File(String.format("%s/%dright.txt", file.getParent(), flag));
+
+            File fileOne = new File(String.format("%s/%dright.txt", file.getParent(), n));
             BufferedWriter bwOne = new BufferedWriter(new FileWriter(fileOne));
             while (raf.getFilePointer() < flag) {
                 temp = raf.readLine();
@@ -67,7 +64,7 @@ public class SorterByBytes {
             }
             bwOne.flush();
 
-            fileTwo = new File(String.format("%s/%dleft.txt", file.getParent(), flag));
+            File fileTwo = new File(String.format("%s/%dleft.txt", file.getParent(), n));
             BufferedWriter bwTwo = new BufferedWriter(new FileWriter(fileTwo));
             while ((temp = raf.readLine()) != null) {
                 bwTwo.write(temp + System.lineSeparator());
@@ -77,19 +74,32 @@ public class SorterByBytes {
             bwOne.close();
             bwTwo.close();
 
-            Files.delete(Paths.get(path));
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        source.delete();
+    }
 
-        if (fileOne.length() > size) {
-            split(size, fileOne.getPath());
-        }
-
-        if (fileTwo.length() > size) {
-            split(size, fileTwo.getPath());
+    /**
+     * split all files one by one
+     * @param path
+     * @param size
+     */
+    private void splitAll(String path, long size) {
+        boolean flag = true;
+        int n = 0;
+        List<File> list;
+        while (flag) {
+            list = collect(path);
+            for (File file : list) {
+                if (file.exists() && file.length() > size) {
+                    split(file, n++);
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+            list.clear();
         }
     }
 
@@ -98,16 +108,14 @@ public class SorterByBytes {
      * delete old, create new
      * @param path
      */
-    public static void sort(String path) {
+    private void sort(String path) {
         try {
+            List<File> files = collect(path);
             List<String> list;
-            File index = new File(path);
-            String[] entries = index.list();
             int n = 0;
-            for (String s : entries) {
-                File currentFile = new File(index.getPath(), s);
-                list = Files.lines(Paths.get(currentFile.getPath())).sorted().collect(Collectors.toList());
-                currentFile.delete();
+            for (File file : files) {
+                list = Files.lines(Paths.get(file.getPath())).sorted().collect(Collectors.toList());
+                file.delete();
                 BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path, String.format("%d.txt", n))));
                 n++;
                 for (String str : list) {
@@ -125,30 +133,15 @@ public class SorterByBytes {
      * call method "merge" for all files in that folder
      * @param path
      */
-    public static void mergeAll(String path) {
-        File dir = new File(path);
-        File[] files = dir.listFiles();
-        List<File> list = new ArrayList<>();
-        List<File> out = new ArrayList<>();
-        for (File file : files) {
-            if (file.exists()) {
-                list.add(file);
-            }
-        }
-        while (out.size() != 1) {
-            out.clear();
-            //System.out.println(list.size());
+    private void mergeAll(String path) {
+        List<File> list = collect(path);
+        int n = 0;
+        while (list.size() > 1) {
             for (int i = 0, j = 1; j < list.size(); i = i + 2, j = j + 2) {
-                System.out.println(list.get(i) + " " + list.get(j));
-                out.add(merge(list.get(i), list.get(j), i + j));
+                merge(list.get(i), list.get(j), n++);
             }
-           // System.out.println(out.size());
             list.clear();
-            for (File file : out) {
-                if (file.exists()) {
-                    list.add(file);
-                }
-            }
+            list = collect(path);
         }
     }
 
@@ -159,14 +152,13 @@ public class SorterByBytes {
      * @param count
      * @return
      */
-    public static File merge(File one, File two, int count) {
-        File result = null;
+    private void merge(File one, File two, int count) {
         try (RandomAccessFile rafOne = new RandomAccessFile(one, "rw");
              RandomAccessFile rafTwo = new RandomAccessFile(two, "rw");
-             RandomAccessFile out = new RandomAccessFile(new File(String.format("%s/%d%s", one.getParent(), count, one.getName())), "rw")) {
+             RandomAccessFile out = new RandomAccessFile(new File(String.format("%s/%dout.txt", one.getParent(), count)), "rw")) {
             long size = rafOne.length() + rafTwo.length();
-            long pointerOne = 0;
-            long pointerTwo = 0;
+            long pointerOne;
+            long pointerTwo;
             String oneStr;
             String twoStr;
             while (out.length() < size) {
@@ -182,12 +174,27 @@ public class SorterByBytes {
                     out.write((oneStr + System.lineSeparator()).getBytes());
                 }
             }
-            result = new File(String.format("%s/%d%s", one.getParent(), count, one.getName()));
-            Files.delete(Paths.get(one.getPath()));
-            Files.delete(Paths.get(two.getPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        one.delete();
+        two.delete();
+    }
+
+    /**
+     * check and collect all existing files from that folder
+     * @param path
+     * @return
+     */
+    public List<File> collect(String path) {
+        List<File> list = new ArrayList<>();
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.exists()) {
+                list.add(file);
+            }
+        }
+        return list;
     }
 }

@@ -26,17 +26,6 @@ public class StringSorterTest {
             }
     }
 
-    @After
-    public void deleteAllFilesFolder() {
-        File index = new File(path);
-        String[]entries = index.list();
-        for (String s : entries) {
-            File currentFile = new File(index.getPath(), s);
-            currentFile.delete();
-        }
-        index.delete();
-    }
-
     @Test
     public void test() {
         StringSorter stringSorter = new StringSorter();
@@ -51,5 +40,16 @@ public class StringSorterTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void deleteAllFilesFolder() {
+        File index = new File(path);
+        String[]entries = index.list();
+        for (String s : entries) {
+            File currentFile = new File(index.getPath(), s);
+            currentFile.delete();
+        }
+        index.delete();
     }
 }
