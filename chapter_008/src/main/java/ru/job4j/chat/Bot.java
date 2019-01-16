@@ -1,31 +1,114 @@
 package ru.job4j.chat;
 
+import jdk.management.resource.internal.inst.RandomAccessFileRMHooks;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class Bot {
     public static void main(String[] args) {
-        String answer = null;
+        String[] answers = {"hey", "what is it", "why", "who", "and", "so", "go on", "no", "so what", "how it can be", "lol"};
+        String path = "chapter_008/src/main/resources/";
+        String name = "file.txt";
+        String log = "log.txt";
+        BufferedWriter bw = null;
+        Bot john = new Bot();
+        boolean flag = false;
+        String answer;
+        String botAnswer;
+
+        john.createListAnswers(path + name, answers);
+
+        File logFile = new File(path + log);
         Scanner sc = new Scanner(System.in);
-        File file = new File("chapter_008/src/main/resources/file.txt");
+        System.out.println("Hey, dude, i'm silly John");
         try {
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            answer = sc.nextLine();
-            while (!answer.equals("exit")) {
-                if (sc.hasNextLine()) {
-                    if (answer.equals("stop")) {
-                        System.out.println("!");
-                    } else {
-                       // answer = in.readLine();
-                        System.out.println("fuck");
+            bw = new BufferedWriter(new FileWriter(logFile));
+            while (!flag) {
+                answer = sc.nextLine();
+                bw.write(answer);
+                bw.newLine();
+                if (answer.equals("exit")) {
+                    flag = true;
+                } else if (answer.equals("stop")) {
+                    while (!(answer.equals("continue") || answer.equals("exit"))) {
+                        answer = sc.nextLine();
+                        bw.write(answer);
+                        bw.newLine();
+                        if (answer.equals("exit")) {
+                            flag = true;
+                        }
                     }
-                    answer = sc.nextLine();
+                } else {
+                    botAnswer = john.getAnswer(path + name);
+                    bw.write(botAnswer);
+                    bw.newLine();
+                    System.out.println(botAnswer);
                 }
             }
-            in.close();
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * create file with answers
+     * @param path
+     * @param answers
+     */
+    public void createListAnswers(String path, String[] answers) {
+        File file = new File(path);
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(file));
+            for (String answer : answers) {
+                bw.write(answer);
+                bw.newLine();
+            }
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * get random answer from file
+     * we jump on the beginning new string from seek(pointer)
+     * @param path
+     * @return
+     */
+    public String getAnswer(String path) {
+        String result = null;
+        File file = new File(path);
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            long pointer = (long) (Math.random() * raf.length());
+            raf.seek(pointer);
+            raf.readLine();
+            result = raf.readLine();
+            if (result == null) {
+                raf.seek(0);
+                result = raf.readLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return result;
     }
 }
