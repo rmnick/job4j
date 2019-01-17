@@ -13,7 +13,6 @@ public class Bot {
         String log = "log.txt";
         BufferedWriter bw = null;
         Bot john = new Bot();
-        boolean flag = false;
         String answer;
         String botAnswer;
 
@@ -24,20 +23,15 @@ public class Bot {
         System.out.println("Hey, dude, i'm silly John");
         try {
             bw = new BufferedWriter(new FileWriter(logFile));
-            while (!flag) {
+            do {
                 answer = sc.nextLine();
                 bw.write(answer);
                 bw.newLine();
-                if (answer.equals("exit")) {
-                    flag = true;
-                } else if (answer.equals("stop")) {
+                if (answer.equals("stop")) {
                     while (!(answer.equals("continue") || answer.equals("exit"))) {
                         answer = sc.nextLine();
                         bw.write(answer);
                         bw.newLine();
-                        if (answer.equals("exit")) {
-                            flag = true;
-                        }
                     }
                 } else {
                     botAnswer = john.getAnswer(path + name);
@@ -45,7 +39,7 @@ public class Bot {
                     bw.newLine();
                     System.out.println(botAnswer);
                 }
-            }
+            } while (!"exit".equals(answer));
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
