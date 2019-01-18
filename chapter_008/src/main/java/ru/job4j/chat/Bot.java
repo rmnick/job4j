@@ -11,7 +11,6 @@ public class Bot {
         String path = "chapter_008/src/main/resources/";
         String name = "file.txt";
         String log = "log.txt";
-        BufferedWriter bw = null;
         Bot john = new Bot();
         String answer;
         String botAnswer;
@@ -21,8 +20,7 @@ public class Bot {
         File logFile = new File(path + log);
         Scanner sc = new Scanner(System.in);
         System.out.println("Hey, dude, i'm silly John");
-        try {
-            bw = new BufferedWriter(new FileWriter(logFile));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFile))) {
             do {
                 answer = sc.nextLine();
                 bw.write(answer);
@@ -43,14 +41,6 @@ public class Bot {
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (bw != null) {
-                try {
-                    bw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
