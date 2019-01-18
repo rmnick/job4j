@@ -6,21 +6,41 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Bot {
+
+    private final String path;
+    private final String nameFile;
+    private final String logName;
+    private final String[] answers;
+
+    public Bot(final String path, final String nameFile, final String logName, final String[] answers) {
+        this.path = path;
+        this.nameFile = nameFile;
+        this.logName = logName;
+        this.answers = answers;
+    }
     public static void main(String[] args) {
         String[] answers = {"hey", "what is it", "why", "who", "and", "so", "go on", "no", "so what", "how it can be", "lol"};
         String path = "chapter_008/src/main/resources/";
         String name = "file.txt";
         String log = "log.txt";
-        Bot john = new Bot();
+        Bot john = new Bot(path, name, log, answers);
+        john.createListAnswers();
+        john.start();
+    }
+
+    /**
+     * conversation method
+     */
+    public void start() {
         String answer;
         String botAnswer;
-
-        john.createListAnswers(path + name, answers);
-
-        File logFile = new File(path + log);
+        String hello = "Hey, dude, i'm silly John";
+        File logFile = new File(path + logName);
         Scanner sc = new Scanner(System.in);
-        System.out.println("Hey, dude, i'm silly John");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFile))) {
+            System.out.println(hello);
+            bw.write(hello);
+            bw.newLine();
             do {
                 answer = sc.nextLine();
                 bw.write(answer);
@@ -32,7 +52,7 @@ public class Bot {
                         bw.newLine();
                     }
                 } else {
-                    botAnswer = john.getAnswer(path + name);
+                    botAnswer = getAnswer();
                     bw.write(botAnswer);
                     bw.newLine();
                     System.out.println(botAnswer);
@@ -46,14 +66,10 @@ public class Bot {
 
     /**
      * create file with answers
-     * @param path
-     * @param answers
      */
-    public void createListAnswers(String path, String[] answers) {
-        File file = new File(path);
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter(file));
+    public void createListAnswers() {
+        File file = new File(path + nameFile);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             for (String answer : answers) {
                 bw.write(answer);
                 bw.newLine();
@@ -61,26 +77,16 @@ public class Bot {
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (bw != null) {
-                try {
-                    bw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     /**
      * get random answer from file
      * we jump on the beginning new string from seek(pointer)
-     * @param path
-     * @return
      */
-    public String getAnswer(String path) {
+    public String getAnswer() {
         String result = null;
-        File file = new File(path);
+        File file = new File(path + nameFile);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long pointer = (long) (Math.random() * raf.length());
             raf.seek(pointer);
