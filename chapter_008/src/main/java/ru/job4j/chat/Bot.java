@@ -1,7 +1,5 @@
 package ru.job4j.chat;
 
-import jdk.management.resource.internal.inst.RandomAccessFileRMHooks;
-
 import java.io.*;
 import java.util.Scanner;
 
@@ -51,7 +49,7 @@ public class Bot {
                         bw.write(answer);
                         bw.newLine();
                     }
-                } else {
+                } else if (!answer.equals("exit")) {
                     botAnswer = getAnswer();
                     bw.write(botAnswer);
                     bw.newLine();

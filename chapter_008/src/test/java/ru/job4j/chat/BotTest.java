@@ -59,7 +59,7 @@ public class BotTest {
         bi.close();
         File file = new File(path + log);
         List<String> list = Files.lines(Paths.get(file.getPath())).sorted().collect(Collectors.toList());
-        assertThat(list.size(), is(10));
+        assertThat(list.size(), is(9));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,9 +79,7 @@ public class BotTest {
                 file.delete();
             }
         }
-        if (dir.exists()) {
-            dir.delete();
-        }
+        dir.delete();
     }
 
 }
