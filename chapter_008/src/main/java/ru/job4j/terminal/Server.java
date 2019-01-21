@@ -30,7 +30,7 @@ public class Server {
                     }
                     pw.println();
                 }*/
-                select(ask, parent, out);
+                //select(ask, parent, out);
             } while (!"exit".equals(ask));
         } catch (IOException e) {
             e.printStackTrace();
