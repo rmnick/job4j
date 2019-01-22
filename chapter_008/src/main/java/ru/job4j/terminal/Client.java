@@ -21,8 +21,8 @@ public class Client {
             Scanner console = new Scanner(System.in);
             String str;
             String ask;
-            System.out.println(in.readLine());
             do {
+                System.out.println(in.readLine());
                 ask = console.nextLine();
                 out.println(ask);
                 str = in.readLine();
