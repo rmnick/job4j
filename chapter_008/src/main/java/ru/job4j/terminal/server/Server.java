@@ -1,15 +1,12 @@
-package ru.job4j.terminal;
+package ru.job4j.terminal.server;
+
+import ru.job4j.terminal.Config;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private final Socket socket;
-
-    public Server(final Socket socket) {
-        this.socket = socket;
-    }
 
     public static void main(String[] args) {
         Config conf = new Config();

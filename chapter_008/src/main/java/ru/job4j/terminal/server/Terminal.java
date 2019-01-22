@@ -1,4 +1,4 @@
-package ru.job4j.terminal;
+package ru.job4j.terminal.server;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
@@ -8,7 +8,7 @@ import java.net.Socket;
 public class Terminal {
     private Socket socket;
     private final String[] command = {"help", "ls", "cd", "cd..", "load", "upload"};
-    private File parent = new File("chapter_008/");
+    private File parent = new File(System.getProperty("user.dir"));
 
     public Terminal(Socket socket) {
         this.socket = socket;
@@ -42,7 +42,13 @@ public class Terminal {
                             System.out.println("case cd");
                             changeDirectory(ask, pw);
                             break;
-                            default:
+                        case "upload":
+                            System.out.println("upload");
+                            upload(str[1], out, pw);
+                            //pw.println("end");
+                           // pw.println();
+                            break;
+                        default:
                                 break;
 
                     }
@@ -80,11 +86,39 @@ public class Terminal {
 
     public void goOneFolderUp(PrintWriter pw) {
         System.out.println("in folderUp");
+        parent = new File(parent.getAbsolutePath());
         if (parent.getParentFile() == null) {
             pw.println("parent catalog");
             pw.println();
         } else {
-            pw.println(parent.getAbsolutePath());
+            parent = parent.getParentFile();
+            System.out.println(parent.getAbsolutePath());
+            //pw.println(parent.getAbsolutePath());
+            pw.println();
+        }
+    }
+
+    public void upload(String name, OutputStream out, PrintWriter pw) {
+        File file = new File(parent.getAbsoluteFile() + "/" + name);
+        if (file.exists()) {
+            pw.println("upload");
+            pw.println(file.getName());
+            try (InputStream in = new FileInputStream(file)) {
+                byte[] buf = new byte[4096];
+                int count;
+                while ((count = in.read(buf)) > 0) {
+                    out.write(buf, 0, count);
+                }
+                socket.shutdownOutput();
+                out = socket.getOutputStream();
+                pw = new PrintWriter(new OutputStreamWriter(out), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            pw.println("successful");
+            pw.println();
+        } else {
+            pw.println("file doesn't exist");
             pw.println();
         }
     }
@@ -92,7 +126,7 @@ public class Terminal {
     public boolean validate(String string, PrintWriter pw) {
         String[] str = string.split(" ");
         boolean result = false;
-            if (str != null) {
+            if (str != null && str.length < 3) {
                 for (String s : command) {
                     if (str[0].equals(s)) {
                         result = true;
