@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Terminal {
     private Socket socket;
-    private final String[] command = {"help", "ls", "cd", "cd..", "load", "upload"};
+    private final String[] command = {"help", "ls", "cd", "cd..", "download", "upload"};
     private File parent = new File(System.getProperty("user.dir"));
 
     public Terminal(Socket socket) {
@@ -19,12 +19,13 @@ public class Terminal {
         try (InputStream in = socket.getInputStream();
              OutputStream out = socket.getOutputStream();
              PrintWriter pw = new PrintWriter(new OutputStreamWriter(out), true);
-             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+             BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
             do {
                 System.out.println(parent.getAbsolutePath());
                 pw.println(parent.getAbsolutePath());
                 ask = br.readLine();
                 System.out.println(ask);
+                //validate command string and parse it on command
                 if (validate(ask, pw)) {
                     String[] str = parse(ask);
                     System.out.println("valid");
@@ -43,14 +44,27 @@ public class Terminal {
                             changeDirectory(ask, pw);
                             break;
                         case "upload":
-                            System.out.println("upload");
+                            System.out.println("case upload");
                             upload(str[1], out, pw);
-                            //pw.println("end");
-                           // pw.println();
+                            break;
+                        case "download":
+                            System.out.println("case download");
+                            pw.println("download");
+                            String s = br.readLine();
+                            if (s.equals("file doesn't exist")) {
+                                pw.println(s);
+                                pw.println();
+                            } else {
+                                System.out.println("!!!! in download");
+                                //s = br.readLine();
+                                System.out.println("print name" + s);
+                                long size = Long.parseLong(br.readLine());
+                                System.out.println("print size" + size);
+                                download(s, in, size, pw);
+                            }
                             break;
                         default:
                                 break;
-
                     }
                 }
             } while (true);
@@ -59,8 +73,11 @@ public class Terminal {
         }
     }
 
+    /**
+     * ls
+     * @param pw
+     */
     public void show(PrintWriter pw) {
-        System.out.println("in Show" + parent.list().length);
         String[] str = parent.list();
         for (String s : str) {
             System.out.println(s);
@@ -69,6 +86,11 @@ public class Terminal {
         pw.println();
     }
 
+    /**
+     * cd "directory"
+     * @param string
+     * @param pw
+     */
     public void changeDirectory(String string, PrintWriter pw) {
         String[] str = string.split(" ");
         String name = parent.getAbsolutePath() + "/" + str[1] + "/";
@@ -76,7 +98,6 @@ public class Terminal {
         File dir = new File(name);
         if (dir.exists() && dir.isDirectory()) {
             parent = dir;
-            //pw.println(dir.getAbsolutePath());
             pw.println();
         } else {
             pw.println("directory doesn't exist");
@@ -84,8 +105,11 @@ public class Terminal {
         }
     }
 
+    /**
+     * cd..
+     * @param pw
+     */
     public void goOneFolderUp(PrintWriter pw) {
-        System.out.println("in folderUp");
         parent = new File(parent.getAbsolutePath());
         if (parent.getParentFile() == null) {
             pw.println("parent catalog");
@@ -93,25 +117,29 @@ public class Terminal {
         } else {
             parent = parent.getParentFile();
             System.out.println(parent.getAbsolutePath());
-            //pw.println(parent.getAbsolutePath());
             pw.println();
         }
     }
 
+    /**
+     * !!!!!!!!!!
+     * @param name
+     * @param out
+     * @param pw
+     */
     public void upload(String name, OutputStream out, PrintWriter pw) {
         File file = new File(parent.getAbsoluteFile() + "/" + name);
         if (file.exists()) {
             pw.println("upload");
             pw.println(file.getName());
+            System.out.println(file.length());
+            pw.println(file.length());
             try (InputStream in = new FileInputStream(file)) {
                 byte[] buf = new byte[4096];
                 int count;
                 while ((count = in.read(buf)) > 0) {
                     out.write(buf, 0, count);
                 }
-                socket.shutdownOutput();
-                out = socket.getOutputStream();
-                pw = new PrintWriter(new OutputStreamWriter(out), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -121,6 +149,33 @@ public class Terminal {
             pw.println("file doesn't exist");
             pw.println();
         }
+    }
+
+    /**
+     * !!!!!!!!!!!
+     * @param name
+     * @param in
+     * @param size
+     * @param pw
+     */
+    public void download(String name, InputStream in, long size, PrintWriter pw) {
+        File file = new File(parent.getAbsolutePath() + "/" + name);
+        System.out.println(file.getAbsolutePath());
+        try (OutputStream out = new FileOutputStream(file)) {
+            System.out.println(file.length());
+            System.out.println(size);
+            byte[] buf = new byte[4096];
+            int count;
+            int a = 0;
+            while (file.length() < size) {
+                out.write(in.read());
+            }
+            System.out.println("!!!freeeee");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pw.println("successful");
+        pw.println();
     }
 
     public boolean validate(String string, PrintWriter pw) {
