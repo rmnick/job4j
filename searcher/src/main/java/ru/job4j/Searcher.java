@@ -1,4 +1,4 @@
-package ru.job4j.search;
+package ru.job4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +17,12 @@ public class Searcher {
         this.log = log;
     }
 
+    /**
+     * main method use the walkFileTree
+     * @param var
+     */
     public void search(String var) {
-        Path path = Paths.get(log);
+        Path path = Paths.get(log + "log.txt");
         try (PrintWriter pw = new PrintWriter(path.toFile())) {
             Files.walkFileTree(Paths.get(dir), new MyVisitor(name, pw, var));
         } catch (IOException e) {
@@ -31,7 +35,7 @@ public class Searcher {
         private final PrintWriter pw;
         private final String var;
 
-        public MyVisitor(String name, PrintWriter pw, String var) {
+        public MyVisitor(final String name, final PrintWriter pw, final String var) {
             this.name = name;
             this.pw = pw;
             this.var = var;
@@ -46,7 +50,7 @@ public class Searcher {
             return FileVisitResult.CONTINUE;
         }
 
-        public boolean regularMatches(Path file) {
+        private boolean regularMatches(Path file) {
             boolean result = false;
             if (file.getFileName().toString().matches(name)) {
                 result = true;
@@ -54,7 +58,7 @@ public class Searcher {
             return result;
         }
 
-        public boolean fullMatches(Path file) {
+        private boolean fullMatches(Path file) {
             boolean result = false;
             if (file.getFileName().toString().equals(name)) {
                 result = true;
@@ -62,7 +66,7 @@ public class Searcher {
             return result;
         }
 
-        public boolean maskMatches(Path file) {
+        private boolean maskMatches(Path file) {
             boolean result = false;
             if (file.getFileName().toString().endsWith(name)) {
                 result = true;
@@ -71,39 +75,72 @@ public class Searcher {
         }
     }
 
-    private static boolean valid(String[] args) {
+    /**
+     * validate args and print hint
+     * @param args
+     * @return
+     */
+    public static boolean valid(String[] args) {
         boolean flag = false;
-        for (int i = 0; i < args.length; i++) {
-            if (flag) {
-                break;
-            }
-            switch (i) {
-                case 0:
-                    if (!args[i].equals("-d")) {
-                        System.out.println("write correct \"-d\"");
-                        flag = true;
-                    } else {
-                        File dir = new File(args[i + 1]);
-                        if (!dir.exists() && !dir.isDirectory()) {
-                            System.out.println("wrong directory name");
+        if (args.length == 7) {
+            for (int i = 0; i < args.length; i++) {
+                if (flag) {
+                    break;
+                }
+                switch (i) {
+                    case 0:
+                        if (!args[i].equals("-d")) {
+                            System.out.println("write correct key \"-d\"");
+                            flag = true;
+                        } else {
+                            File dir = new File(args[i + 1]);
+                            if (!dir.exists() && !dir.isDirectory()) {
+                                System.out.println("wrong directory name");
+                                flag = true;
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (!args[i].equals("-n")) {
+                            System.out.println("write correct key \"-n\"");
                             flag = true;
                         }
-                    }
-                    break;
-                case 1:
-                    break;
+                        break;
+                    case 4:
+                        if (!(args[i].equals("-m") || args[i].equals("-f") || args[i].equals("-r"))) {
+                            System.out.println("write correct key \"-m\" or \"-f\" or \"-r\"");
+                            flag = true;
+                        }
+                        break;
+                    case 5:
+                        if (!args[i].equals("-o")) {
+                            System.out.println("write correct key \"-o\"");
+                            flag = true;
+                        } else {
+                            File dirLog = new File(args[i + 1]);
+                            if (!dirLog.exists() && !dirLog.isDirectory()) {
+                                System.out.println("wrong directory log file name");
+                                flag = true;
+                            }
+                            break;
+                        }
                     default:
                         break;
+                }
             }
+        } else {
+            System.out.println("please write the keys correct");
+            flag = true;
         }
         return flag;
     }
 
-    private static void help() {
+    /**
+     * print help in console
+     */
+    public static void help() {
         System.out.println(new StringBuilder()
-                .append("...help: ")
-                .append(System.lineSeparator())
-                .append("correct view")
+                .append("help: ")
                 .append(System.lineSeparator())
                 .append("-d \"absolute path\" -n \"filename(regular expression or mask)\" "
                         + "-m,r,f(mask, regular expression, full name) -o \"log file absolute path\"")
@@ -140,10 +177,11 @@ public class Searcher {
                         break;
             }
         }
-        help();
         if (!valid(args)) {
             Searcher searcher = new Searcher(dir, name, log);
             searcher.search(var);
+        } else {
+            help();
         }
     }
 }

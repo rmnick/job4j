@@ -61,6 +61,7 @@
         <module>magnit</module>
         <module>chapter_008</module>
         <module>wise_oracle</module>
+        <module>searcher</module>
     </modules>
 	 
 	<build>
