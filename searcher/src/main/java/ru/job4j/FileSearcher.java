@@ -9,12 +9,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 public class FileSearcher extends SimpleFileVisitor<Path> {
     private final PrintWriter pw;
     private final IChecker checker;
-    /*
-    private final static String keyMask = "-m";
-    private final static String keyRegular = "-r";
-    private final static String keyName = "-f";
-    */
-
 
     public FileSearcher(final PrintWriter pw, final IChecker checker) {
         this.pw = pw;

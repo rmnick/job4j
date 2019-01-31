@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,29 +11,40 @@ public class Searcher {
     private final String dir;
     private final String template;
     private final String log;
+    private final String keyTemplate;
+    private final static String KEY_MASK = "-m";
+    private final static String KEY_FULL_NAME = "-f";
+    //private final static String KEY_REGULAR = "-r";
 
-    public Searcher(final String dir, final String template, final String log) {
+
+    public Searcher(final String dir, final String template, final String keyTemplate, final String log) {
         this.dir = dir;
         this.template = template;
         this.log = log;
+        this.keyTemplate = keyTemplate;
     }
 
+    public IChecker getChecker() {
+        IChecker checker;
+        if (keyTemplate.equals(KEY_MASK)) {
+            checker = new MaskCheckerMaker().makeChecker(template);
+        } else if (keyTemplate.equals(KEY_FULL_NAME)) {
+            checker = new NameCheckerMaker().makeChecker(template);
+        } else {
+            checker = new RegularCheckerMaker().makeChecker(template);
+        }
+        return checker;
+    }
 
     public void search() {
         Path path = Paths.get(log + "log.txt");
-        IChecker checker = new MaskCheckerMaker(template).makeChecker();
         try (PrintWriter pw = new PrintWriter(path.toFile())) {
-            Files.walkFileTree(Paths.get(dir), new FileSearcher(pw, checker));
+            Files.walkFileTree(Paths.get(dir), new FileSearcher(pw, this.getChecker()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * validate args and print hint
-     * @param args
-     * @return
-     */
     public static boolean valid(String[] args) {
         boolean flag = false;
         if (args.length == 7) {
@@ -90,9 +100,6 @@ public class Searcher {
         return flag;
     }
 
-    /**
-     * print help in console
-     */
     public static void help() {
         System.out.println(new StringBuilder()
                 .append("help: ")
@@ -106,8 +113,8 @@ public class Searcher {
 
     public static void main(String[] args) {
         String dir = null;
-        String name = null;
-        String var = null;
+        String template = null;
+        String keyTemplate = null;
         String log = null;
         Map<String, String> keys = new HashMap<>();
         String[] k = {"-d", "-n", "-m", "-r", "-f", "-o"};
@@ -120,16 +127,16 @@ public class Searcher {
                     dir = args[i + 1];
                     break;
                 case "-n":
-                    name = args[i + 1];
+                    template = args[i + 1];
                     break;
                 case "-m":
-                    var = "m";
+                    keyTemplate = "-m";
                     break;
                 case "-f":
-                    var = "f";
+                    keyTemplate = "-f";
                     break;
                 case "-r":
-                    var = "r";
+                    keyTemplate = "-r";
                     break;
                 case "-o":
                     log = args[i + 1];
@@ -140,7 +147,7 @@ public class Searcher {
 
         }
         if (!valid(args)) {
-            Searcher searcher = new Searcher(dir, name, log);
+            Searcher searcher = new Searcher(dir, template, keyTemplate, log);
             searcher.search();
         } else {
             help();

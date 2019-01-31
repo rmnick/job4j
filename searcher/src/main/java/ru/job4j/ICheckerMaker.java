@@ -1,5 +1,5 @@
 package ru.job4j;
 
 public interface ICheckerMaker {
-    public IChecker makeChecker();
+    public IChecker makeChecker(String template);
 }
