@@ -12,10 +12,6 @@ public class Searcher {
     private final String template;
     private final String log;
     private final String keyTemplate;
-    private final static String KEY_MASK = "-m";
-    private final static String KEY_FULL_NAME = "-f";
-    //private final static String KEY_REGULAR = "-r";
-
 
     public Searcher(final String dir, final String template, final String keyTemplate, final String log) {
         this.dir = dir;
@@ -24,22 +20,10 @@ public class Searcher {
         this.keyTemplate = keyTemplate;
     }
 
-    public IChecker getChecker() {
-        IChecker checker;
-        if (keyTemplate.equals(KEY_MASK)) {
-            checker = new MaskCheckerMaker().makeChecker(template);
-        } else if (keyTemplate.equals(KEY_FULL_NAME)) {
-            checker = new NameCheckerMaker().makeChecker(template);
-        } else {
-            checker = new RegularCheckerMaker().makeChecker(template);
-        }
-        return checker;
-    }
-
     public void search() {
         Path path = Paths.get(log + "log.txt");
         try (PrintWriter pw = new PrintWriter(path.toFile())) {
-            Files.walkFileTree(Paths.get(dir), new FileSearcher(pw, this.getChecker()));
+            Files.walkFileTree(Paths.get(dir), new FileSearcher(pw, new CheckerDispatch().init().get(keyTemplate, template)));
         } catch (IOException e) {
             e.printStackTrace();
         }
