@@ -1,7 +1,5 @@
 package ru.job4j;
 
-import java.nio.file.Path;
-
 public class RegularCheckerMaker implements ICheckerMaker {
 
     @Override

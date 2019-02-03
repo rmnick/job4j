@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * chose and return right checker according with template key;
+ * -r, -f, -m
+ */
+
 public class CheckerDispatch {
     private final static String KEY_MASK = "-m";
     private final static String KEY_FULL_NAME = "-f";
@@ -18,23 +23,23 @@ public class CheckerDispatch {
         return this;
     }
 
-    public void load(String key, Function<String, IChecker> handle) {
+    private void load(String key, Function<String, IChecker> handle) {
         this.dispatch.put(key, handle);
     }
 
-    public Function<String, IChecker> mask() {
+    private Function<String, IChecker> mask() {
         return template -> {
             return new MaskCheckerMaker().makeChecker(template);
         };
     }
 
-    public Function<String, IChecker> regular() {
+    private Function<String, IChecker> regular() {
         return template -> {
             return new RegularCheckerMaker().makeChecker(template);
         };
     }
 
-    public Function<String, IChecker> name() {
+    private Function<String, IChecker> name() {
         return template -> {
             return new NameCheckerMaker().makeChecker(template);
         };
