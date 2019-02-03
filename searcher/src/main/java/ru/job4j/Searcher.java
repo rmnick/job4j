@@ -112,34 +112,36 @@ public class Searcher {
 
 
     public static void main(String[] args) {
-        String dir = null;
-        String template = null;
-        String keyTemplate = null;
-        String log = null;
+        //String dir = null;
+        //String template = null;
+       // String keyTemplate = null;
+       // String log = null;
         Map<String, String> keys = new HashMap<>();
-        String[] k = {"-d", "-n", "-m", "-r", "-f", "-o"};
-        for (String s : k) {
-            keys.put(s, null);
-        }
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-d":
-                    dir = args[i + 1];
+                  //  dir = args[i + 1];
+                    keys.putIfAbsent("-d", args[i + 1]);
                     break;
                 case "-n":
-                    template = args[i + 1];
+                   // template = args[i + 1];
+                    keys.putIfAbsent("-n", args[i + 1]);
                     break;
                 case "-m":
-                    keyTemplate = "-m";
+                   // keyTemplate = "-m";
+                    keys.putIfAbsent("keyTemplate", "-m");
                     break;
                 case "-f":
-                    keyTemplate = "-f";
+                    //keyTemplate = "-f";
+                    keys.putIfAbsent("keyTemplate", "-f");
                     break;
                 case "-r":
-                    keyTemplate = "-r";
+                   // keyTemplate = "-r";
+                    keys.putIfAbsent("keyTemplate", "-r");
                     break;
                 case "-o":
-                    log = args[i + 1];
+                    //log = args[i + 1];
+                    keys.putIfAbsent("-o", args[i + 1]);
                     break;
                     default:
                         break;
@@ -147,7 +149,7 @@ public class Searcher {
 
         }
         if (!valid(args)) {
-            Searcher searcher = new Searcher(dir, template, keyTemplate, log);
+            Searcher searcher = new Searcher(keys.get("-d"), keys.get("-n"), keys.get("keyTemplate"), keys.get("-o"));
             searcher.search();
         } else {
             help();
