@@ -28,7 +28,7 @@ public class Searcher {
 
     public static void main(String[] args) {
         Validator v = new Validator(args);
-        IHelper helper = new Helper();
+        IHelper helper = new ConsoleHelper();
         if (v.validate()) {
             Searcher searcher = new Searcher(v.getDirectory(), v.getTemplate(), v.getKeyTemplate(), v.getDirectoryLog());
             searcher.search();

@@ -1,6 +1,6 @@
 package ru.job4j;
 
-public class Helper implements IHelper {
+public class ConsoleHelper implements IHelper {
     @Override
     public void help() {
         System.out.println(new StringBuilder()

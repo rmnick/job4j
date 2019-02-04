@@ -56,7 +56,7 @@ public class Validator {
                     result = true;
                     store.put(2, arg);
                 } else {
-                    System.out.println("please enter correct directory. that directory does not exist");
+                    System.out.println("please enter correct directory for search. that directory does not exist");
                 }
             }
           return result;
@@ -124,7 +124,7 @@ public class Validator {
                     result = true;
                     store.put(7, arg);
                 } else {
-                    System.out.println("please enter correct directory. that directory does not exist");
+                    System.out.println("please enter correct log directory. that directory does not exist");
                 }
             }
             return result;
