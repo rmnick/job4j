@@ -1,4 +1,4 @@
-package ru.job4j.terminal;
+package ru.job4j.terminaldelete;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,10 +8,10 @@ public class Config {
     private final Properties values = new Properties();
 
     public Config() {
-        try (InputStream in = ru.job4j.terminaldelete.Config.class.getClassLoader().getResourceAsStream("app.properties")) {
+        try (InputStream in = Config.class.getClassLoader().getResourceAsStream("app.properties")) {
             values.load(in);
         } catch (IOException e) {
-            e.printStackTrace();
+           e.printStackTrace();
         }
     }
 

@@ -1,4 +1,4 @@
-package ru.job4j.terminal.server;
+package ru.job4j.terminaldelete.server;
 
 import java.io.*;
 import java.net.Socket;
