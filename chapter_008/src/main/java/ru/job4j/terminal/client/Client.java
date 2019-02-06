@@ -2,9 +2,7 @@ package ru.job4j.terminal.client;
 
 import ru.job4j.terminal.Config;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
@@ -20,22 +18,23 @@ public class Client {
 
     public void start() {
         try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-             DataInputStream in = new DataInputStream(this.socket.getInputStream())) {
+             DataInputStream in = new DataInputStream(this.socket.getInputStream());
+             DataOutputStream dout = new DataOutputStream(this.socket.getOutputStream());
+             BufferedReader br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))) {
             Scanner console = new Scanner(System.in);
             String input;
+            String ask;
             //out.println("-help");
             System.out.println("before while");
             while (true) {
-                System.out.println("in while");
-                input = in.readUTF();
-                if ("exit".equals(input)) {
-                    break;
+                ask = console.nextLine();
+                dout.writeUTF(ask);
+                while (!(input = in.readUTF()).isEmpty()) {
+                    System.out.println("in while");
+                    System.out.println(input);
+                    //input = in.readUTF();
                 }
-                System.out.println("!!!!");
-                System.out.println(input);
-                out.println(console.nextLine());
             }
-            System.out.println("after while");
         } catch (IOException e) {
             e.printStackTrace();
         }

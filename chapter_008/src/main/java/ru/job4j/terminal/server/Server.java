@@ -2,10 +2,7 @@ package ru.job4j.terminal.server;
 
 import ru.job4j.terminal.Config;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,14 +18,18 @@ public class Server {
     public void start() {
         String ask;
         try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-             DataInputStream in = new DataInputStream(this.socket.getInputStream())) {
+             DataInputStream in = new DataInputStream(this.socket.getInputStream());
+             DataOutputStream dout = new DataOutputStream(this.socket.getOutputStream());
+             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             System.out.println(parent.getAbsolutePath());
             do {
-                System.out.println("in while");
-                out.println(parent.getAbsolutePath());
-                ask = in.readUTF();
-                System.out.println(ask);
-                out.println(ask + "i answer");
+                System.out.println("wait");
+                while(!(ask = in.readUTF()).isEmpty()) {
+                    System.out.println("in while");
+                    System.out.println(ask);
+                    dout.writeUTF(ask + " answer");
+                    dout.writeUTF("");
+                }
             } while (true);
 
         } catch (IOException e) {
