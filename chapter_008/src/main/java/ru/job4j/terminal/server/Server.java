@@ -8,32 +8,27 @@ import java.net.Socket;
 
 public class Server {
     private final Socket socket;
-    private File parent = new File(System.getProperty("user.dir"));
-
 
     public Server(final Socket socket) {
         this.socket = socket;
     }
 
     public void start() {
+        File parent = new File(System.getProperty("user.dir"));
         String ask;
-        try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-             DataInputStream in = new DataInputStream(this.socket.getInputStream());
-             DataOutputStream dout = new DataOutputStream(this.socket.getOutputStream());
-             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try (DataInputStream in = new DataInputStream(this.socket.getInputStream());
+             DataOutputStream out = new DataOutputStream(this.socket.getOutputStream())) {
             System.out.println(parent.getAbsolutePath());
-            Dispatcher dis = new Dispatcher(parent, dout);
+            Dispatcher dis = new Dispatcher(parent, out, in);
             dis.init();
+            out.writeUTF(parent.getAbsolutePath());
             do {
                 System.out.println("wait");
-                while(!(ask = in.readUTF()).isEmpty()) {
-                    //System.out.println("in while");
-                    /*System.out.println(ask);
-                    dout.writeUTF(ask + " answer");
-                    dout.writeUTF("");*/
-                    dout.writeUTF(ask + " show");
+                ask = in.readUTF();
+                while (!ask.isEmpty()) {
+                    out.writeUTF(ask + " show");
                     dis.get(ask);
-                    //dout.writeUTF("");
+                    ask = in.readUTF();
                 }
             } while (true);
 

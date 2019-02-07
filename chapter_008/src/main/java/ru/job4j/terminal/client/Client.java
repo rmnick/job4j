@@ -17,24 +17,20 @@ public class Client {
     }
 
     public void start() {
-        try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-             DataInputStream in = new DataInputStream(this.socket.getInputStream());
-             DataOutputStream dout = new DataOutputStream(this.socket.getOutputStream());
-             BufferedReader br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))) {
+        try (DataInputStream in = new DataInputStream(this.socket.getInputStream());
+             DataOutputStream out = new DataOutputStream(this.socket.getOutputStream())) {
             Scanner console = new Scanner(System.in);
-            String input;
             String ask;
-            //out.println("-help");
-            System.out.println("before while");
-            while (true) {
+            Validator validator = new Validator();
+            Dispatcher dispatcher = new Dispatcher(out, in);
+            dispatcher.init();
+            System.out.println(in.readUTF());
+            do {
                 ask = console.nextLine();
-                dout.writeUTF(ask);
-                while (!(input = in.readUTF()).isEmpty()) {
-                    //System.out.println("in while");
-                    System.out.println(input);
-                    //input = in.readUTF();
+                if (validator.validate(ask)) {
+                    dispatcher.get(ask);
                 }
-            }
+            } while (!ask.equals("exit"));
         } catch (IOException e) {
             e.printStackTrace();
         }
