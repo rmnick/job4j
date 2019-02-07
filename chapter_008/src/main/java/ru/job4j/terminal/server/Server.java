@@ -22,13 +22,18 @@ public class Server {
              DataOutputStream dout = new DataOutputStream(this.socket.getOutputStream());
              BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             System.out.println(parent.getAbsolutePath());
+            Dispatcher dis = new Dispatcher(parent, dout);
+            dis.init();
             do {
                 System.out.println("wait");
                 while(!(ask = in.readUTF()).isEmpty()) {
-                    System.out.println("in while");
-                    System.out.println(ask);
+                    //System.out.println("in while");
+                    /*System.out.println(ask);
                     dout.writeUTF(ask + " answer");
-                    dout.writeUTF("");
+                    dout.writeUTF("");*/
+                    dout.writeUTF(ask + " show");
+                    dis.get(ask);
+                    //dout.writeUTF("");
                 }
             } while (true);
 

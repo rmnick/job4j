@@ -30,7 +30,7 @@ public class Client {
                 ask = console.nextLine();
                 dout.writeUTF(ask);
                 while (!(input = in.readUTF()).isEmpty()) {
-                    System.out.println("in while");
+                    //System.out.println("in while");
                     System.out.println(input);
                     //input = in.readUTF();
                 }
