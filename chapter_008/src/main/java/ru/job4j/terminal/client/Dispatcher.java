@@ -22,6 +22,12 @@ public class Dispatcher extends AbstractDispatcher {
         return this;
     }
 
+    /**
+     * method for conversation with server
+     * send command from client input and take an answer
+     * use method ask()
+     * @return
+     */
     public Consumer<String> talk() {
         return str -> {
           try {
@@ -33,6 +39,10 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * exit from programme
+     * @return
+     */
     public Consumer<String> exit() {
         return str -> {
           try {
@@ -43,6 +53,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * downloading file from client PC to server in current directory
+     * client must enter "download" and absolute name of file
+     * @return
+     */
     public Consumer<String> download() {
         return str -> {
             String[] arr = str.split(" ");
@@ -63,6 +78,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * uploading file from server(current directory) to client PC in special folder(downloads)
+     * client must enter "upload" and name of file
+     * @return
+     */
     public Consumer<String> upload() {
         return str -> {
             String[] arr = str.split(" ");
@@ -83,6 +103,10 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * asking server and print the answers
+     * @throws IOException
+     */
     public void ask() throws IOException {
         String ask;
         ask = din.readUTF();

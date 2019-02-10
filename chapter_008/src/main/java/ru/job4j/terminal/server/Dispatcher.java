@@ -21,6 +21,11 @@ public class Dispatcher extends AbstractDispatcher {
         return this;
     }
 
+    /**
+     * print help menu
+     * client must enter "help"
+     * @return
+     */
     public Consumer<String> help() {
         return str -> {
           StringBuilder sb = new StringBuilder();
@@ -49,6 +54,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * show all files and folders in current directory
+     * client must enter "ls"
+     * @return
+     */
     public Consumer<String> show() {
         return str -> {
             try {
@@ -64,6 +74,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * moving up to to parent folder
+     * client must enter "cd.."
+     * @return
+     */
     public Consumer<String> up() {
         return str -> {
             try {
@@ -77,6 +92,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * go to the specified directory
+     * client must enter "cd" and name of directory
+     * @return
+     */
     public Consumer<String> down() {
         return str -> {
             try {
@@ -96,6 +116,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * downloading file from client PC to server in current directory
+     * client must enter "download" and absolute name of file
+     * @return
+     */
     public Consumer<String> download() {
         return str -> {
           try {
@@ -112,6 +137,11 @@ public class Dispatcher extends AbstractDispatcher {
         };
     }
 
+    /**
+     * uploading file from server(current directory) to client PC in special folder(downloads)
+     * client must enter "upload" and name of file
+     * @return
+     */
     public Consumer<String> upload() {
         return str -> {
           String[] arr = str.split(" ");

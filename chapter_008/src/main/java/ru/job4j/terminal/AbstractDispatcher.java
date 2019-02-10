@@ -29,6 +29,10 @@ public abstract class AbstractDispatcher implements IDispatcher<String> {
         map = new HashMap<>();
     }
 
+    /**
+     * parse user input and choose right method from dispatcher
+     * @param ask
+     */
     @Override
     public void get(String ask) {
         String[] arr = ask.split(" ");
@@ -39,6 +43,11 @@ public abstract class AbstractDispatcher implements IDispatcher<String> {
         }
     }
 
+    /**
+     * convert file to output stream
+     * @param file
+     * @param out
+     */
     @Override
     public void loadTo(File file, OutputStream out) {
         try (FileInputStream in = new FileInputStream(file)) {
@@ -53,6 +62,12 @@ public abstract class AbstractDispatcher implements IDispatcher<String> {
         }
     }
 
+    /**
+     * convert input stream to file
+     * @param file
+     * @param in
+     * @param size
+     */
     @Override
     public void loadFrom(File file, InputStream in, long size) {
         try (FileOutputStream out = new FileOutputStream(file)) {

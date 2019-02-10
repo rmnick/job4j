@@ -13,6 +13,11 @@ public class Server {
         this.socket = socket;
     }
 
+    /**
+     * main method on server side
+     * create Dispatcher for dispatch operation according with client commands
+     * start conversation with client
+     */
     public void start() {
         File parent = new File(System.getProperty("user.dir"));
         String ask;

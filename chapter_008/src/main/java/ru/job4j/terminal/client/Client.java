@@ -16,12 +16,23 @@ public class Client {
         this.downloads = downloads;
     }
 
+    /**
+     * make downloads folder on client PC
+     * this folder for downloading files from server
+     * @return
+     */
     public File mkDir() {
         File dir = new File(downloads);
         dir.mkdir();
         return dir;
     }
 
+    /**
+     * main method on client side
+     * create Validator for validation our input
+     * create Dispatcher for dispatch operation according with user's commands
+     * start conversation with server
+     */
     public void start() {
         try (InputStream in = this.socket.getInputStream();
              OutputStream out = this.socket.getOutputStream();
