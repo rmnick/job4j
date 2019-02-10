@@ -16,15 +16,24 @@ public class Client {
         this.downloads = downloads;
     }
 
+    public File mkDir() {
+        File dir = new File(downloads);
+        dir.mkdir();
+        return dir;
+    }
+
     public void start() {
-        try (DataInputStream in = new DataInputStream(this.socket.getInputStream());
-             DataOutputStream out = new DataOutputStream(this.socket.getOutputStream())) {
+        try (InputStream in = this.socket.getInputStream();
+             OutputStream out = this.socket.getOutputStream();
+             DataOutputStream dout = new DataOutputStream(out);
+             DataInputStream din = new DataInputStream(in)) {
             Scanner console = new Scanner(System.in);
             String ask;
             Validator validator = new Validator();
-            Dispatcher dispatcher = new Dispatcher(out, in);
+            Dispatcher dispatcher = new Dispatcher(mkDir(), in, out, din, dout);
             dispatcher.init();
-            System.out.println(in.readUTF());
+            System.out.println("enter \"help\" for a list of programme command");
+            System.out.println(din.readUTF());
             do {
                 ask = console.nextLine();
                 if (validator.validate(ask)) {

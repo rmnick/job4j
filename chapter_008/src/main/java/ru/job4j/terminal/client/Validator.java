@@ -1,11 +1,7 @@
 package ru.job4j.terminal.client;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 public class Validator {
-    String[] templates = {"ls", "cd..", "cd", "upload", "download"};
+    String[] templates = {"ls", "cd..", "cd", "upload", "download", "help", "exit"};
 
     public boolean validate(String str) {
         boolean result = false;
@@ -17,7 +13,9 @@ public class Validator {
                     break;
                 }
             }
-            System.out.println("wrong command name");
+            if (!result) {
+                System.out.println("wrong command name");
+            }
         } else {
             System.out.println("you must input command or command with file(directory) name");
         }

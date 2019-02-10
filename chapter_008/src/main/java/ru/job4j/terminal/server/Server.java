@@ -16,22 +16,20 @@ public class Server {
     public void start() {
         File parent = new File(System.getProperty("user.dir"));
         String ask;
-        try (DataInputStream in = new DataInputStream(this.socket.getInputStream());
-             DataOutputStream out = new DataOutputStream(this.socket.getOutputStream())) {
-            System.out.println(parent.getAbsolutePath());
-            Dispatcher dis = new Dispatcher(parent, out, in);
+        try (InputStream in = this.socket.getInputStream();
+             OutputStream out = this.socket.getOutputStream();
+             DataInputStream din = new DataInputStream(in);
+             DataOutputStream dout = new DataOutputStream(out)) {
+            Dispatcher dis = new Dispatcher(parent, in, out, din, dout);
             dis.init();
-            out.writeUTF(parent.getAbsolutePath());
+            dout.writeUTF(parent.getAbsolutePath());
             do {
                 System.out.println("wait");
-                ask = in.readUTF();
-                while (!ask.isEmpty()) {
-                    out.writeUTF(ask + " show");
+                ask = din.readUTF();
+                if (!ask.equals("exit")) {
                     dis.get(ask);
-                    ask = in.readUTF();
                 }
-            } while (true);
-
+            } while (!ask.equals("exit"));
         } catch (IOException e) {
             e.printStackTrace();
         }

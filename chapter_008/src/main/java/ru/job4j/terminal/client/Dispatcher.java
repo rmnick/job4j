@@ -2,36 +2,93 @@ package ru.job4j.terminal.client;
 
 import ru.job4j.terminal.AbstractDispatcher;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.function.Consumer;
 
 public class Dispatcher extends AbstractDispatcher {
 
-    public Dispatcher(DataOutputStream out, DataInputStream in) {
-        super(out, in);
+    public Dispatcher(File dir, InputStream in, OutputStream out, DataInputStream din, DataOutputStream dout) {
+        super(dir, in, out, din, dout);
     }
 
     public Dispatcher init() {
-        this.tempalte.put(SHOW_ALL, show());
+        map.put(SHOW_ALL, talk());
+        map.put(MOVE_UP, talk());
+        map.put(MOVE_IN, talk());
+        map.put(DOWNLOAD, download());
+        map.put(UPLOAD, upload());
+        map.put(HELP, talk());
+        map.put(EXIT, exit());
         return this;
     }
 
-    public Consumer<String> show() {
+    public Consumer<String> talk() {
         return str -> {
-            String input;
           try {
-              out.writeUTF(str);
-              input = in.readUTF();
-              while (!input.isEmpty()) {
-                  System.out.println(input);
-                  input = in.readUTF();
-              }
-              out.writeUTF("");
+              dout.writeUTF(str);
+              ask();
           } catch (IOException e) {
               e.printStackTrace();
           }
         };
+    }
+
+    public Consumer<String> exit() {
+        return str -> {
+          try {
+              dout.writeUTF(str);
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+        };
+    }
+
+    public Consumer<String> download() {
+        return str -> {
+            String[] arr = str.split(" ");
+          try {
+              File file = new File(arr[1]);
+              if (file.exists()) {
+                  dout.writeUTF(str);
+                  dout.writeUTF(file.getName());
+                  dout.writeLong(file.length());
+                  loadTo(file, out);
+                  ask();
+              } else {
+                  System.out.println("file does not exist");
+              }
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+        };
+    }
+
+    public Consumer<String> upload() {
+        return str -> {
+            String[] arr = str.split(" ");
+            try {
+                dout.writeUTF(str);
+                if (din.readUTF().equals("exist")) {
+                    File file = new File(String.format("%s\\%s", dir.getAbsoluteFile(), arr[1]));
+                    long size = din.readLong();
+                    loadFrom(file, in, size);
+                    dout.writeUTF("");
+                    ask();
+                } else {
+                    ask();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+
+    public void ask() throws IOException {
+        String ask;
+        ask = din.readUTF();
+        while (!ask.isEmpty()) {
+            System.out.println(ask);
+            ask = din.readUTF();
+        }
     }
 }
