@@ -62,6 +62,7 @@
         <module>chapter_008</module>
         <module>wise_oracle</module>
         <module>searcher</module>
+        <module>searcher_light</module>
     </modules>
 	 
 	<build>
