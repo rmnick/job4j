@@ -63,6 +63,7 @@
         <module>wise_oracle</module>
         <module>searcher</module>
         <module>searcher_light</module>
+        <module>job_parser</module>
     </modules>
 	 
 	<build>

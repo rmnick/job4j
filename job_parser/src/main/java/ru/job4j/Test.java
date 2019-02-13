@@ -15,7 +15,20 @@ public class Test {
             Element hrElement = element.child(0);
             String url = hrElement.attr("href");
             String name = hrElement.text();
-            System.out.println(url + " " + name);
+            if (name.contains(" Java ")) {
+                System.out.println("!!!!!");
+                try {
+                    Document page = Jsoup.connect(url).get();
+                    Elements elementsPage = page.getElementsByAttributeValue("class", "msgTable");
+                    elementsPage.forEach(elementPage -> {
+                        Element tr = elementPage.attr("class", "msgBody");
+                        System.out.println(tr.text());
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
         });
     }
 
