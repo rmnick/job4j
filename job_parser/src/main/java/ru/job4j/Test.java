@@ -19,10 +19,10 @@ public class Test {
                 System.out.println("!!!!!");
                 try {
                     Document page = Jsoup.connect(url).get();
-                    Elements elementsPage = page.getElementsByAttributeValue("class", "msgTable");
+                    Elements elementsPage = page.select("table.msgTable");
                     elementsPage.forEach(elementPage -> {
-                        Element tr = elementPage.attr("class", "msgBody");
-                        System.out.println(tr.text());
+                        String text = elementPage.select("td.msgBody").text();
+                        System.out.println(text);
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
