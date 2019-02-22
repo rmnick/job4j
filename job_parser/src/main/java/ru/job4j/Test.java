@@ -7,15 +7,66 @@ import org.jsoup.select.Elements;
 
 import javax.management.Descriptor;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Test {
+public class Test implements AutoCloseable {
+
+    private Connection connection = null;
+
+    public Test(final Config config) {
+        try {
+            this.connection = DriverManager.getConnection(config.get("url"), config.get("username"), config.get("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createDb() {
+            String create = "create table if not exists vacancies(id serial primary key," +
+                    "name varchar(1500), url varchar (1500), description text);";
+            try (Statement st = connection.createStatement()) {
+                st.execute(create);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+    }
+
+    public void loadDb(Job job) {
+        String insert = "insert into vacancies(name, url, description) values(?, ?, ?);";
+        try(PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, job.getName());
+            ps.setString(2, job.getUrl());
+            ps.setString(3, job.getDescription());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void uploadDb(List<Job> list) {
+        String select = "select v.name, v.url, v.description from vacancies as v";
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                String name = rs.getString(1);
+                String url = rs.getString(2);
+                String description = rs.getString(3);
+                list.add(new Job(name, url, description));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) throws IOException {
+        Test test = new Test(new Config());
+        test.createDb();
+
         List<Job> jobs = new ArrayList<>();
         Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
         Elements elements = doc.select("table.sort_options");
@@ -25,11 +76,11 @@ public class Test {
         String str = column.text();
         String[] arr = str.split(" ");
         int number = Integer.valueOf(arr[arr.length - 1]);
-        for (int i = 1; i < number; i++) {
+        for (int i = 1; i < 2; i++) {
             boolean flag = true;
-            System.out.println();
-            System.out.println("page " + i);
-            System.out.println();
+            //System.out.println();
+            //System.out.println("page " + i);
+            //System.out.println();
             String urlPage = String.format("https://www.sql.ru/forum/job-offers/%d", i);
             Document page = Jsoup.connect(urlPage).get();
             Elements els = page.select("table[class=forumTable]");
@@ -45,8 +96,6 @@ public class Test {
                 }
                 if (tds.get(1).text().toLowerCase().contains("java") && !tds.get(1).text().toLowerCase().contains("script")) {
                     Element hr = tds.get(1).child(0);
-                    //System.out.println(hr.text());
-                    //System.out.println(hr.attr("href"));
                     String name = hr.text();
                     String url = hr.attr("href");
                     Document job = Jsoup.connect(url).get();
@@ -55,15 +104,35 @@ public class Test {
                     Elements tdJobTable = trJobTable.get(1).select("td");
                     String description = tdJobTable.get(1).text();
                     jobs.add(new Job(name, url, description));
-                    //System.out.println(tdJobTable.get(1).text());
                 };
             }
             if (!flag) {
                 break;
             }
         }
+        System.out.println(jobs.size());
+        jobs.forEach(test::loadDb);
+        jobs.clear();
+        System.out.println(jobs.size());
+        test.uploadDb(jobs);
+        System.out.println(jobs.size());
         jobs.forEach(System.out::println);
+
+
+
     }
+
+    @Override
+    public void close() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 class Job {
