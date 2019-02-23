@@ -1,4 +1,4 @@
-create database test;
+create database pageParser;
 --create tables
 create table users(
 	id serial primary key, 
