@@ -22,7 +22,7 @@ public class VacancyLoader extends Thread {
 
     public void loadDb(Vacancy vacancy) {
         String insert = "insert into vacancies(name, url, description, dateVac) values(?, ?, ?, ?);";
-        try(PreparedStatement ps = connection.prepareStatement(insert)) {
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
             ps.setString(1, vacancy.getName());
             ps.setString(2, vacancy.getUrl());
             ps.setString(3, vacancy.getDescription());

@@ -11,9 +11,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 
-public class QuarztJob implements Job {
+public class QuartzJob implements Job {
 
-    private static final Logger LOG = LogManager.getLogger(QuarztJob.class.getName());
+    private static final Logger LOG = LogManager.getLogger(QuartzJob.class.getName());
     private final BlockingQueue<Vacancy> vacancies = new ArrayBlockingQueue<>(50);
     private final Config config = new Config();
     private PageParser parser = new PageParser(config, vacancies);
@@ -21,6 +21,6 @@ public class QuarztJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
-        parser.parse();
+        parser.start();
     }
 }

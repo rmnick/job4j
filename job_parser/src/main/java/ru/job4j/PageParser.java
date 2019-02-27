@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -25,8 +26,6 @@ public class PageParser implements AutoCloseable {
     private final BlockingQueue<Vacancy> vacancies;
     private final Map<String, Month> months = new HashMap<>();
     private final LocalDateTime startDate = LocalDateTime.of(2019, Month.JANUARY, 1, 0, 0);
-    private static boolean orderFlag = true;
-    private Document doc;
 
     public PageParser(final Config config, final BlockingQueue<Vacancy> vacancies) {
         this.config = config;
@@ -36,7 +35,6 @@ public class PageParser implements AutoCloseable {
         } catch (SQLException e) {
             LOG.error(e.getMessage());
         }
-        LOG.info("fill map months");
         fillMap();
     }
 
@@ -59,44 +57,61 @@ public class PageParser implements AutoCloseable {
     }
 
     /**
-     * create table "vacancies" for saving our downloading vacancies
+     * create DB
+     * create and start costumer thread for uploading from queue and downloading all data to DB
+     * start main thread for parsing page
      */
-    public void createDb() {
-            String create = "create table if not exists vacancies(id serial primary key," +
-                    "name varchar(1500) NOT NULL UNIQUE, url varchar (1500), description text, dateVac timestamp);";
-            try (Statement st = connection.createStatement()) {
-                st.execute(create);
-            } catch (SQLException e) {
-                LOG.error(e.getMessage());
-            }
-    }
-
-    public void parse() {
+    public void start() {
+        createDb();
         try {
-            LOG.info(orderFlag);
-            if (orderFlag) {
-                firstParse();
-                LOG.info(orderFlag);
-            } else {
-                secondParse();
-            }
+            VacancyLoader vl = new VacancyLoader(this.connection, this.vacancies);
+            vl.start();
+            parse(checkDate());
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
     }
 
+    /**
+     * create table "vacancies" for saving our downloading vacancies
+     */
+    public void createDb() {
+        String create = "create table if not exists vacancies(id serial primary key,"
+                + "name varchar(1500) NOT NULL UNIQUE, url varchar (1500), description text, dateVac timestamp);";
+        try (Statement st = connection.createStatement()) {
+            st.execute(create);
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+    }
 
-    public void firstParse() throws IOException {
-        LOG.info("first parsing");
-        createDb();
+    /**
+     * check date in DB and if date not null return last one, else return default date
+     * @return
+     */
+    public LocalDateTime checkDate() {
+        LocalDateTime result = null;
+        String select = "select max(datevac) as max from vacancies;";
+        try (ResultSet rs = connection.createStatement().executeQuery(select)) {
+            while (rs.next()) {
+                Timestamp vacDate = rs.getTimestamp(1);
+                result = (vacDate == null ? startDate : vacDate.toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+        return result;
+    }
 
-        VacancyLoader vl = new VacancyLoader(this.connection, this.vacancies);
-        LOG.info("thread loader to queue start");
-        vl.start();
-
-        //connecting and parsing from mainThread, downloading all vacancies to DB. First start!
-        this.doc = Jsoup.connect(config.get("urlPage")).get();
-        int numberOfpages = getNumberOfPages();
+    /**
+     * method for parsing web page and searching Java vacancy
+     * main thread
+     * @param dateTime
+     * @throws IOException
+     */
+    public void parse(LocalDateTime dateTime) throws IOException {
+        Document doc = Jsoup.connect(config.get("urlPage")).get();
+        int numberOfpages = getNumberOfPages(doc);
         for (int i = 1; i <= numberOfpages; i++) {
             //flag for stopping this cycle if date of vacancy will be old
             boolean flagStop = true;
@@ -107,45 +122,25 @@ public class PageParser implements AutoCloseable {
             //skip the first four empty lines
             ListIterator<Element> iterator = rows.listIterator(4);
             while (iterator.hasNext()) {
-                //columns with data
+                //columns with date
                 Elements columns = iterator.next().select("td");
                 //checking date if date is wrong then out from "while" cycle
-                //columns.get(5).text().matches("\\d+\\s[А-Я, а-я]+\\s\\d+,\\s\\d+:\\d+") && !columns.get(5).text().split(" ")[2].equals("19,")
-                if (!parseDate(columns.get(5).text()).isAfter(this.startDate)) {
+                if (!parseDate(columns.get(5).text()).isAfter(dateTime)) {
                     flagStop = false;
                     break;
                 }
                 //searching for java position
                 if (searchJava(columns.get(1).text())) {
                     loadToQueue(columns);
-                };
+                }
             }
-            //out from "for" cycle
+            //out from "for" cycle according with date
             if (!flagStop) {
                 break;
             }
         }
-        //making "poison pill"
+        //make "poison pill" and send to consumer
         vacancies.add(new Vacancy("stop", null, null, null));
-        orderFlag = false;
-        LOG.info("end of first parsing");
-    }
-
-    public void secondParse() {
-        LOG.info("Second parsing");
-        Elements mainTable = this.doc.select("table[class=forumTable]");
-        Elements rows = mainTable.select("tr");
-        ListIterator<Element> iterator = rows.listIterator(4);
-        while (iterator.hasNext()) {
-            Elements columns = iterator.next().select("td");
-            if (columns.get(5).text().contains("вчера")) {
-                System.out.println("!!!!!!!!");
-                System.out.println(columns.get(1).text());
-            } else {
-                System.out.println("out");
-                break;
-            }
-        }
     }
 
     /**
@@ -168,10 +163,11 @@ public class PageParser implements AutoCloseable {
 
     /**
      * method for searching number of pages
+     * it needs for creating our url address
      * @return
      */
-    public int getNumberOfPages() {
-        Elements elements = this.doc.select("table.sort_options");
+    public int getNumberOfPages(Document doc) {
+        Elements elements = doc.select("table.sort_options");
         Element table = elements.get(1);
         Elements columns = table.select("td");
         Element column = columns.get(0);
@@ -207,17 +203,16 @@ public class PageParser implements AutoCloseable {
     }
 
     /**
-     *
+     * get right month from our map
      * @param str
      * @return
      */
     public Month parseMonth(String str) {
-        Month result = null;
         return this.months.get(str);
     }
 
     /**
-     *
+     * search "java" word
      * @param str
      * @return
      */
@@ -229,7 +224,6 @@ public class PageParser implements AutoCloseable {
     @Override
     public void close() {
         try {
-            LOG.info("close our parser");
             if (connection != null) {
                 connection.close();
             }
