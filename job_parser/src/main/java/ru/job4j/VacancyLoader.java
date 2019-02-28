@@ -15,11 +15,20 @@ public class VacancyLoader extends Thread {
     private BlockingQueue<Vacancy> vacancies;
     private final Connection connection;
 
+    /**
+     * constructor
+     * @param connection Connection
+     * @param vacancies ArrayBlockingQueue
+     */
     public VacancyLoader(final Connection connection, final BlockingQueue vacancies) {
         this.connection = connection;
         this.vacancies = vacancies;
     }
 
+    /**
+     * insert PostgresSQL method
+     * @param vacancy Vacancy
+     */
     public void loadDb(Vacancy vacancy) {
         String insert = "insert into vacancies(name, url, description, dateVac) values(?, ?, ?, ?);";
         try (PreparedStatement ps = connection.prepareStatement(insert)) {
@@ -34,7 +43,7 @@ public class VacancyLoader extends Thread {
     }
 
     /**
-     * loading to DB from BlockingQueue. stops when takes the "poison pill"
+     * loading vacancies to DB from BlockingQueue. stops when takes the "poison pill"
      */
     @Override
     public void run() {

@@ -27,6 +27,11 @@ public class PageParser implements AutoCloseable {
     private final Map<String, Month> months = new HashMap<>();
     private final LocalDateTime startDate = LocalDateTime.of(2019, Month.JANUARY, 1, 0, 0);
 
+    /**
+     * constructor
+     * @param config Config
+     * @param vacancies BlockingQueue<Vacancy>
+     */
     public PageParser(final Config config, final BlockingQueue<Vacancy> vacancies) {
         this.config = config;
         this.vacancies = vacancies;
@@ -62,7 +67,7 @@ public class PageParser implements AutoCloseable {
      * start main thread for parsing page
      */
     public void start() {
-        createDb();
+        initDb();
         try {
             VacancyLoader vl = new VacancyLoader(this.connection, this.vacancies);
             vl.start();
@@ -75,11 +80,11 @@ public class PageParser implements AutoCloseable {
     /**
      * create table "vacancies" for saving our downloading vacancies
      */
-    public void createDb() {
-        String create = "create table if not exists vacancies(id serial primary key,"
+    public void initDb() {
+        String createVac = "create table if not exists vacancies(id serial primary key,"
                 + "name varchar(1500) NOT NULL UNIQUE, url varchar (1500), description text, dateVac timestamp);";
         try (Statement st = connection.createStatement()) {
-            st.execute(create);
+            st.execute(createVac);
         } catch (SQLException e) {
             LOG.error(e.getMessage());
         }
@@ -87,7 +92,7 @@ public class PageParser implements AutoCloseable {
 
     /**
      * check date in DB and if date not null return last one, else return default date
-     * @return
+     * @return LocalDateTime
      */
     public LocalDateTime checkDate() {
         LocalDateTime result = null;
@@ -106,47 +111,64 @@ public class PageParser implements AutoCloseable {
     /**
      * method for parsing web page and searching Java vacancy
      * main thread
-     * @param dateTime
-     * @throws IOException
+     * @param dateTime LocalDateTime
+     * @throws IOException e
      */
     public void parse(LocalDateTime dateTime) throws IOException {
         Document doc = Jsoup.connect(config.get("urlPage")).get();
-        int numberOfpages = getNumberOfPages(doc);
-        for (int i = 1; i <= numberOfpages; i++) {
-            //flag for stopping this cycle if date of vacancy will be old
+        /**
+         * searching for how many pages in this forum
+         */
+        int numberOfPages = getNumberOfPages(doc);
+        for (int i = 1; i <= numberOfPages; i++) {
+            /**
+             * flag for stopping this cycle if date of vacancy will be old
+             */
             boolean flagStop = true;
             String urlPage = String.format("%s%d", config.get("urlPage"), i);
             Document page = Jsoup.connect(urlPage).get();
             Elements mainTable = page.select("table[class=forumTable]");
             Elements rows = mainTable.select("tr");
-            //skip the first four empty lines
+            /**
+             * skip the first four empty lines
+             */
             ListIterator<Element> iterator = rows.listIterator(4);
             while (iterator.hasNext()) {
-                //columns with date
+                /**
+                 * take columns with date
+                 */
                 Elements columns = iterator.next().select("td");
-                //checking date if date is wrong then out from "while" cycle
+                /**
+                 * checking date if date is wrong then out from "while" cycle
+                 */
                 if (!parseDate(columns.get(5).text()).isAfter(dateTime)) {
                     flagStop = false;
                     break;
                 }
-                //searching for java position
+                /**
+                 * searching for java position in current column
+                 */
                 if (searchJava(columns.get(1).text())) {
                     loadToQueue(columns);
                 }
             }
-            //out from "for" cycle according with date
+            /**
+             * out from "for" cycle according with date
+             */
             if (!flagStop) {
                 break;
             }
         }
-        //make "poison pill" and send to consumer
+        /**
+         * make some "poison pill" and send to consumer
+         */
         vacancies.add(new Vacancy("stop", null, null, null));
     }
 
     /**
      * parse, create and load vacancy to queue
-     * @param columns
-     * @throws IOException
+     * @param columns Elements
+     * @throws IOException e
      */
     public void loadToQueue(Elements columns) throws IOException {
         Element element = columns.get(1).child(0);
@@ -164,7 +186,7 @@ public class PageParser implements AutoCloseable {
     /**
      * method for searching number of pages
      * it needs for creating our url address
-     * @return
+     * @return int
      */
     public int getNumberOfPages(Document doc) {
         Elements elements = doc.select("table.sort_options");
@@ -179,8 +201,8 @@ public class PageParser implements AutoCloseable {
 
     /**
      * parsing localDate from string
-     * @param str
-     * @return
+     * @param str String
+     * @return LocalDateTime
      */
     public LocalDateTime parseDate(String str) {
         String time = str.substring(str.indexOf(",") + 2);
@@ -204,8 +226,8 @@ public class PageParser implements AutoCloseable {
 
     /**
      * get right month from our map
-     * @param str
-     * @return
+     * @param str String
+     * @return Month
      */
     public Month parseMonth(String str) {
         return this.months.get(str);
@@ -213,8 +235,8 @@ public class PageParser implements AutoCloseable {
 
     /**
      * search "java" word
-     * @param str
-     * @return
+     * @param str String
+     * @return boolean
      */
     public boolean searchJava(String str) {
         str = str.toLowerCase();
