@@ -17,9 +17,30 @@ public class Calculator {
 
     public void run() {
         String answer = null;
-        double[] var = {0, 0};
+        double[] var = {0, 2};
+        String key;
         do {
             answer = this.input.ask();
+            if (answer.trim().matches("^[0-9]*[.,]?[0-9]+$")) {
+                System.out.println("digit");
+                var[0] = Double.valueOf(answer.trim());
+            } else {
+                System.out.println("not digit");
+                key = answer.trim();
+                IArithmeticOperation operation = operations.get(key);
+                while (operation == null) {
+                    System.out.println("input right operation symbol");
+                    answer = this.input.ask();
+                    operation = operations.get(answer);
+                }
+                answer = this.input.ask();
+                while (!answer.trim().matches("^[0-9]*[.,]?[0-9]+$")) {
+                    System.out.println("input right number");
+                    answer = this.input.ask();
+                }
+                var[1] = Double.valueOf(answer);
+                System.out.println(operation.calc(var));
+            }
 
         } while (!answer.equals("exit"));
     }
