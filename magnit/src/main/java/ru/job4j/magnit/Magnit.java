@@ -41,7 +41,7 @@ public class Magnit implements AutoCloseable {
         SAXParser parser = factory.newSAXParser();
         parser.parse(result, new MagnitHandler());
         long timeFinish = System.currentTimeMillis();
-        System.out.println(String.format("time operation is %d \n", timeFinish - timeStart));
+        System.out.println(String.format("time calculation is %d \n", timeFinish - timeStart));
     }
 
     public void init() {

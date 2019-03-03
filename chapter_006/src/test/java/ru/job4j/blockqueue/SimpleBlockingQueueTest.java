@@ -35,7 +35,7 @@ public class SimpleBlockingQueueTest {
     }
 
     /**
-     * testing multithreading operation with SimpleBlockingQueue
+     * testing multithreading calculation with SimpleBlockingQueue
      */
     @Test
     public void multithreadingTest() {
