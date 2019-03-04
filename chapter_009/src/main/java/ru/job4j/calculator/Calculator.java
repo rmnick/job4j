@@ -12,6 +12,12 @@ public class Calculator {
         this.validator = validator;
     }
 
+    /**
+     * use input-output to communicate whit program
+     * choose right operation for calculation or leaving program
+     * if first word from user will be number then use this number as firstNumber for calculation
+     * if first word will be some operation then use result as firstNumber for calculation
+     */
     public void run() {
         String answer;
         String result = "0";

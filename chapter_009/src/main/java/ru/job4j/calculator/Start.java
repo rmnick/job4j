@@ -28,7 +28,11 @@ public class Start {
     public static final String CE = "c";
     public static final String OFF = "off";
 
-
+    /**
+     * inner class for demonstration program menu and choosing calculator version
+     * there are two version, standard and extended with different functionality
+     * extended version just only complements standard one
+     */
     public class Menu {
         private final IInput input;
         private final IOutput output;
