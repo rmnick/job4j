@@ -1,4 +1,4 @@
-package ru.job4j.calculator.calculation.logarithmic;
+package ru.job4j.calculator.operation.logarithmic;
 
 public class DecLogarithm extends AbstractLogarithm {
     public DecLogarithm(String name) {
@@ -7,6 +7,10 @@ public class DecLogarithm extends AbstractLogarithm {
 
     @Override
     public double calc(double[] var) {
-        return Math.log(var[0]);
+        double result = 0;
+        if (var[0] != 0) {
+            result = Math.log(var[0]);
+        }
+        return result;
     }
 }

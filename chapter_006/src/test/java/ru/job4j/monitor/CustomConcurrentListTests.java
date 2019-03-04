@@ -44,9 +44,9 @@ public class CustomConcurrentListTests {
             countNewList++;
             newIterator.next();
         }
-        //there is not changing in snapshot even if we're making "add" calculation
+        //there is not changing in snapshot even if we're making "add" operation
         assertThat(countSnapshot == 1000, is(true));
-        //some changing list because we've made several "add" calculation
+        //some changing list because we've made several "add" operation
         assertThat(countNewList != countSnapshot, is(true));
     }
 

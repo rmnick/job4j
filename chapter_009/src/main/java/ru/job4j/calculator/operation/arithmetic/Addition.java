@@ -1,4 +1,4 @@
-package ru.job4j.calculator.calculation.arithmetic;
+package ru.job4j.calculator.operation.arithmetic;
 
 
 public class Addition extends AbstractArithmetic {

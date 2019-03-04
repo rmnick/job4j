@@ -15,7 +15,7 @@ public class Server {
 
     /**
      * main method on server side
-     * create Dispatcher for dispatch calculation according with client commands
+     * create Dispatcher for dispatch operation according with client commands
      * start conversation with client
      */
     public void start() {

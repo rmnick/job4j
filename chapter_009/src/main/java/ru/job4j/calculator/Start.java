@@ -1,25 +1,32 @@
 package ru.job4j.calculator;
 
-import ru.job4j.calculator.calculation.ICalculation;
-import ru.job4j.calculator.calculation.arithmetic.Addition;
-import ru.job4j.calculator.calculation.arithmetic.Division;
-import ru.job4j.calculator.calculation.arithmetic.Multiplication;
-import ru.job4j.calculator.calculation.arithmetic.Subtraction;
-import ru.job4j.calculator.calculation.trigonometric.Sinus;
+import ru.job4j.calculator.operation.IOperation;
+import ru.job4j.calculator.operation.arithmetic.Addition;
+import ru.job4j.calculator.operation.arithmetic.Division;
+import ru.job4j.calculator.operation.arithmetic.Multiplication;
+import ru.job4j.calculator.operation.arithmetic.Subtraction;
+import ru.job4j.calculator.operation.logarithmic.DecLogarithm;
+import ru.job4j.calculator.operation.system.OffOperation;
+import ru.job4j.calculator.operation.system.ResetOperation;
+import ru.job4j.calculator.operation.trigonometric.Cosinus;
+import ru.job4j.calculator.operation.trigonometric.Sinus;
+import ru.job4j.calculator.operation.trigonometric.Tangens;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Start {
-    private final Map<String, ICalculation> operations = new HashMap<>();
-    private final static String ADD = "+";
-    private final static String SUB = "-";
-    private final static String DIV = "/";
-    private final static String MUL = "*";
-    private final static String COS = "cos";
-    private final static String SIN = "sin";
-    private final static String TAN = "tan";
-    private final static String LOG = "log";
+    private final Map<String, IOperation> operations = new HashMap<>();
+    public static final String ADD = "+";
+    public static final String SUB = "-";
+    public static final String DIV = ":";
+    public static final String MUL = "*";
+    public static final String COS = "cos";
+    public static final String SIN = "sin";
+    public static final String TAN = "tan";
+    public static final String LOG = "log";
+    public static final String CE = "c";
+    public static final String OFF = "off";
 
 
     public class Menu {
@@ -36,14 +43,16 @@ public class Start {
             operations.put(SUB, new Subtraction(SUB));
             operations.put(DIV, new Division(DIV));
             operations.put(MUL, new Multiplication(MUL));
+            operations.put(CE, new ResetOperation(CE));
+            operations.put(OFF, new OffOperation(OFF));
 
         }
 
         public void fillExtended() {
             operations.put(SIN, new Sinus(SIN));
-            operations.put(COS, new Sinus(COS));
-            operations.put(TAN, new Sinus(TAN));
-            operations.put(LOG, new Sinus(LOG));
+            operations.put(COS, new Cosinus(COS));
+            operations.put(TAN, new Tangens(TAN));
+            operations.put(LOG, new DecLogarithm(LOG));
         }
 
         public void show() {
@@ -55,9 +64,12 @@ public class Start {
             }
             if (answer.equals("standard")) {
                 fillStandard();
+                output.out(String.format("%s %s %s %s %s %s", ADD, SUB, DIV, MUL, CE, OFF));
             } else {
                 fillStandard();
                 fillExtended();
+                output.out(String.format("%s %s %s %s %s %s %s %s %s %s", ADD, SUB, DIV, MUL, SIN, COS, TAN, LOG, CE, OFF));
+
             }
         }
     }

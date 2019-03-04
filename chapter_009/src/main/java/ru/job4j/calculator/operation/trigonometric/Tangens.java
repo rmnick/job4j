@@ -1,6 +1,6 @@
-package ru.job4j.calculator.calculation.trigonometric;
+package ru.job4j.calculator.operation.trigonometric;
 
-public class Tangens extends Abstractrigonometric {
+public class Tangens extends AbstractTrigonometric {
     public Tangens(String name) {
         super(name);
     }

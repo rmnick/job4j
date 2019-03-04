@@ -30,7 +30,7 @@ public class Client {
     /**
      * main method on client side
      * create Validator for validation our input
-     * create Dispatcher for dispatch calculation according with user's commands
+     * create Dispatcher for dispatch operation according with user's commands
      * start conversation with server
      */
     public void start() {

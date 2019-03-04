@@ -1,4 +1,4 @@
-package ru.job4j.calculator.calculation.arithmetic;
+package ru.job4j.calculator.operation.arithmetic;
 
 
 public class Division extends AbstractArithmetic {
@@ -9,11 +9,9 @@ public class Division extends AbstractArithmetic {
 
     @Override
     public double calc(final double[] var) {
-        double result;
-        if (var[1] == 0) {
-            result = 0;
-        } else {
-           result = var[0] / var[1];
+        double result = 0;
+        if (var[1] != 0) {
+            result = var[0] / var[1];
         }
         return result;
     }

@@ -1,6 +1,6 @@
-package ru.job4j.calculator.calculation.trigonometric;
+package ru.job4j.calculator.operation.trigonometric;
 
-public class Cosinus extends Abstractrigonometric {
+public class Cosinus extends AbstractTrigonometric {
     public Cosinus(String name) {
         super(name);
     }

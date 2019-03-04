@@ -53,7 +53,7 @@ public class CustomHashMap<K, V> implements Iterable<Map.Entry<K, V>> {
     }
 
     /**
-     * index calculation from jdk 7
+     * index operation from jdk 7
      * @param h
      * @param length
      * @return

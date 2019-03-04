@@ -1,35 +1,30 @@
 package ru.job4j.calculator;
 
 import org.junit.Test;
-import ru.job4j.calculator.calculation.ICalculation;
-import ru.job4j.calculator.calculation.arithmetic.Subtraction;
+import ru.job4j.calculator.operation.ICalculation;
+import ru.job4j.calculator.operation.arithmetic.Addition;
+import ru.job4j.calculator.operation.arithmetic.Subtraction;
+import ru.job4j.calculator.operation.logarithmic.DecLogarithm;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class CalculatorTest {
     @Test
-    public void test() {
-        //BigDecimal a = BigDecimal.valueOf(36);
-        //BigDecimal b = BigDecimal.valueOf(54);
-        //int a = 36;
-        //int b = 54;
-        //float a = 36;
-        //float b = 54;
-        String a = "36";
-        String b = "54";
-        //double a = 36.00;
-        //double b = 54.00;
-        System.out.println(Double.valueOf(a) - Double.valueOf(b));
+    public void whenTwoPlusTwoThenFour() {
+        ICalculation add = new Addition("+");
+        assertThat(add.calc(new double[]{2.0, 2.0}), is(4.0));
     }
 
     @Test
-    public void testOperation() {
-        double[] var = {36.00, 54.00};
+    public void whenTwoSubtractFiveThenMinusThree() {
         ICalculation sub = new Subtraction("-");
-        double result = sub.calc(var);
-        System.out.println(result);
+        assertThat(sub.calc(new double[]{2.0, 5.0}), is(-3.0));
     }
 
     @Test
-    public void scTest() {
-
+    public void whenLogOneThenZero() {
+        ICalculation log = new DecLogarithm("log");
+        assertThat(log.calc(new double[]{1.0}), is(0.0));
     }
 }
