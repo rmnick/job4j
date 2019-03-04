@@ -23,7 +23,7 @@ public class CalculatorTest {
     @Test
     public void testOperation() {
         double[] var = {36.00, 54.00};
-        ICalculation sub = new Subtraction();
+        ICalculation sub = new Subtraction("-");
         double result = sub.calc(var);
         System.out.println(result);
     }

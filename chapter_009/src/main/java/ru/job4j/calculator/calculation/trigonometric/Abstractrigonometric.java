@@ -1,12 +1,12 @@
-package ru.job4j.calculator.calculation.arithmetic;
+package ru.job4j.calculator.calculation.trigonometric;
 
 import ru.job4j.calculator.calculation.ICalculation;
 
-public abstract class AbstractArithmetic implements ICalculation {
+public abstract class Abstractrigonometric implements ICalculation {
     protected final String name;
 
 
-    public AbstractArithmetic(final String name) {
+    public Abstractrigonometric(final String name) {
         this.name = name;
     }
 
@@ -14,6 +14,4 @@ public abstract class AbstractArithmetic implements ICalculation {
     public String toString() {
         return name;
     }
-
-
 }

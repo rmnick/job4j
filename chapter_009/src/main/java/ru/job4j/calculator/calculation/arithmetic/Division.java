@@ -1,22 +1,21 @@
 package ru.job4j.calculator.calculation.arithmetic;
 
-import ru.job4j.calculator.IInput;
-import ru.job4j.calculator.IOutput;
-import ru.job4j.calculator.Validator;
 
 public class Division extends AbstractArithmetic {
 
-    public Division(IInput input, IOutput output, String name, Validator validator) {
-        super(input, output, name, validator);
+    public Division(String name) {
+        super(name);
     }
 
     @Override
     public double calc(final double[] var) {
-        return var[0] / var[1];
+        double result;
+        if (var[1] == 0) {
+            result = 0;
+        } else {
+           result = var[0] / var[1];
+        }
+        return result;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
 }
