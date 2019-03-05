@@ -33,6 +33,10 @@ public class FoodBusiness {
         this.sorters.add(new WareHouseSorter(this.storage.get("warehouse")));
     }
 
+    /**
+     * create food list for sorting
+     * @return ArrayList
+     */
     public List<Food> delivery() {
         List<Food> food = new ArrayList<>();
         food.add(new Tomatoes(10,
@@ -58,6 +62,11 @@ public class FoodBusiness {
         return food;
     }
 
+    /**
+     * use the strategy pattern for sort all food from list
+     * set all sorters one by one in controller
+     * each sorter looks through the food list and puts item to the right storage
+     */
     public void run() {
         List<Food> food = delivery();
         sorters.forEach(iSorter -> {
