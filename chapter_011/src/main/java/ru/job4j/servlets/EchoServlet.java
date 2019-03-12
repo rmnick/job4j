@@ -15,7 +15,7 @@ public class EchoServlet extends HttpServlet {
         res.setContentType("text/html");
         try {
             LOG.info("start response");
-            res.getOutputStream().write("hello world".getBytes());
+            res.getOutputStream().print("hello world");
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
