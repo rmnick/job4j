@@ -65,7 +65,7 @@
         <module>searcher_light</module>
         <module>job_parser</module>
         <module>chapter_009</module>
-        <module>chapter_11</module>
+        <module>chapter_011</module>
     </modules>
 	 
 	<build>
