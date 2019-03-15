@@ -2,12 +2,14 @@ package ru.job4j.servlets.users.storage;
 
 import ru.job4j.servlets.users.logic.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class MemoryStore implements Store {
     private static MemoryStore instance = new MemoryStore();
-    private final Map<Integer, User> store = new ConcurrentHashMap<>();
+    private final Map<String, User> store = new ConcurrentHashMap<>();
 
     private MemoryStore() {
     }
@@ -32,6 +34,10 @@ public class MemoryStore implements Store {
         temp.setName(user.getName());
         temp.setEmail(user.getEmail());
         return temp;
+    }
+
+    public List<User> show() {
+        return store.values().stream().collect(Collectors.toList());
     }
 
     public User get(User user) {

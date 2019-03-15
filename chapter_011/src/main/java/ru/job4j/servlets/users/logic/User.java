@@ -3,22 +3,28 @@ package ru.job4j.servlets.users.logic;
 import java.time.LocalDateTime;
 
 public class User {
-    private int id;
+    private String id;
     private String name;
     private String email;
+    private String login;
     private LocalDateTime date;
 
-    public User(final String name, final String email) {
+    public User(final String name, final String login, final String email) {
         this.name = name;
+        this.login = login;
         this.email = email;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     public String getEmail() {
@@ -29,12 +35,16 @@ public class User {
         return date;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public void setEmail(String email) {
@@ -47,6 +57,6 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("id: %s, name: %s email: %s, date: %s", id, name, email, date);
+        return String.format("id: %s, name: %s, login: %s, email: %s, date: %s", id, name, login, email, date);
     }
 }
