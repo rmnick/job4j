@@ -45,11 +45,17 @@ public class UserController extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
         try {
+            /**
+             * information from user
+             */
             String action = req.getParameter("action");
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String login = req.getParameter("login");
             String id = req.getParameter("id");
+            /**
+             * create dummy(user) and make response
+             */
             User user = createUser(id, name, login, email);
             res.getWriter().println(getOperation(action, user));
         } catch (IOException e) {
@@ -78,6 +84,11 @@ public class UserController extends HttpServlet {
         };
     }
 
+    /**
+     * delete function
+     * starting if user input "action=delete"
+     * @return Function
+     */
     private Function<User, String> delete() {
         return usr -> {
             String result;
@@ -90,6 +101,11 @@ public class UserController extends HttpServlet {
         };
     }
 
+    /**
+     * update function
+     * starting if user input "action=update"
+     * @return Function
+     */
     private Function<User, String> update() {
         return usr -> {
             String result;
@@ -102,6 +118,13 @@ public class UserController extends HttpServlet {
         };
     }
 
+    /**
+     * dispatcher pattern, search right operation in Map<String, Function> (action is a key),
+     * and return String as result operation(value)
+     * @param action String
+     * @param user User
+     * @return String
+     */
     private String getOperation(String action, User user) {
         String result;
         if (operations.get(action) == null) {
@@ -111,8 +134,7 @@ public class UserController extends HttpServlet {
         }
         return result;
     }
-
-
+    
     private void fill() {
         operations.put("add", add());
         operations.put("delete", delete());
