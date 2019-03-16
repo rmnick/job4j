@@ -31,18 +31,49 @@ public class ValidateService {
      * @throws LoginException RuntimeException
      */
     public User add(User user) throws NameException, MailException, LoginException {
-        User result = null;
+        User result;
         if (user.getName() == null || user.getName().equals("")) {
-            throw new NameException();
+            throw new NameException("input name");
         } else if (user.getLogin() == null || user.getLogin().equals("")) {
-            throw new LoginException();
+            throw new LoginException("input login");
         } else if (user.getEmail() == null || user.getEmail().equals("")) {
-            throw new MailException();
+            throw new MailException("input email");
         } else {
             user.setDate(LocalDateTime.now());
             user.setId(generateId());
             result = user;
             ms.add(result);
+        }
+        return result;
+    }
+
+    public User delete(User user) throws IdException {
+        if (user.getId() == null) {
+            throw new IdException("input id");
+        }
+        User result = ms.delete(user);
+        if (result == null) {
+            throw new IdException("input correct id");
+        }
+        return result;
+    }
+
+    public User update(User user) throws IdException {
+        if (user.getId() == null) {
+            throw new IdException("input id");
+        }
+        User result = ms.get(user);
+        if (result == null) {
+            throw new IdException("input correct id");
+        }
+        if (user.getName() != null && !user.getName().equals("")) {
+            result.setName(user.getName());
+        }
+        if (user.getLogin() != null && !user.getLogin().equals("")) {
+            result.setLogin(user.getLogin());
+        }
+        if (user.getEmail() != null && !user.getEmail().equals("")) {
+            result.setEmail(user.getEmail());
         }
         return result;
     }

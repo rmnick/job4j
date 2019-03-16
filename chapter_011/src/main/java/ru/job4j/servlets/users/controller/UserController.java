@@ -68,17 +68,41 @@ public class UserController extends HttpServlet {
             try {
                 result = vs.add(usr).toString();
             } catch (NameException name) {
-                result = "input name";
+                result = name.getMessage();
             } catch (MailException mail) {
-                result = "input email";
+                result = mail.getMessage();
             } catch (LoginException login) {
-                result = "input login";
+                result = login.getMessage();
             }
             return result;
         };
     }
 
-    public String getOperation(String action, User user) {
+    private Function<User, String> delete() {
+        return usr -> {
+            String result;
+            try {
+                result = vs.delete(usr).toString();
+            } catch (IdException id) {
+                result = id.getMessage();
+            }
+            return result;
+        };
+    }
+
+    private Function<User, String> update() {
+        return usr -> {
+            String result;
+            try {
+                result = vs.update(usr).toString();
+            } catch (IdException id) {
+                result = id.getMessage();
+            }
+            return result;
+        };
+    }
+
+    private String getOperation(String action, User user) {
         String result;
         if (operations.get(action) == null) {
             result = "input action";
@@ -91,6 +115,8 @@ public class UserController extends HttpServlet {
 
     private void fill() {
         operations.put("add", add());
+        operations.put("delete", delete());
+        operations.put("update", update());
     }
 
     /**
