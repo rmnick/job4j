@@ -16,9 +16,9 @@ import java.util.Map;
 public class FoodBusiness {
     public final List<ISorter> sorters = new ArrayList<>();
     public final Map<String, Storage> storage = new HashMap<>();
-    public final ControllQuality cq;
+    public final ControlQuality cq;
 
-    private FoodBusiness(final ControllQuality cq) {
+    private FoodBusiness(final ControlQuality cq) {
         this.cq = cq;
     }
 
@@ -76,7 +76,7 @@ public class FoodBusiness {
     }
 
     public static void main(String[] args) {
-        ControllQuality cq = new ControllQuality();
+        ControlQuality cq = new ControlQuality();
         FoodBusiness fb = new FoodBusiness(cq);
         fb.init();
         fb.run();

@@ -5,7 +5,7 @@ import ru.job4j.foodstorage.sorters.ISorter;
 
 import java.util.List;
 
-public class ControllQuality {
+public class ControlQuality {
     private ISorter sorter;
 
     public void setSorter(final ISorter controller) {
