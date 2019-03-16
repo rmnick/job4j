@@ -134,7 +134,7 @@ public class UserController extends HttpServlet {
         }
         return result;
     }
-    
+
     private void fill() {
         operations.put("add", add());
         operations.put("delete", delete());
