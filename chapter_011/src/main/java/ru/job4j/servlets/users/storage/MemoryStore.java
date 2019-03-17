@@ -1,13 +1,13 @@
 package ru.job4j.servlets.users.storage;
 
 import ru.job4j.servlets.users.logic.User;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class MemoryStore implements Store {
+public class MemoryStore implements Store<User> {
     private static MemoryStore instance = new MemoryStore();
     private final Map<String, User> store = new ConcurrentHashMap<>();
 
@@ -36,11 +36,11 @@ public class MemoryStore implements Store {
         return temp;
     }
 
-    public List<User> show() {
-        return store.values().stream().collect(Collectors.toList());
+    public List<User> getUsers() {
+        return store.values().stream().collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public User get(User user) {
+    public User getUser(User user) {
         return store.get(user.getId());
     }
 }

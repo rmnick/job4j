@@ -4,14 +4,11 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.logic.*;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -73,12 +70,8 @@ public class UserController extends HttpServlet {
             String result;
             try {
                 result = vs.add(usr).toString();
-            } catch (NameException name) {
-                result = name.getMessage();
-            } catch (MailException mail) {
-                result = mail.getMessage();
-            } catch (LoginException login) {
-                result = login.getMessage();
+            } catch (ValidateException e) {
+                result = e.getMessage();
             }
             return result;
         };
@@ -94,8 +87,8 @@ public class UserController extends HttpServlet {
             String result;
             try {
                 result = vs.delete(usr).toString();
-            } catch (IdException id) {
-                result = id.getMessage();
+            } catch (ValidateException e) {
+                result = e.getMessage();
             }
             return result;
         };
@@ -111,8 +104,8 @@ public class UserController extends HttpServlet {
             String result;
             try {
                 result = vs.update(usr).toString();
-            } catch (IdException id) {
-                result = id.getMessage();
+            } catch (ValidateException e) {
+                result = e.getMessage();
             }
             return result;
         };

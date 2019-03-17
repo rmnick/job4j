@@ -27,6 +27,6 @@ chapter_001/target
 target
 chess/src/main/resources
 
-.idea
+.idea/
 *.iml
 
