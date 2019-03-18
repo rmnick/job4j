@@ -14,6 +14,22 @@
         <url-pattern>/user</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>Create</servlet-name>
+        <servlet-class>ru.job4j.servlets.users.controller.UserCreate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Create</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Update</servlet-name>
+        <servlet-class>ru.job4j.servlets.users.controller.UserUpdate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Update</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>EchoServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.echo.EchoServlet</servlet-class>
         <!--<load-on-startup>2</load-on-startup>-->

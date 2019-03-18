@@ -16,132 +16,57 @@ import java.util.function.Function;
 
 public class UserController extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(UserController.class.getName());
+//    private final Dispatcher dp = Dispatcher.getInstance();
     private final ValidateService vs = ValidateService.getInstance();
-    private final Map<String, Function<User, String>> operations = new HashMap<>();
+//    private final Map<String, Function<User, String>> operations = new HashMap<>();
 
-    /**
-     * constructor only for filling internal function dispatcher
-     */
-    public UserController() {
-        fill();
-    }
+//    /**
+//     * constructor only for filling internal function dispatcher
+//     */
+//    public UserController() {
+//        fill();
+//    }
 
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
         try {
+            String formUpdate = new StringBuilder("<form action='/chapter_011")
+//                    .append(req.getContextPath())
+                    .append("/update' method='get'>")
+                    .append("<p><input type='button' value='update'></p>")
+                    .append("</form>").toString();
+
+            StringBuilder sb = new StringBuilder("<table>");
+            vs.show().stream().forEach(usr -> {
+                sb.append("<tr><td>" + usr.toString() + formUpdate + "</td></tr>");
+            });
+            sb.append("</table>");
             PrintWriter wr = res.getWriter();
-            vs.show().stream().forEach(wr::println);
+            wr.println("<!DOCTYPE html>" +
+                    "<html lang=\"en\">" +
+                    "<head>" +
+                    "    <meta charset=\"UTF-8\">" +
+                    "    <title>users</title>" +
+                    "</head>" +
+                    "<body>" +
+                    sb.toString() +
+                    "</body>" +
+                    "</html>");
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
     }
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) {
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("text/html");
-        try {
-            /**
-             * information from user
-             */
-            String action = req.getParameter("action");
-            String name = req.getParameter("name");
-            String email = req.getParameter("email");
-            String login = req.getParameter("login");
-            String id = req.getParameter("id");
-            /**
-             * create dummy(user) and make response
-             */
-            User user = createUser(id, name, login, email);
-            res.getWriter().println(getOperation(action, user));
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        }
+        User user = createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
+        res.getWriter().println(vs.add(user));
+
     }
 
-    /**
-     * add function
-     * starting if user input "action=add"
-     * @return Function
-     */
-    private Function<User, String> add() {
-        return usr -> {
-            String result;
-            try {
-                result = vs.add(usr).toString();
-            } catch (ValidateException e) {
-                result = e.getMessage();
-            }
-            return result;
-        };
-    }
-
-    /**
-     * delete function
-     * starting if user input "action=delete"
-     * @return Function
-     */
-    private Function<User, String> delete() {
-        return usr -> {
-            String result;
-            try {
-                result = vs.delete(usr).toString();
-            } catch (ValidateException e) {
-                result = e.getMessage();
-            }
-            return result;
-        };
-    }
-
-    /**
-     * update function
-     * starting if user input "action=update"
-     * @return Function
-     */
-    private Function<User, String> update() {
-        return usr -> {
-            String result;
-            try {
-                result = vs.update(usr).toString();
-            } catch (ValidateException e) {
-                result = e.getMessage();
-            }
-            return result;
-        };
-    }
-
-    /**
-     * dispatcher pattern, search right operation in Map<String, Function> (action is a key),
-     * and return String as result operation(value)
-     * @param action String
-     * @param user User
-     * @return String
-     */
-    private String getOperation(String action, User user) {
-        String result;
-        if (operations.get(action) == null) {
-            result = "input action";
-        } else {
-            result = operations.get(action).apply(user);
-        }
-        return result;
-    }
-
-    private void fill() {
-        operations.put("add", add());
-        operations.put("delete", delete());
-        operations.put("update", update());
-    }
-
-    /**
-     * make some dummy for conversation between layouts
-     * @param id String
-     * @param name String
-     * @param login String
-     * @param email String
-     * @return User
-     */
     private User createUser(final String id, final String name, final String login, final String email) {
         User user = new User(name, login, email);
         if (id != null) {
@@ -149,6 +74,5 @@ public class UserController extends HttpServlet {
         }
         return user;
     }
-
 
 }
