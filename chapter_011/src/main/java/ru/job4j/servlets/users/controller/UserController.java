@@ -32,15 +32,11 @@ public class UserController extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
         try {
-            String formUpdate = new StringBuilder("<form action='/chapter_011")
-//                    .append(req.getContextPath())
-                    .append("/update' method='get'>")
-                    .append("<p><input type='button' value='update'></p>")
-                    .append("</form>").toString();
+
 
             StringBuilder sb = new StringBuilder("<table>");
             vs.show().stream().forEach(usr -> {
-                sb.append("<tr><td>" + usr.toString() + formUpdate + "</td></tr>");
+                sb.append("<tr><td>" + usr.toString() + createForm(usr, req) + "</td></tr>");
             });
             sb.append("</table>");
             PrintWriter wr = res.getWriter();
@@ -73,6 +69,17 @@ public class UserController extends HttpServlet {
             user.setId(id);
         }
         return user;
+    }
+
+    private String createForm (User user, HttpServletRequest request) {
+        return new StringBuilder("<form method='get' action='")
+                .append(request.getContextPath())
+                .append("/update&" +
+                        "id=" +
+                        user.getId() +
+                        "'>")
+                .append("<button type='submit'>update</button>")
+                .append("</form>").toString();
     }
 
 }
