@@ -2,14 +2,11 @@ package ru.job4j.servlets.users.logic;
 
 import ru.job4j.servlets.users.storage.MemoryStore;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ValidateService {
     private static ValidateService instance = new ValidateService();
     private final MemoryStore ms = MemoryStore.getInstance();
-    private AtomicInteger counter = new AtomicInteger(0);
 
     private ValidateService() {
     }
@@ -29,8 +26,6 @@ public class ValidateService {
         checkName(user);
         checkLogin(user);
         checkEmail(user);
-        user.setDate(LocalDateTime.now());
-        user.setId(generateId());
         result = user;
         ms.add(result);
         return result;
@@ -195,11 +190,11 @@ public class ValidateService {
         return ms.getUsers();
     }
 
-    /**
-     * using AtomicInteger for thread safety
-     * @return String
-     */
-    private String generateId() {
-        return String.valueOf(counter.incrementAndGet());
+    public User createUser(final String id, final String name, final String login, final String email) {
+        User user = new User(name, login, email);
+        if (id != null) {
+            user.setId(id);
+        }
+        return user;
     }
 }

@@ -9,24 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 
 public class UserController extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(UserController.class.getName());
-//    private final Dispatcher dp = Dispatcher.getInstance();
     private final ValidateService vs = ValidateService.getInstance();
-//    private final Map<String, Function<User, String>> operations = new HashMap<>();
-
-//    /**
-//     * constructor only for filling internal function dispatcher
-//     */
-//    public UserController() {
-//        fill();
-//    }
-
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -34,7 +20,7 @@ public class UserController extends HttpServlet {
         try {
             StringBuilder sb = new StringBuilder("<table>");
             vs.show().stream().forEach(usr -> {
-                sb.append("<tr><td>" + usr.toString() + createForm(usr, req) + "</td></tr>");
+                sb.append("<tr><td>" + usr.toString() + "</td>" + "<td>" + createFormUpdate(usr, req) + "</td>" + "<td>" + createFormDelete(usr, req) + "</td></tr>");
             });
             sb.append("</table>");
             PrintWriter wr = res.getWriter();
@@ -56,28 +42,44 @@ public class UserController extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("text/html");
-        User user = createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
-        res.getWriter().println(vs.add(user));
-
-    }
-
-    private User createUser(final String id, final String name, final String login, final String email) {
-        User user = new User(name, login, email);
-        if (id != null) {
-            user.setId(id);
+        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
+        try {
+            res.getWriter().println(vs.delete(user));
+        } catch (ValidateException e) {
+            res.getWriter().println(e.getMessage());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
         }
-        return user;
     }
 
-    private String createForm(User user, HttpServletRequest request) {
+    private String createFormUpdate(User user, HttpServletRequest request) {
         return new StringBuilder("<form method='get' action='")
                 .append(request.getContextPath())
                 .append("/update'>")
                 .append("<input type='hidden' name='id' value='")
                 .append(user.getId())
                 .append("'/>")
+                .append("<input type='hidden' name='name' value='")
+                .append(user.getName())
+                .append("'/>")
+                .append("<input type='hidden' name='login' value='")
+                .append(user.getLogin())
+                .append("'/>")
+                .append("<input type='hidden' name='email' value='")
+                .append(user.getEmail())
+                .append("'/>")
                 .append("<button type='submit'>update</button>")
                 .append("</form>").toString();
     }
 
+    private String createFormDelete(User user, HttpServletRequest request) {
+        return new StringBuilder("<form method='post' action='")
+                .append(request.getContextPath())
+                .append("/user'>")
+                .append("<input type='hidden' name='id' value='")
+                .append(user.getId())
+                .append("'/>")
+                .append("<button type='submit'>delete</button>")
+                .append("</form>").toString();
+    }
 }

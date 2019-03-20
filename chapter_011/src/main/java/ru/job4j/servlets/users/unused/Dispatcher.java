@@ -1,4 +1,8 @@
-package ru.job4j.servlets.users.logic;
+package ru.job4j.servlets.users.unused;
+
+import ru.job4j.servlets.users.logic.User;
+import ru.job4j.servlets.users.logic.ValidateException;
+import ru.job4j.servlets.users.logic.ValidateService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,16 +76,16 @@ public class Dispatcher {
         };
     }
 
-//    private Function<User, String> show() {
-//        return usr -> {
-//            StringBuilder sb = new StringBuilder("<table>");
-//            vs.show().stream().forEach(user -> {
-//                sb.append("<tr><td>" + user.toString() + "</td></tr>");
-//            });
-//            sb.append("</table>");
-//            return sb.toString();
-//        };
-//    }
+    private Function<User, String> show() {
+        return usr -> {
+            StringBuilder sb = new StringBuilder("<table>");
+            vs.show().stream().forEach(user -> {
+                sb.append("<tr><td>" + user.toString() + "</td></tr>");
+            });
+            sb.append("</table>");
+            return sb.toString();
+        };
+    }
 
     /**
      * dispatcher pattern, search right operation in Map<String, Function> (action is a key),
