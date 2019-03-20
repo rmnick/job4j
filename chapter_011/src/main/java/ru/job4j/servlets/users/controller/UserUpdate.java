@@ -8,25 +8,26 @@ import java.io.IOException;
 public class UserUpdate extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        String id = req.getParameter("id");
-        res.getWriter().println("<!DOCTYPE html>" +
-                "<html lang=\"en\">" +
-                "<head>" +
-                "    <meta charset=\"UTF-8\">" +
-                "    <title>users</title>" +
-                "</head>" +
-                "<body>" +
-                "<form>" +
-                        "  <fieldset>" +
-                        "    <legend>edit</legend>" +
-                        "    <p><label for=\"name\">name</label><input type=\"text\" value=\"" + id + "\"" + "id=\"name\"></p>" +
-                        "    <p><label for=\"email\">e-mail</label><input type=\"text\" id=\"email\"></p>" +
-                        "    <p><label for=\"login\">login</label><input type=\"text\" id=\"login\"></p>" +
-                        "  </fieldset>" +
-                        "<p><input type=\"submit\" value=\"update\"></p>" +
-                        "</form>" +
-                "</body>" +
-                "</html>");
+//        String id = req.getParameter("id");
+        res.getWriter().println(req.getParameter("id"));
+//        res.getWriter().println("<!DOCTYPE html>" +
+//                "<html lang=\"en\">" +
+//                "<head>" +
+//                "    <meta charset=\"UTF-8\">" +
+//                "    <title>users</title>" +
+//                "</head>" +
+//                "<body>" +
+//                "<form>" +
+//                        "  <fieldset>" +
+//                        "    <legend>edit</legend>" +
+//                        "    <p><label for=\"name\">name</label><input type=\"text\" value=\"" + id + "\"" + "id=\"name\"></p>" +
+//                        "    <p><label for=\"email\">e-mail</label><input type=\"text\" id=\"email\"></p>" +
+//                        "    <p><label for=\"login\">login</label><input type=\"text\" id=\"login\"></p>" +
+//                        "  </fieldset>" +
+//                        "<p><input type=\"submit\" value=\"update\"></p>" +
+//                        "</form>" +
+//                "</body>" +
+//                "</html>");
     }
 
     @Override

@@ -32,24 +32,22 @@ public class UserController extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
         try {
-
-
             StringBuilder sb = new StringBuilder("<table>");
             vs.show().stream().forEach(usr -> {
                 sb.append("<tr><td>" + usr.toString() + createForm(usr, req) + "</td></tr>");
             });
             sb.append("</table>");
             PrintWriter wr = res.getWriter();
-            wr.println("<!DOCTYPE html>" +
-                    "<html lang=\"en\">" +
-                    "<head>" +
-                    "    <meta charset=\"UTF-8\">" +
-                    "    <title>users</title>" +
-                    "</head>" +
-                    "<body>" +
-                    sb.toString() +
-                    "</body>" +
-                    "</html>");
+            wr.println("<!DOCTYPE html>"
+                    + "<html lang=\"en\">"
+                    + "<head>"
+                    + "    <meta charset=\"UTF-8\">"
+                    + "    <title>users</title>"
+                    + "</head>"
+                    + "<body>"
+                    + sb.toString()
+                    + "</body>"
+                    + "</html>");
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
@@ -71,13 +69,13 @@ public class UserController extends HttpServlet {
         return user;
     }
 
-    private String createForm (User user, HttpServletRequest request) {
+    private String createForm(User user, HttpServletRequest request) {
         return new StringBuilder("<form method='get' action='")
                 .append(request.getContextPath())
-                .append("/update&" +
-                        "id=" +
-                        user.getId() +
-                        "'>")
+                .append("/update'>")
+                .append("<input type='hidden' name='id' value='")
+                .append(user.getId())
+                .append("'/>")
                 .append("<button type='submit'>update</button>")
                 .append("</form>").toString();
     }

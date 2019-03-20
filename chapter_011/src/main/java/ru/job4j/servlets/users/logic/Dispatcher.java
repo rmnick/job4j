@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class Dispatcher {
     private final ValidateService vs = ValidateService.getInstance();
-    private static final Dispatcher instance = new Dispatcher();
+    private static final Dispatcher INSTANCE = new Dispatcher();
     private final Map<String, Function<User, String>> operations = new HashMap<>();
 
     /**
@@ -17,8 +17,8 @@ public class Dispatcher {
         fill();
     }
 
-    public static Dispatcher getInstance () {
-        return instance;
+    public static Dispatcher getInstance() {
+        return INSTANCE;
     }
 
     /**
