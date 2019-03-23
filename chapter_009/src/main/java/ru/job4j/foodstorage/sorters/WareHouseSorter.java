@@ -1,14 +1,14 @@
 package ru.job4j.foodstorage.sorters;
 
 import ru.job4j.foodstorage.food.Food;
-import ru.job4j.foodstorage.storage.Storage;
+import ru.job4j.foodstorage.storage.IStorage;
 
 import java.time.ZoneId;
 import java.util.List;
 
 public class WareHouseSorter extends AbstractSorter {
-    public WareHouseSorter(Storage storage) {
-        super(storage);
+    public WareHouseSorter(IStorage IStorage) {
+        super(IStorage);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class WareHouseSorter extends AbstractSorter {
             if (expireDate - now > 0) {
                 double percent = ((expireDate - now) * 100 / (expireDate - createDate));
                 if (percent > 75) {
-                    this.storage.getStorage().add(food);
+                    this.IStorage.getStorage().add(food);
                 }
             }
         });
@@ -28,6 +28,6 @@ public class WareHouseSorter extends AbstractSorter {
 
     @Override
     public String toString() {
-        return String.format("wareHouseSorter dispatches to %s storage", this.storage.toString());
+        return String.format("wareHouseSorter dispatches to %s IStorage", this.IStorage.toString());
     }
 }

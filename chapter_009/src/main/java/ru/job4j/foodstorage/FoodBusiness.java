@@ -2,7 +2,7 @@ package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.*;
 import ru.job4j.foodstorage.sorters.*;
-import ru.job4j.foodstorage.storage.Storage;
+import ru.job4j.foodstorage.storage.IStorage;
 import ru.job4j.foodstorage.storage.Shop;
 import ru.job4j.foodstorage.storage.Trash;
 import ru.job4j.foodstorage.storage.WareHouse;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class FoodBusiness {
     public final List<ISorter> sorters = new ArrayList<>();
-    public final Map<String, Storage> storage = new HashMap<>();
+    public final Map<String, IStorage> storage = new HashMap<>();
     public final ControlQuality cq;
 
     private FoodBusiness(final ControlQuality cq) {
@@ -65,7 +65,7 @@ public class FoodBusiness {
     /**
      * use the strategy pattern for sort all food from list
      * set all sorters one by one in controller
-     * each sorter looks through the food list and puts item to the right storage
+     * each sorter looks through the food list and puts item to the right IStorage
      */
     public void run() {
         List<Food> food = delivery();

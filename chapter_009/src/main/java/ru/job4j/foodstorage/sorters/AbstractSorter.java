@@ -1,11 +1,11 @@
 package ru.job4j.foodstorage.sorters;
 
-import ru.job4j.foodstorage.storage.Storage;
+import ru.job4j.foodstorage.storage.IStorage;
 
 public abstract class AbstractSorter implements ISorter {
-    protected final Storage storage;
+    protected final IStorage IStorage;
 
-    public AbstractSorter(final Storage storage) {
-        this.storage = storage;
+    public AbstractSorter(final IStorage IStorage) {
+        this.IStorage = IStorage;
     }
 }

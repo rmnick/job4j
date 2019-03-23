@@ -1,8 +1,15 @@
 package ru.job4j.foodstorage.storage;
 
-public class Trash extends Storage {
+import ru.job4j.foodstorage.food.Food;
+
+public class Trash implements IStorage {
     @Override
     public String toString() {
         return "trash";
+    }
+
+    @Override
+    public boolean check(final Food food) {
+        return false;
     }
 }
