@@ -2,7 +2,7 @@ package ru.job4j.foodstorage.storage;
 
 import ru.job4j.foodstorage.food.Food;
 
-public class Trash implements IStorage {
+public class Trash extends AbstractStorage {
     @Override
     public String toString() {
         return "trash";

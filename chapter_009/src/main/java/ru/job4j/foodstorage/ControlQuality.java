@@ -8,17 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControlQuality {
-    private final List<IStorage> storages = new ArrayList<>();
+    private final List<IStorage> storage = new ArrayList<>();
 
-//    public void setSorter(final ISorter controller) {
-//        this.sorter = controller;
-//    }
-
-    public void add(IStorage storage) {
-        this.storages.add(storage);
+    public void add(IStorage st) {
+        this.storage.add(st);
     }
 
-    public void sort(List<Food> food) {
-
+    public void sort(List<Food> foodstuff) {
+        foodstuff.forEach(item -> {
+            for (IStorage st : storage) {
+                if (st.check(item)) {
+                    st.add(item);
+                    break;
+                }
+            }
+        });
     }
 }

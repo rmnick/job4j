@@ -7,12 +7,14 @@ public class Food {
     public final LocalDateTime createDate;
     public final LocalDateTime expireDate;
     protected int discount;
+    public final String name;
 
-    public Food(final double price, final LocalDateTime createDate, final LocalDateTime expireDate, final int discount) {
+    public Food(final double price, final LocalDateTime createDate, final LocalDateTime expireDate, final int discount, final String name) {
         this.price = price;
         this.createDate = createDate;
         this.expireDate = expireDate;
         this.discount = discount;
+        this.name = name;
     }
 
     public double getPrice() {
@@ -33,5 +35,10 @@ public class Food {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %d", name, price);
     }
 }

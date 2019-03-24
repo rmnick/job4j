@@ -21,7 +21,7 @@ public class ShopDiscountSorter extends AbstractSorter {
                 double percent = ((expireDate - now) * 100 / (expireDate - createDate));
                 if (percent < 25) {
                     food.setDiscount(25);
-                    this.IStorage.getStorage().add(food);
+//                    this.IStorage.getStorage().add(food);
                 }
             }
         });

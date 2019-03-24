@@ -18,7 +18,7 @@ public class TrashSorter extends AbstractSorter {
             long now = System.currentTimeMillis();
             long dif = (expireDate - now);
             if (dif < 0) {
-                this.IStorage.getStorage().add(food);
+//                this.IStorage.getStorage().add(food);
             }
         });
     }
