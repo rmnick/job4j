@@ -8,12 +8,22 @@ import java.util.List;
 
 public abstract class AbstractStorage implements IStorage {
     public final List<Food> storage = new ArrayList<>();
+    protected final String name;
+
+
+    public AbstractStorage(final String name) {
+        this.name = name;
+    }
 
     public void add(Food food) {
         this.storage.add(food);
     }
 
     public void show() {
-        this.storage.forEach(System.out::println);
+        StringBuilder sb = new StringBuilder().append(String.format("%s:%s", name, System.lineSeparator()));
+        this.storage.forEach(st -> {
+            sb.append(String.format("%s ", st));
+        });
+        System.out.println(sb.toString());
     }
 }

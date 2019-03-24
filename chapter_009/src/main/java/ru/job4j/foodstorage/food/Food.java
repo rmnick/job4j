@@ -1,5 +1,6 @@
 package ru.job4j.foodstorage.food;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Food {
@@ -39,6 +40,6 @@ public class Food {
 
     @Override
     public String toString() {
-        return String.format("%s %d", name, price);
+        return String.format("(%s; price: %.2f; expireDate: %s; discount: %d%s)", name, price, Date.valueOf(expireDate.toLocalDate()), discount, "%");
     }
 }

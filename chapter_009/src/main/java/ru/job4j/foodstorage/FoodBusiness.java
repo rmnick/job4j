@@ -1,6 +1,7 @@
 package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.*;
+import ru.job4j.foodstorage.storage.IStorage;
 import ru.job4j.foodstorage.storage.Shop;
 import ru.job4j.foodstorage.storage.Trash;
 import ru.job4j.foodstorage.storage.WareHouse;
@@ -17,10 +18,13 @@ public class FoodBusiness {
         this.cq = cq;
     }
 
-    public void init() {
-        cq.add(new Shop());
-        cq.add(new Trash());
-        cq.add(new WareHouse());
+    /**
+     * add storage in ControlQuality
+     */
+    public void fill() {
+        cq.add(new Shop("shop"));
+        cq.add(new Trash("trash"));
+        cq.add(new WareHouse("wareHouse"));
     }
 
     /**
@@ -35,12 +39,12 @@ public class FoodBusiness {
                 0, "cherry"));
         food.add(new Milk(10,
                 LocalDateTime.of(2019, 3, 1, 0, 0, 0),
-                LocalDateTime.of(2019, 3, 10, 0, 0, 0),
-                0, "3,2"));
+                LocalDateTime.of(2019, 3, 27, 0, 0, 0),
+                0, "3,2 milk"));
         food.add(new Milk(10,
                 LocalDateTime.of(2019, 2, 10, 0, 0, 0),
                 LocalDateTime.of(2019, 4, 10, 0, 0, 0),
-                0, "2,5"));
+                0, "2,5 milk"));
         food.add(new Beer(10,
                 LocalDateTime.of(2019, 3, 1, 0, 0, 0),
                 LocalDateTime.of(2050, 3, 10, 0, 0, 0),
@@ -61,8 +65,12 @@ public class FoodBusiness {
     public static void main(String[] args) {
         ControlQuality cq = new ControlQuality();
         FoodBusiness fb = new FoodBusiness(cq);
-        fb.init();
+        fb.fill();
         fb.run();
+        /**
+         * show sorting result
+         */
+        cq.getStorage().forEach(IStorage::show);
 
     }
 

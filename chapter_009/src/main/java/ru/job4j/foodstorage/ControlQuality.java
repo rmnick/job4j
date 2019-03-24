@@ -1,7 +1,6 @@
 package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.Food;
-import ru.job4j.foodstorage.sorters.ISorter;
 import ru.job4j.foodstorage.storage.IStorage;
 
 import java.util.ArrayList;
@@ -14,6 +13,11 @@ public class ControlQuality {
         this.storage.add(st);
     }
 
+    /**
+     * each storage in the list checks the product from the product list
+     * adding according with storage conditions
+     * @param foodstuff List<Food>
+     */
     public void sort(List<Food> foodstuff) {
         foodstuff.forEach(item -> {
             for (IStorage st : storage) {
@@ -23,5 +27,9 @@ public class ControlQuality {
                 }
             }
         });
+    }
+
+    public List<IStorage> getStorage() {
+        return this.storage;
     }
 }
