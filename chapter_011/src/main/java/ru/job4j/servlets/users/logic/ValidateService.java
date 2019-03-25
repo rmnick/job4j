@@ -35,16 +35,9 @@ public class ValidateService {
      * must enter the correct id
      * @param user User
      * @return User
-     * @throws ValidateException RuntimeException
      */
-    public User delete(User user) throws ValidateException {
-        if (!checkNullField(user.getId())) {
-            throw new ValidateException("field id is empty");
-        }
+    public User delete(User user) {
         User result = ms.delete(user);
-        if (result == null) {
-            throw new ValidateException("input correct id");
-        }
         return result;
     }
 
@@ -55,52 +48,14 @@ public class ValidateService {
      * @throws ValidateException RuntimeException
      */
     public User update(User user) throws ValidateException {
-        if (!checkNullField(user.getId())) {
-            throw new ValidateException("field id is empty");
-        }
-        User result = ms.getUser(user);
-        if (result == null) {
-            throw new ValidateException("input correct id");
-        }
-        /**
-         * update name
-         */
         checkName(user);
-        result.setName(user.getName());
-        /**
-         * update login
-         */
-        if (!checkNullField(user.getLogin())) {
-            throw new ValidateException("field login is empty");
+        if (!user.getLogin().equals(ms.getUser(user).getLogin())) {
+            checkLogin(user);
         }
-        if (!result.getLogin().equals(user.getLogin())) {
-            validateLogin(user.getLogin());
-            result.setLogin(user.getLogin());
+        if (!user.getEmail().equals(ms.getUser(user).getEmail())) {
+            checkEmail(user);
         }
-        /**
-         * update email
-         */
-        if (!checkNullField(user.getEmail())) {
-           throw  new ValidateException("field email is empty");
-        }
-        if (!result.getEmail().equals(user.getEmail())) {
-            validateEmail(user.getEmail());
-            result.setEmail(user.getLogin());
-        }
-        return result;
-    }
-
-    /**
-     * return false if user field is empty (string == null)
-     * @param str String
-     * @return boolean
-     */
-    private boolean checkNullField(String str) {
-        boolean result = false;
-        if (str != null) {
-            result = true;
-        }
-        return result;
+        return ms.update(user);
     }
 
     /**
@@ -137,59 +92,52 @@ public class ValidateService {
     }
 
     /**
-     * check if login is already exist and throw exception
+     * check for empty and valid state
      * @param user User
-     * @return boolean
      * @throws ValidateException RuntimeException
      */
-    private void compareLogin(User user) throws ValidateException {
-        for (User usr : ms.getUsers()) {
-            if (usr.getLogin().equals(user.getLogin())) {
-                throw new ValidateException("login is already exist");
-            }
+    private void checkName(User user) throws  ValidateException {
+        validateName(user.getName());
+    }
+
+    /**
+     * check for empty, valid and existing state
+     * use method compare from memoryStore
+     * @param user User
+     * @throws ValidateException RuntimeException
+     */
+    private void checkLogin(User user) throws ValidateException {
+        validateLogin(user.getLogin());
+        if (ms.compareLogin(user)) {
+            throw new ValidateException("login is already exist");
         }
     }
 
     /**
-     * check if email is already exist and throw exception
+     * check for empty, valid and existing state
+     * use method compare from memoryStore
      * @param user User
      * @throws ValidateException RuntimeException
      */
-    private void compareEmail(User user) throws ValidateException {
-        for (User usr : ms.getUsers()) {
-            if (usr.getEmail().equals(user.getEmail())) {
-                throw new ValidateException("email is already exist");
-            }
-        }
-    }
-
-    private void checkName(User user) throws  ValidateException {
-        if (!checkNullField(user.getName())) {
-            throw new ValidateException("name field is empty");
-        }
-        validateName(user.getName());
-    }
-
-    private void checkLogin(User user) throws ValidateException {
-        if (!checkNullField(user.getLogin())) {
-            throw new ValidateException("field login is empty");
-        }
-        validateLogin(user.getLogin());
-        compareLogin(user);
-    }
-
     private void checkEmail(User user) throws ValidateException {
-        if (!checkNullField(user.getEmail())) {
-            throw new ValidateException("field email is empty");
-        }
         validateEmail(user.getEmail());
-        compareEmail(user);
+        if (ms.compareEmail(user)) {
+            throw new ValidateException("email is already exist");
+        }
     }
 
     public List<User> show() {
         return ms.getUsers();
     }
 
+    /**
+     * create new User for conversation between layouts
+     * @param id String
+     * @param name String
+     * @param login String
+     * @param email String
+     * @return user User
+     */
     public User createUser(final String id, final String name, final String login, final String email) {
         User user = new User(name, login, email);
         if (id != null) {

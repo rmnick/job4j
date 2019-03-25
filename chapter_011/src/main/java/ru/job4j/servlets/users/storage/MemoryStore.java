@@ -1,6 +1,7 @@
 package ru.job4j.servlets.users.storage;
 
 import ru.job4j.servlets.users.logic.User;
+import ru.job4j.servlets.users.logic.ValidateException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class MemoryStore implements Store<User> {
     @Override
     public User update(User user) {
         User temp = store.get(user.getId());
+        temp.setLogin(user.getLogin());
         temp.setName(user.getName());
         temp.setEmail(user.getEmail());
         return temp;
@@ -58,5 +60,35 @@ public class MemoryStore implements Store<User> {
 
     public User getUser(User user) {
         return store.get(user.getId());
+    }
+
+    /**
+     * check if email already exists
+     * @param user User
+     * @return boolean
+     */
+    public boolean compareEmail(User user) throws ValidateException {
+        boolean result = false;
+        for (User usr : this.getUsers()) {
+            if (usr.getEmail().equals(user.getEmail())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * check if login already exists and return true
+     * @param user User
+     * @return boolean
+     */
+    public boolean compareLogin(User user) {
+        boolean result = false;
+        for (User usr : this.getUsers()) {
+            if (usr.getLogin().equals(user.getLogin())) {
+                result = true;
+            }
+        }
+        return result;
     }
 }
