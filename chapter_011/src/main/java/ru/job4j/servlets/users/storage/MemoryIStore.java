@@ -11,16 +11,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class MemoryStore implements Store<User> {
-    private static MemoryStore instance = new MemoryStore();
+public class MemoryIStore implements IStore<User> {
+    private static MemoryIStore instance = new MemoryIStore();
     private final Map<String, User> store = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
 
-    private MemoryStore() {
+    private MemoryIStore() {
     }
 
-    public static MemoryStore getInstance() {
+    public static MemoryIStore getInstance() {
         return instance;
     }
 

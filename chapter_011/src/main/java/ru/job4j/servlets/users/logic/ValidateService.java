@@ -1,12 +1,14 @@
 package ru.job4j.servlets.users.logic;
 
-import ru.job4j.servlets.users.storage.MemoryStore;
+import ru.job4j.servlets.users.storage.DbStore;
+import ru.job4j.servlets.users.storage.MemoryIStore;
 
 import java.util.List;
 
 public class ValidateService {
     private static ValidateService instance = new ValidateService();
-    private final MemoryStore ms = MemoryStore.getInstance();
+    private final DbStore ds = DbStore.getInstance();
+    private final MemoryIStore ms = MemoryIStore.getInstance();
 
     private ValidateService() {
     }
@@ -22,12 +24,13 @@ public class ValidateService {
      * @throws ValidateException RuntimeException
      */
     public User add(User user) throws ValidateException {
-        User result;
+        User result = user;
         checkName(user);
         checkLogin(user);
         checkEmail(user);
         result = user;
         ms.add(result);
+        ds.add(result);
         return result;
     }
 
@@ -37,6 +40,7 @@ public class ValidateService {
      * @return User
      */
     public User delete(User user) {
+        ds.delete(user);
         User result = ms.delete(user);
         return result;
     }
@@ -55,6 +59,7 @@ public class ValidateService {
         if (!user.getEmail().equals(ms.getUser(user).getEmail())) {
             checkEmail(user);
         }
+        ds.update(user);
         return ms.update(user);
     }
 
