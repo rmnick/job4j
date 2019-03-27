@@ -13,28 +13,33 @@
 </head>
 <body>
 <table>
-<%for (User user : ValidateService.getInstance().show()) {%>
-<tr>
-    <td>
+    <tr>
+        <form method='get' action='<%=request.getContextPath()%>/index.jsp'>
+            <button type='submit'>create user</button>
+        </form>
+    </tr>
+    <%for (User user : ValidateService.getInstance().show()) {%>
+    <tr>
+        <td>
         <%=user%>
-    </<td>
-    <td>
-        <form method='post' action='<%=request.getContextPath()%>/update.jsp'>
-            <input type='hidden' name='id' value='<%=user.getId()%>'/>
-            <input type='hidden' name='name' value='<%=user.getName()%>'/>
-            <input type='hidden' name='login' value='<%=user.getLogin()%>'/>
-            <input type='hidden' name='email' value='<%=user.getEmail()%>'/>
-            <button type='submit'>update</button>
-        </form>
-    </td>
-    <td>
-        <form method='post' action='<%=request.getContextPath()%>/user'>
-            <input type='hidden' name='id' value='<%=user.getId()%>'/>
-            <button type='submit'>delete</button>
-        </form>
-    </td>
-</tr>
-<%}%>
+        </td>
+        <td>
+            <form method='post' action='<%=request.getContextPath()%>/update.jsp'>
+                <input type='hidden' name='id' value='<%=user.getId()%>'/>
+                <input type='hidden' name='name' value='<%=user.getName()%>'/>
+                <input type='hidden' name='login' value='<%=user.getLogin()%>'/>
+                <input type='hidden' name='email' value='<%=user.getEmail()%>'/>
+                <button type='submit'>update</button>
+            </form>
+        </td>
+        <td>
+            <form method='post' action='<%=request.getContextPath()%>/user'>
+                <input type='hidden' name='id' value='<%=user.getId()%>'/>
+                <button type='submit'>delete</button>
+            </form>
+        </td>
+    </tr>
+    <%}%>
 </table>
 </body>
 </html>

@@ -1,20 +1,21 @@
 package ru.job4j.servlets.users.logic;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.storage.DbStore;
-import ru.job4j.servlets.users.storage.MemoryIStore;
 
 import java.util.List;
 
 public class ValidateService {
-    private static ValidateService instance = new ValidateService();
+    private final static ValidateService INSTANCE = new ValidateService();
     private final DbStore ds = DbStore.getInstance();
-    private final MemoryIStore ms = MemoryIStore.getInstance();
+    private static final Logger LOG = LogManager.getLogger(ValidateService.class.getName());
 
     private ValidateService() {
     }
 
     public static ValidateService getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -24,14 +25,10 @@ public class ValidateService {
      * @throws ValidateException RuntimeException
      */
     public User add(User user) throws ValidateException {
-        User result = user;
         checkName(user);
         checkLogin(user);
         checkEmail(user);
-        result = user;
-        ms.add(result);
-        ds.add(result);
-        return result;
+        return ds.add(user);
     }
 
     /**
@@ -40,27 +37,25 @@ public class ValidateService {
      * @return User
      */
     public User delete(User user) {
-        ds.delete(user);
-        User result = ms.delete(user);
-        return result;
+        return ds.delete(user);
     }
 
     /**
      * to update you need to fill in all the fields
+     * if the field is equivalent to the previous value, validation is not required
      * @param user User
      * @return User
      * @throws ValidateException RuntimeException
      */
     public User update(User user) throws ValidateException {
         checkName(user);
-        if (!user.getLogin().equals(ms.getUser(user).getLogin())) {
+        if (!user.getLogin().equals(ds.getUser(user).getLogin())) {
             checkLogin(user);
         }
-        if (!user.getEmail().equals(ms.getUser(user).getEmail())) {
+        if (!user.getEmail().equals(ds.getUser(user).getEmail())) {
             checkEmail(user);
         }
-        ds.update(user);
-        return ms.update(user);
+        return ds.update(user);
     }
 
     /**
@@ -113,7 +108,7 @@ public class ValidateService {
      */
     private void checkLogin(User user) throws ValidateException {
         validateLogin(user.getLogin());
-        if (ms.compareLogin(user)) {
+        if (ds.compareLogin(user)) {
             throw new ValidateException("login is already exist");
         }
     }
@@ -126,13 +121,13 @@ public class ValidateService {
      */
     private void checkEmail(User user) throws ValidateException {
         validateEmail(user.getEmail());
-        if (ms.compareEmail(user)) {
+        if (ds.compareEmail(user)) {
             throw new ValidateException("email is already exist");
         }
     }
 
     public List<User> show() {
-        return ms.getUsers();
+        return ds.getAll();
     }
 
     /**
