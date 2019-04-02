@@ -1,10 +1,7 @@
 package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.*;
-import ru.job4j.foodstorage.storage.IStorage;
-import ru.job4j.foodstorage.storage.Shop;
-import ru.job4j.foodstorage.storage.Trash;
-import ru.job4j.foodstorage.storage.WareHouse;
+import ru.job4j.foodstorage.storage.*;
 
 
 import java.time.LocalDateTime;
@@ -22,9 +19,16 @@ public class FoodBusiness {
      * add storage in ControlQuality
      */
     public void fill() {
-        cq.add(new Shop("shop"));
-        cq.add(new Trash("trash"));
-        cq.add(new WareHouse("wareHouse"));
+        AbstractStorage shop = new Shop("shop");
+        AbstractStorage trash = new Trash("trash");
+        AbstractStorage wareHouse = new WareHouse("wareHouse");
+        cq.add(new FrigeStore("fridge", shop));
+        cq.add(new WareHouseFixed("fixed", wareHouse));
+        cq.add(new WareHouseExtended("extended", wareHouse));
+        cq.add(new TrashReproductor("reproductor", trash));
+        cq.add(shop);
+        cq.add(trash);
+        cq.add(wareHouse);
     }
 
     /**
@@ -36,23 +40,35 @@ public class FoodBusiness {
         food.add(new Tomatoes(10,
                 LocalDateTime.of(2018, 10, 1, 0, 0, 0),
                 LocalDateTime.of(2019, 3, 20, 0, 0, 0),
-                0, "cherry"));
+                0, "cherry", false));
         food.add(new Milk(10,
                 LocalDateTime.of(2019, 3, 1, 0, 0, 0),
                 LocalDateTime.of(2019, 3, 27, 0, 0, 0),
-                0, "3,2 milk"));
+                0, "3,2 milk", false));
         food.add(new Milk(10,
                 LocalDateTime.of(2019, 2, 10, 0, 0, 0),
                 LocalDateTime.of(2019, 4, 10, 0, 0, 0),
-                0, "2,5 milk"));
+                0, "2,5 milk", false));
         food.add(new Beer(10,
                 LocalDateTime.of(2019, 3, 1, 0, 0, 0),
                 LocalDateTime.of(2050, 3, 10, 0, 0, 0),
-                0, "Bud"));
+                0, "Bud", false));
         food.add(new Cheese(10,
                 LocalDateTime.of(2018, 3, 1, 0, 0, 0),
                 LocalDateTime.of(2019, 2, 10, 0, 0, 0),
-                0, "cheddar"));
+                0, "cheddar", false));
+        food.add(new Tomatoes(10,
+                LocalDateTime.of(2019, 3, 1, 0, 0, 0),
+                LocalDateTime.of(2019, 5, 20, 0, 0, 0),
+                0, "red", false));
+        food.add(new Bread(10,
+                LocalDateTime.of(2019, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2019, 1, 20, 0, 0, 0),
+                0, "red", true));
+        food.add(new Beer(10,
+                LocalDateTime.of(2019, 3, 1, 0, 0, 0),
+                LocalDateTime.of(2050, 3, 10, 0, 0, 0),
+                0, "Miller", false));
         return food;
     }
 

@@ -19,14 +19,15 @@ public class ControlQuality {
      * @param foodstuff List<Food>
      */
     public void sort(List<Food> foodstuff) {
-        foodstuff.forEach(item -> {
-            for (IStorage st : storage) {
-                if (st.check(item)) {
-                    st.add(item);
+        for (IStorage st : storage) {
+            for (int i = 0; i < foodstuff.size(); i++) {
+                if (st.check(foodstuff.get(i))) {
+                    st.add(foodstuff.get(i));
+                    foodstuff.remove(i);
                     break;
                 }
             }
-        });
+        }
     }
 
     public List<IStorage> getStorage() {
