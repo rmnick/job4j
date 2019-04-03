@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-public class DbStore implements IStore<User> {
+public class DbStore implements IStore<User>, AutoCloseable {
 
     private static final BasicDataSource SOURCE = new BasicDataSource();
     private static final DbStore INSTANCE = new DbStore();
@@ -179,11 +179,13 @@ public class DbStore implements IStore<User> {
      */
     public boolean compareEmail(User user) {
         boolean result = false;
-        for (User usr : this.getAll()) {
-            if (usr.getEmail().equals(user.getEmail())) {
+        String select = String.format("select u.id from tb_user as u where u.email = \'%s\'", user.getEmail());
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            if (rs.next()) {
                 result = true;
-                break;
             }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
         }
         return result;
     }
@@ -195,13 +197,25 @@ public class DbStore implements IStore<User> {
      */
     public boolean compareLogin(User user) {
         boolean result = false;
-        for (User usr : this.getAll()) {
-            if (usr.getLogin().equals(user.getLogin())) {
+        String select = String.format("select u.id from tb_user as u where u.login=\'%s\'", user.getLogin());
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            if (rs.next()) {
                 result = true;
-                break;
             }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
         }
         return result;
     }
 
+    @Override
+    public void close() {
+        try {
+            if (SOURCE != null) {
+                SOURCE.close();
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+    }
 }

@@ -6,7 +6,7 @@ import ru.job4j.servlets.users.storage.DbStore;
 
 import java.util.List;
 
-public class ValidateService {
+public class ValidateService implements AutoCloseable {
     private final static ValidateService INSTANCE = new ValidateService();
     private final DbStore ds = DbStore.getInstance();
     private static final Logger LOG = LogManager.getLogger(ValidateService.class.getName());
@@ -144,5 +144,10 @@ public class ValidateService {
             user.setId(id);
         }
         return user;
+    }
+
+    @Override
+    public void close() {
+        ds.close();
     }
 }

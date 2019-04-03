@@ -25,4 +25,9 @@ public class UserController extends HttpServlet {
         LOG.info(String.format("delete: %s", user.toString()));
         res.sendRedirect(String.format("%s/users.jsp", req.getContextPath()));
     }
+
+    @Override
+    public void destroy() {
+        vs.close();
+    }
 }
