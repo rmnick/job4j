@@ -18,6 +18,13 @@ public class UserUpdate extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
+        try {
+            req.getRequestDispatcher("/WEB-INF/views/update.jsp").forward(req, res);
+        } catch (ServletException e) {
+            LOG.error(e.getMessage());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
     }
 
     @Override
@@ -26,11 +33,11 @@ public class UserUpdate extends HttpServlet {
         try {
             user = vs.update(user);
             LOG.info(String.format("user update: %s", user.toString()));
-            res.sendRedirect(String.format("%s/users.jsp", req.getContextPath()));
+            res.sendRedirect(String.format("%s/", req.getContextPath()));
         } catch (ValidateException e) {
             try {
                 req.setAttribute("message", e.getMessage());
-                req.getRequestDispatcher("/fault.jsp").forward(req, res);
+                req.getRequestDispatcher("WEB-INF/views/fault.jsp").forward(req, res);
             } catch (ServletException se) {
                 LOG.error(se.getMessage());
             } catch (IOException ioe) {

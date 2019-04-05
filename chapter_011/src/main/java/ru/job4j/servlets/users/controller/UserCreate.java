@@ -19,6 +19,13 @@ public class UserCreate extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
+        try {
+            req.getRequestDispatcher("/WEB-INF/views/create.jsp").forward(req, res);
+        } catch (ServletException e) {
+            LOG.error(e.getMessage());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
     }
 
     @Override
@@ -27,11 +34,11 @@ public class UserCreate extends HttpServlet {
         try {
             user = vs.add(user);
             LOG.info(String.format("add user: %s", user.toString()));
-            res.sendRedirect(String.format("%s/users.jsp", req.getContextPath()));
+            res.sendRedirect(String.format("%s/", req.getContextPath()));
         } catch (ValidateException e) {
             try {
                 req.setAttribute("message", e.getMessage());
-                req.getRequestDispatcher("/fault.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/views/fault.jsp").forward(req, res);
             } catch (ServletException se) {
                 LOG.error(se.getMessage());
             } catch (IOException ioe) {
