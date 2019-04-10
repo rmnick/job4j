@@ -35,6 +35,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
             LOG.error(e.getMessage());
         }
         createStructure();
+        createRoot();
     }
 
     public static DbStore getInstance() {
@@ -46,11 +47,48 @@ public class DbStore implements IStore<User>, AutoCloseable {
      * fields: id(generated in db), name, login, email, create_date(LocalDate);
      */
     private void createStructure() {
-        String init = "create table if not exists tb_user(id serial primary key, name varchar(50), login varchar(50), email varchar(50), create_date timestamp);";
+        String init = "create table if not exists tb_user(id serial primary key, name varchar(50), login varchar(50), password varchar(15), email varchar(50), create_date timestamp);";
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
             st.execute(init);
         } catch (SQLException e) {
             LOG.error(e.getMessage());
+        }
+    }
+
+    /**
+     * create root user if doesn't exist for authorization test
+     */
+    private void createRoot() {
+        String select = "select u.id from tb_user as u where login=\'root\'";
+        String insert = "insert into tb_user (name, login, password, email, create_date) values (?, ?, ?, ?, ?)";
+        Connection con = null;
+        try {
+            con = SOURCE.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(select);
+            if (!rs.next()) {
+                PreparedStatement ps = con.prepareStatement(insert);
+                ps.setString(1, "Root");
+                ps.setString(2, "root");
+                ps.setString(3, "root");
+                ps.setString(4, "root@mail.ru");
+                LocalDateTime date = LocalDateTime.now();
+                ps.setTimestamp(5, Timestamp.valueOf(date));
+                ps.executeUpdate();
+            }
+            rs.close();
+            st.close();
+            con.close();
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage());
+            }
         }
     }
 
@@ -63,13 +101,14 @@ public class DbStore implements IStore<User>, AutoCloseable {
     @Override
     public User add(User user) {
         User result = null;
-        String insert = "insert into tb_user (name, login, email, create_date) values (?, ?, ?, ?)";
+        String insert = "insert into tb_user (name, login, password, email, create_date) values (?, ?, ?, ?, ?)";
         try (Connection con = SOURCE.getConnection(); PreparedStatement ps = con.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getLogin());
-            ps.setString(3, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getEmail());
             LocalDateTime date = LocalDateTime.now();
-            ps.setTimestamp(4, Timestamp.valueOf(date));
+            ps.setTimestamp(5, Timestamp.valueOf(date));
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (!rs.next()) {
@@ -114,13 +153,41 @@ public class DbStore implements IStore<User>, AutoCloseable {
     @Override
     public User update(User user) {
         User result = null;
-        String update = String.format("update tb_user set name=?, login=?, email=? where id=%d", (int) Integer.valueOf(user.getId()));
+        String update = String.format("update tb_user set name=?, login=?, password=?, email=? where id=%d", (int) Integer.valueOf(user.getId()));
         try (Connection con = SOURCE.getConnection(); PreparedStatement ps = con.prepareStatement(update)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getLogin());
-            ps.setString(3, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getEmail());
             ps.executeUpdate();
             result = user;
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * use this method for authentication in session mode
+     * unique login is session attribute
+     * @param user User
+     * @return User
+     */
+    public User getUserByLogin(User user) {
+        User result = null;
+        String select = String.format("select u.id, u.name, u.login, u.password, u.email, u.create_date from tb_user as u where u.login=\'%s\'", user.getLogin());
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                String id = Integer.valueOf(rs.getInt(1)).toString();
+                String name = rs.getString(2);
+                String login = rs.getString(3);
+                String password = rs.getString(4);
+                String email = rs.getString(5);
+                LocalDateTime date = rs.getTimestamp(6).toLocalDateTime();
+                result = new User(name, login, password, email);
+                result.setId(id);
+                result.setDate(date);
+            }
         } catch (SQLException e) {
             LOG.error(e.getMessage());
         }
@@ -134,14 +201,15 @@ public class DbStore implements IStore<User>, AutoCloseable {
      */
     public User getUser(User user) {
         User result = null;
-        String select = String.format("select u.name, u.login, u.email, u.create_date from tb_user as u where u.id=%d", (int) Integer.valueOf(user.getId()));
+        String select = String.format("select u.name, u.login, u.password, u.email, u.create_date from tb_user as u where u.id=%d", (int) Integer.valueOf(user.getId()));
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
             while (rs.next()) {
                 String name = rs.getString(1);
                 String login = rs.getString(2);
-                String email = rs.getString(3);
-                LocalDateTime date = rs.getTimestamp(4).toLocalDateTime();
-                result = new User(name, login, email);
+                String password = rs.getString(3);
+                String email = rs.getString(4);
+                LocalDateTime date = rs.getTimestamp(5).toLocalDateTime();
+                result = new User(name, login, password, email);
                 result.setId(user.getId());
                 result.setDate(date);
             }
@@ -151,17 +219,22 @@ public class DbStore implements IStore<User>, AutoCloseable {
         return result;
     }
 
+    /**
+     * return list of users for root user
+     * @return ArrayList<User>
+     */
     public List<User> getAll() {
         List<User> list = new ArrayList<>();
-        String select = "select u.id, u.name, u.login, u.email, u.create_date from tb_user as u";
+        String select = "select u.id, u.name, u.login, u.password, u.email, u.create_date from tb_user as u";
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
             while (rs.next()) {
                 String id = String.valueOf(rs.getInt(1));
                 String name = rs.getString(2);
                 String login = rs.getString(3);
-                String email = rs.getString(4);
-                LocalDateTime date = rs.getTimestamp(5).toLocalDateTime();
-                User user = new User(name, login, email);
+                String password = rs.getString(4);
+                String email = rs.getString(5);
+                LocalDateTime date = rs.getTimestamp(6).toLocalDateTime();
+                User user = new User(name, login, password, email);
                 user.setId(id);
                 user.setDate(date);
                 list.add(user);
@@ -170,6 +243,27 @@ public class DbStore implements IStore<User>, AutoCloseable {
            LOG.error(e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * check password
+     * @param user User
+     * @return boolean
+     */
+    public boolean authenticate(User user) {
+        boolean result = false;
+        String select = String.format("select u.password from tb_user as u where u.login=\'%s\'", user.getLogin());
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            if (rs.next()) {
+                String password = rs.getString(1);
+                if (password.equals(user.getPassword())) {
+                    result = true;
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+        return result;
     }
 
     /**

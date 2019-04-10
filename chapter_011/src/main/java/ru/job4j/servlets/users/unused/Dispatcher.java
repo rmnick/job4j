@@ -116,11 +116,12 @@ public class Dispatcher {
      * @param id String
      * @param name String
      * @param login String
+     * @param password String
      * @param email String
      * @return User
      */
-    private User createUser(final String id, final String name, final String login, final String email) {
-        User user = new User(name, login, email);
+    private User createUser(final String id, final String name, final String login, final String password, final String email) {
+        User user = new User(name, login, password, email);
         if (id != null) {
             user.setId(id);
         }

@@ -7,12 +7,19 @@ public class User {
     private String name;
     private String email;
     private String login;
+    private String password;
     private LocalDateTime date;
 
-    public User(final String name, final String login, final String email) {
+    public User(final String login, final String password) {
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(final String name, final String login, final String password, final String email) {
         this.name = name;
         this.login = login;
         this.email = email;
+        this.password = password;
     }
 
     public String getId() {
@@ -35,6 +42,10 @@ public class User {
         return date;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -53,6 +64,10 @@ public class User {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

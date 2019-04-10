@@ -59,6 +59,15 @@ public class ValidateService implements AutoCloseable {
     }
 
     /**
+     * redirect to DbStore and check current user in there
+     * @param user User
+     * @return boolean
+     */
+    public boolean authenticate(User user) {
+        return ds.authenticate(user);
+    }
+
+    /**
      * the name cannot contain numeric characters
      * the name must start with a capital letter and contain less than 15 characters
      * @param str String
@@ -130,6 +139,10 @@ public class ValidateService implements AutoCloseable {
         return ds.getAll();
     }
 
+    public User getUser(User user) {
+        return ds.getUserByLogin(user);
+    }
+
     /**
      * create new User for conversation between layouts
      * @param id String
@@ -138,11 +151,22 @@ public class ValidateService implements AutoCloseable {
      * @param email String
      * @return user User
      */
-    public User createUser(final String id, final String name, final String login, final String email) {
-        User user = new User(name, login, email);
+    public User createUser(final String id, final String name, final String login, final String password, final String email) {
+        User user = new User(name, login, password, email);
         if (id != null) {
             user.setId(id);
         }
+        return user;
+    }
+
+    /**
+     * for sign in servlet
+     * @param login
+     * @param password
+     * @return User
+     */
+    public User createUser(final String login, final String password) {
+        User user = new User(login, password);
         return user;
     }
 

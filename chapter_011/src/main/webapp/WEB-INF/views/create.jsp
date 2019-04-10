@@ -17,6 +17,7 @@
         <legend>create</legend>
         <p>name : <input type='text' name='name'/></p>
         <p>login : <input type='text' name='login'/></p>
+        <p>password : <input type='password' name='password'/></p>
         <p>email : <input type='text' name='email'/></p>
     </fieldset>
     <p><input type='submit' value='create'></p>

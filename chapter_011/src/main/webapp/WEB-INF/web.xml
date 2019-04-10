@@ -4,14 +4,46 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
+    <filter>
+        <filter-name>SessionFilter</filter-name>
+        <filter-class>ru.job4j.servlets.users.controller.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionFilter</filter-name>
+        <url-pattern>/auth</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>RootFilter</filter-name>
+        <filter-class>ru.job4j.servlets.users.controller.RootFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RootFilter</filter-name>
+        <servlet-name>Users</servlet-name>
+    </filter-mapping>
     <servlet>
-        <servlet-name>User</servlet-name>
-        <servlet-class>ru.job4j.servlets.users.controller.UserController</servlet-class>
+        <servlet-name>Signin</servlet-name>
+        <servlet-class>ru.job4j.servlets.users.controller.SigninController</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
+        <servlet-name>Signin</servlet-name>
+        <url-pattern>/authentication</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Users</servlet-name>
+        <servlet-class>ru.job4j.servlets.users.controller.UsersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Users</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>User</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-class>ru.job4j.servlets.users.controller.UserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>User</servlet-name>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>Create</servlet-name>

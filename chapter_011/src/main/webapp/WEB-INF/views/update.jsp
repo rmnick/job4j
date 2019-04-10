@@ -18,6 +18,7 @@
         <p>id : <input type='text' name='id' value='${param.id}' readonly/></p>
         <p>name : <input type='text' name='name' value='${param.name}'/></p>
         <p>login : <input type='text' name='login' value='${param.login}'/></p>
+        <p>password : <input type='password' name='password' value='${param.password}'/></p>
         <p>email : <input type='text' name='email' value='${param.email}'/></p>
     </fieldset>
     <p><input type="submit" value="update"></p>

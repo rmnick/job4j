@@ -1,10 +1,8 @@
-<%@ page import="ru.job4j.servlets.users.logic.ValidateService" %>
-<%@ page import="ru.job4j.servlets.users.logic.User" %>
-<%@ page import="java.util.List" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: User
-  Date: 25.03.2019
-  Time: 23:31
+  Date: 10.04.2019
+  Time: 21:38
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -12,16 +10,10 @@
 
 <html>
 <head>
-    <title>users</title>
+    <title>user</title>
 </head>
 <body>
 <table>
-    <tr>
-        <form method='get' action='${pageContext.request.contextPath}/create'>
-            <button type='submit'>create user</button>
-        </form>
-    </tr>
-    <c:forEach items="${users}" var="user">
     <tr>
         <td>
             <c:out value="${user}"></c:out>
@@ -36,16 +28,13 @@
                 <button type='submit'>update</button>
             </form>
         </td>
-        <c:if test="${user.login != 'root'}">
-            <td>
-                <form method='post' action='${pageContext.request.contextPath}/users'>
-                    <input type='hidden' name='id' value='${user.id}'/>
-                    <button type='submit'>delete</button>
-                </form>
-            </td>
-        </c:if>
+        <td>
+            <form method='post' action='${pageContext.request.contextPath}/user'>
+                <input type='hidden' name='id' value='${user.id}'/>
+                <button type='submit'>delete</button>
+            </form>
+        </td>
     </tr>
-    </c:forEach>
     <tr>
         <form method='get' action='${pageContext.request.contextPath}/authentication'>
             <button type='submit'>sign out</button>

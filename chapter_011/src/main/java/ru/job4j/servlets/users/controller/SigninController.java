@@ -12,22 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class UserController extends HttpServlet {
+public class SigninController extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(UsersController.class.getName());
     private final ValidateService vs = ValidateService.getInstance();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
         try {
-            HttpSession session = req.getSession();
-            String login = null;
+            HttpSession session = req.getSession(false);
             if (session != null) {
-                login = session.getAttribute("login").toString();
+                session.invalidate();
             }
-            User user = vs.createUser(null, null, login, null, null);
-            System.out.println(vs.getUser(user));
-            req.setAttribute("user", vs.getUser(user));
-            req.getRequestDispatcher("/WEB-INF/views/user.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/views/signin.jsp").forward(req, res);
         } catch (ServletException e) {
             LOG.error(e.getMessage());
         } catch (IOException e) {
@@ -37,19 +33,19 @@ public class UserController extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
-        res.setContentType("text/html");
-        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
+        User user = vs.createUser(req.getParameter("login"), req.getParameter("password"));
         try {
-            HttpSession session = req.getSession(false);
-            user = vs.delete(user);
-            LOG.info(String.format("delete: %s", user.toString()));
-            if (session != null) {
-                session.invalidate();
+            if (vs.authenticate(user)) {
+                HttpSession session = req.getSession();
+                session.setAttribute("login", user.getLogin());
+                res.sendRedirect(String.format("%s/users", req.getContextPath()));
+            } else {
+                req.setAttribute("error", "incorrect login or password");
+                doGet(req, res);
             }
-            LOG.info(String.format("%s is leaving session", user.toString()));
-            res.sendRedirect(String.format("%s/authentication", req.getContextPath()));
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
+
     }
 }

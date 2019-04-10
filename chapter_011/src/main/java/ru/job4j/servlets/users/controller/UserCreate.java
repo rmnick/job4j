@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class UserCreate extends HttpServlet {
@@ -30,11 +31,16 @@ public class UserCreate extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
-        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("email"));
+        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
         try {
             user = vs.add(user);
             LOG.info(String.format("add user: %s", user.toString()));
-            res.sendRedirect(String.format("%s/", req.getContextPath()));
+            HttpSession session = req.getSession(false);
+            if (session == null || session.getAttribute("login") == null) {
+                session = req.getSession();
+                session.setAttribute("login", user.getLogin());
+            }
+            res.sendRedirect(String.format("%s/users", req.getContextPath()));
         } catch (ValidateException e) {
             try {
                 req.setAttribute("message", e.getMessage());
