@@ -20,9 +20,9 @@ public class UsersController extends HttpServlet {
             req.setAttribute("users", vs.show());
             req.getRequestDispatcher("/WEB-INF/views/users.jsp").forward(req, res);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -35,7 +35,7 @@ public class UsersController extends HttpServlet {
             LOG.info(String.format("delete: %s", user.toString()));
             res.sendRedirect(String.format("%s/users", req.getContextPath()));
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 

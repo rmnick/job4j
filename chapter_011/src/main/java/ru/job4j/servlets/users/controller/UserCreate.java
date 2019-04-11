@@ -46,12 +46,12 @@ public class UserCreate extends HttpServlet {
                 req.setAttribute("message", e.getMessage());
                 req.getRequestDispatcher("/WEB-INF/views/fault.jsp").forward(req, res);
             } catch (ServletException se) {
-                LOG.error(se.getMessage());
+                LOG.error(se.getMessage(), e);
             } catch (IOException ioe) {
-                LOG.error(ioe.getMessage());
+                LOG.error(ioe.getMessage(), e);
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 }

@@ -35,9 +35,9 @@ public class RootFilter implements Filter {
                 response.sendRedirect(String.format("%s/user", request.getContextPath()));
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 

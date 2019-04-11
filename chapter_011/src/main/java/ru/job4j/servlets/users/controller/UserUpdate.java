@@ -22,9 +22,9 @@ public class UserUpdate extends HttpServlet {
         try {
             req.getRequestDispatcher("/WEB-INF/views/update.jsp").forward(req, res);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -49,7 +49,7 @@ public class UserUpdate extends HttpServlet {
                 LOG.error(ioe.getMessage());
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 }

@@ -25,9 +25,9 @@ public class SigninController extends HttpServlet {
             }
             req.getRequestDispatcher("/WEB-INF/views/signin.jsp").forward(req, res);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -44,7 +44,7 @@ public class SigninController extends HttpServlet {
                 doGet(req, res);
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
 
     }

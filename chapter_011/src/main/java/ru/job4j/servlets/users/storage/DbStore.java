@@ -32,7 +32,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
             SOURCE.setMaxIdle(10);
             SOURCE.setMaxOpenPreparedStatements(100);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         createStructure();
         createRoot();
@@ -51,7 +51,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
             st.execute(init);
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -80,14 +80,14 @@ public class DbStore implements IStore<User>, AutoCloseable {
             st.close();
             con.close();
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } finally {
             try {
                 if (con != null) {
                     con.close();
                 }
             } catch (SQLException e) {
-                LOG.error(e.getMessage());
+                LOG.error(e.getMessage(), e);
             }
         }
     }
@@ -120,7 +120,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
             user.setDate(date);
             result =  user;
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -139,7 +139,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
             result = this.getUser(user);
             st.execute(delete);
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -162,7 +162,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
             ps.executeUpdate();
             result = user;
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -189,7 +189,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 result.setDate(date);
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -214,7 +214,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 result.setDate(date);
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -240,7 +240,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 list.add(user);
             }
         } catch (SQLException e) {
-           LOG.error(e.getMessage());
+           LOG.error(e.getMessage(), e);
         }
         return list;
     }
@@ -261,7 +261,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -279,7 +279,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 result = true;
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -297,7 +297,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 result = true;
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
         return result;
     }
@@ -309,7 +309,7 @@ public class DbStore implements IStore<User>, AutoCloseable {
                 SOURCE.close();
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 }

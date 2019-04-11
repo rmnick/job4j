@@ -32,9 +32,9 @@ public class AuthFilter implements Filter {
                 }
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 }

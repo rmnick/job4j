@@ -29,9 +29,9 @@ public class UserController extends HttpServlet {
             req.setAttribute("user", vs.getUser(user));
             req.getRequestDispatcher("/WEB-INF/views/user.jsp").forward(req, res);
         } catch (ServletException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -49,7 +49,7 @@ public class UserController extends HttpServlet {
             LOG.info(String.format("%s is leaving session", user.toString()));
             res.sendRedirect(String.format("%s/authentication", req.getContextPath()));
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 }
