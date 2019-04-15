@@ -26,4 +26,8 @@ public abstract class AbstractStorage implements IStorage {
         });
         System.out.println(sb.toString());
     }
+
+    public List<Food> getStorage() {
+        return this.storage;
+    }
 }
