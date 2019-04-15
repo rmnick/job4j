@@ -14,7 +14,7 @@ public class ValidateStub implements Validate {
 
     @Override
     public User createUser(String id, String name, String login, String password, String email) {
-        return null;
+        return new User(name, login, password, email);
     }
 
     @Override

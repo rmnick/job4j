@@ -3,12 +3,13 @@ package ru.job4j.servlets.users.logic;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.storage.DbStore;
+import ru.job4j.servlets.users.storage.IStore;
 
 import java.util.List;
 
 public class ValidateService implements Validate {
 //    private final static Validate INSTANCE = new ValidateService();
-    private final DbStore ds = DbStore.getInstance();
+    private final IStore<User> ds = DbStore.getInstance();
     private static final Logger LOG = LogManager.getLogger(ValidateService.class.getName());
 
     private ValidateService() {
@@ -176,6 +177,10 @@ public class ValidateService implements Validate {
 
     @Override
     public void close() {
-        ds.close();
+        try {
+            ds.close();
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 }
