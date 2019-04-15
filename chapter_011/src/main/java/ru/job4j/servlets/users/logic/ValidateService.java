@@ -6,16 +6,20 @@ import ru.job4j.servlets.users.storage.DbStore;
 
 import java.util.List;
 
-public class ValidateService implements AutoCloseable {
-    private final static ValidateService INSTANCE = new ValidateService();
+public class ValidateService implements Validate {
+//    private final static Validate INSTANCE = new ValidateService();
     private final DbStore ds = DbStore.getInstance();
     private static final Logger LOG = LogManager.getLogger(ValidateService.class.getName());
 
     private ValidateService() {
     }
 
-    public static ValidateService getInstance() {
-        return INSTANCE;
+    private static class ValidateServiceHolder {
+        public final static Validate INSTANCE = new ValidateService();
+    }
+
+    public static Validate getInstance() {
+        return ValidateServiceHolder.INSTANCE;
     }
 
     /**

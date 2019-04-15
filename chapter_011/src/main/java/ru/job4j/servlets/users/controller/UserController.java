@@ -3,6 +3,7 @@ package ru.job4j.servlets.users.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.logic.User;
+import ru.job4j.servlets.users.logic.Validate;
 import ru.job4j.servlets.users.logic.ValidateService;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class UserController extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(UsersController.class.getName());
-    private final ValidateService vs = ValidateService.getInstance();
+    private final Validate vs = ValidateService.getInstance();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {

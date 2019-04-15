@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class UsersController extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(UsersController.class.getName());
-    private final ValidateService vs = ValidateService.getInstance();
+    private final Validate vs = ValidateService.getInstance();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -41,6 +41,10 @@ public class UsersController extends HttpServlet {
 
     @Override
     public void destroy() {
-        vs.close();
+        try {
+            vs.close();
+        } catch (Exception e) {
+           LOG.error(e.getMessage(), e);
+        }
     }
 }
