@@ -3,19 +3,24 @@ package ru.job4j.servlets.users.logic;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.storage.DbStore;
+import ru.job4j.servlets.users.storage.IStore;
 
 import java.util.List;
 
-public class ValidateService {
-    private final static ValidateService INSTANCE = new ValidateService();
-    private final DbStore ds = DbStore.getInstance();
+public class ValidateService implements Validate {
+//    private final static Validate INSTANCE = new ValidateService();
+    private final IStore<User> ds = DbStore.getInstance();
     private static final Logger LOG = LogManager.getLogger(ValidateService.class.getName());
 
     private ValidateService() {
     }
 
-    public static ValidateService getInstance() {
-        return INSTANCE;
+    private static class ValidateServiceHolder {
+        public final static Validate INSTANCE = new ValidateService();
+    }
+
+    public static Validate getInstance() {
+        return ValidateServiceHolder.INSTANCE;
     }
 
     /**
@@ -56,6 +61,15 @@ public class ValidateService {
             checkEmail(user);
         }
         return ds.update(user);
+    }
+
+    /**
+     * redirect to DbStore and check current user in there
+     * @param user User
+     * @return boolean
+     */
+    public boolean authenticate(User user) {
+        return ds.authenticate(user);
     }
 
     /**
@@ -130,6 +144,10 @@ public class ValidateService {
         return ds.getAll();
     }
 
+    public User getUser(User user) {
+        return ds.getUserByLogin(user);
+    }
+
     /**
      * create new User for conversation between layouts
      * @param id String
@@ -138,11 +156,31 @@ public class ValidateService {
      * @param email String
      * @return user User
      */
-    public User createUser(final String id, final String name, final String login, final String email) {
-        User user = new User(name, login, email);
+    public User createUser(final String id, final String name, final String login, final String password, final String email) {
+        User user = new User(name, login, password, email);
         if (id != null) {
             user.setId(id);
         }
         return user;
+    }
+
+    /**
+     * for sign in servlet
+     * @param login
+     * @param password
+     * @return User
+     */
+    public User createUser(final String login, final String password) {
+        User user = new User(login, password);
+        return user;
+    }
+
+    @Override
+    public void close() {
+        try {
+            ds.close();
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 }

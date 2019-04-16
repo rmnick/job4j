@@ -1,41 +1,40 @@
 package ru.job4j.foodstorage;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import ru.job4j.foodstorage.food.*;
 import ru.job4j.foodstorage.storage.*;
 
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodBusiness {
-    public final ControlQuality cq;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-    private FoodBusiness(final ControlQuality cq) {
-        this.cq = cq;
+public class ControlQualityTest {
+    private final PrintStream defaultOut = System.out;
+    private final ByteArrayOutputStream customOut = new ByteArrayOutputStream();
+
+    @Before
+    public void setCustomOutput() {
+        System.setOut(new PrintStream(this.customOut));
     }
 
-    /**
-     * add storage in ControlQuality
-     */
-    public void fill() {
-        AbstractStorage shop = new Shop("shop");
-        AbstractStorage trash = new Trash("trash");
-        AbstractStorage wareHouse = new WareHouse("wareHouse");
-        cq.add(new FrigeStore("fridge", shop));
-        cq.add(new WareHouseFixed("fixed", wareHouse));
-        cq.add(new WareHouseExtended("extended", wareHouse));
-        cq.add(new TrashReproductor("reproductor", trash));
-        cq.add(shop);
-        cq.add(trash);
-        cq.add(wareHouse);
+    @After
+    public void rollbackCustomOut() {
+        System.setOut(this.defaultOut);
     }
 
-    /**
-     * create foodstuff list for sorting
-     * @return ArrayList
-     */
-    public List<Food> delivery() {
+    @Test
+    public void whenStarResortImmediatelyAfterSortThenEqualResult() {
+        /**
+         * create and fill food list
+         */
         List<Food> food = new ArrayList<>();
         food.add(new Tomatoes(10,
                 LocalDateTime.of(2018, 10, 1, 0, 0, 0),
@@ -69,33 +68,32 @@ public class FoodBusiness {
                 LocalDateTime.of(2019, 3, 1, 0, 0, 0),
                 LocalDateTime.of(2050, 3, 10, 0, 0, 0),
                 0, "Miller", false));
-        return food;
-    }
-
-
-    public void run() {
-        List<Food> food = delivery();
-        cq.sort(food);
-    }
-
-    public void resort() {
-        cq.resort();
-    }
-
-    public static void main(String[] args) {
+        /**
+         * create controlQuality object
+         */
         ControlQuality cq = new ControlQuality();
-        FoodBusiness fb = new FoodBusiness(cq);
-        fb.fill();
-        fb.run();
         /**
-         * show sorting result
+         * create all stores and fill store list in controlQuality
          */
-        cq.getStorage().forEach(IStorage::show);
-        /**
-         * show after resort
-         */
-        fb.resort();
-        cq.getStorage().forEach(IStorage::show);
-    }
+        AbstractStorage shop = new Shop("shop");
+        AbstractStorage trash = new Trash("trash");
+        AbstractStorage wareHouse = new WareHouse("wareHouse");
+        cq.add(new FrigeStore("fridge", shop));
+        cq.add(new WareHouseFixed("fixed", wareHouse));
+        cq.add(new WareHouseExtended("extended", wareHouse));
+        cq.add(new TrashReproductor("reproductor", trash));
+        cq.add(shop);
+        cq.add(trash);
+        cq.add(wareHouse);
 
+        cq.sort(food);
+        cq.getStorage().forEach(IStorage::show);
+        String sort = new String(customOut.toByteArray());
+        customOut.reset();
+        cq.resort();
+        cq.getStorage().forEach(IStorage::show);
+        String resort = new String(customOut.toByteArray());
+
+        assertThat(sort, is(resort));
+    }
 }

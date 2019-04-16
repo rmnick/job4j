@@ -1,6 +1,7 @@
 package ru.job4j.servlets.users.unused;
 
 import ru.job4j.servlets.users.logic.User;
+import ru.job4j.servlets.users.logic.Validate;
 import ru.job4j.servlets.users.logic.ValidateException;
 import ru.job4j.servlets.users.logic.ValidateService;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class Dispatcher {
-    private final ValidateService vs = ValidateService.getInstance();
+    private final Validate vs = ValidateService.getInstance();
     private static final Dispatcher INSTANCE = new Dispatcher();
     private final Map<String, Function<User, String>> operations = new HashMap<>();
 
@@ -116,11 +117,12 @@ public class Dispatcher {
      * @param id String
      * @param name String
      * @param login String
+     * @param password String
      * @param email String
      * @return User
      */
-    private User createUser(final String id, final String name, final String login, final String email) {
-        User user = new User(name, login, email);
+    private User createUser(final String id, final String name, final String login, final String password, final String email) {
+        User user = new User(name, login, password, email);
         if (id != null) {
             user.setId(id);
         }
