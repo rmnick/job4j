@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import ru.job4j.servlets.users.controller.StubSession;
 import ru.job4j.servlets.users.controller.UserCreate;
 import ru.job4j.servlets.users.logic.Validate;
 import ru.job4j.servlets.users.logic.ValidateService;
@@ -30,9 +31,8 @@ public class UserCreateTest {
         when(ValidateService.getInstance()).thenReturn(validate);
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
-        HttpSession session = mock(HttpSession.class);
         when(req.getParameter("login")).thenReturn("nick");
-        when(req.getSession()).thenReturn(session);
+        when(req.getSession()).thenReturn(new StubSession());
         new UserCreate().doPost(req, resp);
         assertThat(validate.show().get(0).getLogin(), is("nick"));
     }

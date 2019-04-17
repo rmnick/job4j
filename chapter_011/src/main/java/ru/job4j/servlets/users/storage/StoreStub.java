@@ -1,28 +1,38 @@
 package ru.job4j.servlets.users.storage;
+/**
+ * class for testing servlets
+ */
 
 import ru.job4j.servlets.users.logic.User;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StoreStub implements IStore<User> {
+    private final Map<String, User> users = new HashMap<>();
+    private int id = 0;
+
     @Override
     public User add(User user) {
-        return null;
+        user.setId(String.valueOf(id++));
+        return users.put(user.getId(), user);
     }
 
     @Override
     public User delete(User user) {
-        return null;
+        return users.remove(user.getId());
     }
 
     @Override
     public User update(User user) {
-        return null;
+        return users.put(user.getId(), user);
     }
 
     @Override
     public User getUser(User user) {
-        return null;
+        return users.get(user.getId());
     }
 
     @Override
@@ -37,12 +47,12 @@ public class StoreStub implements IStore<User> {
 
     @Override
     public boolean authenticate(User user) {
-        return false;
+        return true;
     }
 
     @Override
     public List<User> getAll() {
-        return null;
+        return users.values().stream().collect(Collectors.toList());
     }
 
     @Override

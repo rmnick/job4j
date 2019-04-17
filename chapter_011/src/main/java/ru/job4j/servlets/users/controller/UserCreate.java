@@ -35,7 +35,6 @@ public class UserCreate extends HttpServlet {
         User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
         try {
             user = vs.add(user);
-            LOG.info(String.format("add user: %s", user.toString()));
             HttpSession session = req.getSession(false);
             if (session == null || session.getAttribute("login") == null) {
                 session = req.getSession();

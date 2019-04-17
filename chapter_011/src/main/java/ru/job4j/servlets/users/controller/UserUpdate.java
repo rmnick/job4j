@@ -38,7 +38,6 @@ public class UserUpdate extends HttpServlet {
             if (session != null) {
                 session.setAttribute("id", user.getId());
             }
-            LOG.info(String.format("user update: %s", user.toString()));
             res.sendRedirect(String.format("%s/users", req.getContextPath()));
         } catch (ValidateException e) {
             try {
