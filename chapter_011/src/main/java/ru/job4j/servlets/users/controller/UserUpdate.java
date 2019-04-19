@@ -3,6 +3,7 @@ package ru.job4j.servlets.users.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.servlets.users.logic.User;
+import ru.job4j.servlets.users.logic.Validate;
 import ru.job4j.servlets.users.logic.ValidateException;
 import ru.job4j.servlets.users.logic.ValidateService;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class UserUpdate extends HttpServlet {
-    private final ValidateService vs = ValidateService.getInstance();
+    private final Validate vs = ValidateService.getInstance();
     private static final Logger LOG = LogManager.getLogger(UserUpdate.class.getName());
 
     @Override
@@ -37,7 +38,6 @@ public class UserUpdate extends HttpServlet {
             if (session != null) {
                 session.setAttribute("id", user.getId());
             }
-            LOG.info(String.format("user update: %s", user.toString()));
             res.sendRedirect(String.format("%s/users", req.getContextPath()));
         } catch (ValidateException e) {
             try {

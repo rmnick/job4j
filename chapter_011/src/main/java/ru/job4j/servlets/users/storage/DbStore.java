@@ -17,7 +17,7 @@ import java.util.Properties;
 public class DbStore implements IStore<User>, AutoCloseable {
 
     private static final BasicDataSource SOURCE = new BasicDataSource();
-    private static final DbStore INSTANCE = new DbStore();
+//    private static final DbStore INSTANCE = new DbStore();
     private static final Logger LOG = LogManager.getLogger(DbStore.class.getName());
 
     private DbStore() {
@@ -38,8 +38,12 @@ public class DbStore implements IStore<User>, AutoCloseable {
         createRoot();
     }
 
-    public static DbStore getInstance() {
-        return INSTANCE;
+    private static class DbStoreHolder {
+        public static final IStore INSTANCE = new DbStore();
+    }
+
+    public static IStore getInstance() {
+        return DbStoreHolder.INSTANCE;
     }
 
     /**

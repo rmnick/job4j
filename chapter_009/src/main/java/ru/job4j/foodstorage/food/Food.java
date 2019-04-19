@@ -9,13 +9,15 @@ public class Food {
     public final LocalDateTime expireDate;
     protected int discount;
     public final String name;
+    public final boolean canReproduct;
 
-    public Food(final double price, final LocalDateTime createDate, final LocalDateTime expireDate, final int discount, final String name) {
+    public Food(final double price, final LocalDateTime createDate, final LocalDateTime expireDate, final int discount, final String name, final boolean canReproduct) {
         this.price = price;
         this.createDate = createDate;
         this.expireDate = expireDate;
         this.discount = discount;
         this.name = name;
+        this.canReproduct = canReproduct;
     }
 
     public double getPrice() {
@@ -36,6 +38,10 @@ public class Food {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public boolean isCanReproduct() {
+        return this.canReproduct;
     }
 
     @Override
