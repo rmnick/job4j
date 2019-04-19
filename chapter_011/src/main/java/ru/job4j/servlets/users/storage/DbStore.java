@@ -39,10 +39,10 @@ public class DbStore implements IStore<User>, AutoCloseable {
     }
 
     private static class DbStoreHolder {
-        public static final DbStore INSTANCE = new DbStore();
+        public static final IStore INSTANCE = new DbStore();
     }
 
-    public static DbStore getInstance() {
+    public static IStore getInstance() {
         return DbStoreHolder.INSTANCE;
     }
 

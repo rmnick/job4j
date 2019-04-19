@@ -77,6 +77,21 @@ public class MemoryIStore implements IStore<User> {
         return result;
     }
 
+    @Override
+    public boolean authenticate(User user) {
+        return false;
+    }
+
+    @Override
+    public List<User> getAll() {
+        return null;
+    }
+
+    @Override
+    public User getUserByLogin(User user) {
+        return null;
+    }
+
     /**
      * check if login already exists and return true
      * @param user User
@@ -90,5 +105,10 @@ public class MemoryIStore implements IStore<User> {
             }
         }
         return result;
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }
