@@ -15,24 +15,30 @@
     </style>
     <script>
         function validate() {
-            answer = 'something\'s wrong with ';
-            result = false;
-            if ($("#name").val() == '') {
-                alert(answer + document.getElementById('name').name);
-            } else if (document.getElementsByName('lastname')[0].value == '') {
-                alert(answer + $("#lastname")[0].name)
-            } else if ($("#id").val() == '') {
-                alert(answer + $("#id")[0].name)
-            } else {
-                result = true;
-            }
+            const resultFn = (arr, fn = Boolean) => arr.every(fn);
+            answer = 'enter correct data';
+            // if ($("#name").val() == '') {
+            //     alert(answer + document.getElementById('name').name);
+            // } else if (document.getElementsByName('lastname')[0].value == '') {
+            //     alert(answer + $("#lastname")[0].name)
+            // } else if ($("#id").val() == '') {
+            //     alert(answer + $("#id")[0].name)
+            // } else {
+            //     result = true;
+            // }
+
+            var values = $('input[type="text"], input[type="number"]').map(function(){return $(this).val();}).get();
+            var result = resultFn(values, value=>value!='');
+            if (!result) {
+                alert(answer);
+            };
             return result;
         }
     </script>
 </head>
 <body>
 <div class="container">
-    <form class="form-horizontal" action="/items" onsubmit="return validate()">
+    <form class="form-horizontal" action="/items" onsubmit="return validate()" id="mainform">
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-5">
