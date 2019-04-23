@@ -17,28 +17,27 @@
         function validate() {
             const resultFn = (arr, fn = Boolean) => arr.every(fn);
             answer = 'enter correct data';
-            // if ($("#name").val() == '') {
-            //     alert(answer + document.getElementById('name').name);
-            // } else if (document.getElementsByName('lastname')[0].value == '') {
-            //     alert(answer + $("#lastname")[0].name)
-            // } else if ($("#id").val() == '') {
-            //     alert(answer + $("#id")[0].name)
-            // } else {
-            //     result = true;
-            // }
-
             var values = $('input[type="text"], input[type="number"]').map(function(){return $(this).val();}).get();
             var result = resultFn(values, value=>value!='');
             if (!result) {
                 alert(answer);
-            };
+            } else {
+                addRow();
+            }
             return result;
+        }
+        
+        function addRow() {
+            if ($('#table tr').length > 3) {
+                $('#table tr')[1].remove();
+            }
+            $('#table tr:last').after('<tr><td>' + $('#name').val() +'</td><td>' + $('#lastname').val() +'</td></tr>');
         }
     </script>
 </head>
 <body>
 <div class="container">
-    <form class="form-horizontal" action="/items" onsubmit="return validate()" id="mainform">
+    <form class="form-horizontal" method="post" action="java script:document.location.reload()" onsubmit="return validate()" id="mainform">
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-5">
@@ -84,7 +83,7 @@
 <div class="container">
     <div class="col-sm-offset-2 col-sm-5">
     <h3>last visitors</h3>
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="table">
         <thead>
         <tr>
             <th>name</th>
