@@ -66,6 +66,7 @@
         <module>job_parser</module>
         <module>chapter_009</module>
         <module>chapter_011</module>
+        <module>tic_tac_toe</module>
     </modules>
 	 
 	<build>
