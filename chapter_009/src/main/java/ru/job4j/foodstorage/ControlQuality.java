@@ -41,10 +41,8 @@ public class ControlQuality {
         List<Food> result = new ArrayList<>();
         for (IStorage st : storage) {
             List<Food> list = st.getStorage();
-            for (int i = 0; i < list.size(); i++) {
-                result.add(list.get(i));
-                list.remove(i);
-            }
+            result.addAll(list);
+            st.clearStorage();
         }
         return result;
     }
