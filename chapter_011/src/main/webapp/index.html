@@ -14,6 +14,22 @@
         .container { margin-top:20px; }
     </style>
     <script>
+        $(
+            $.ajax({
+                type: "GET",
+                url: "./json",
+                complete: function (data) {
+                    var users = JSON.parse(data.responseText);
+                    for (var i = 0; i < users.length; i++) {
+                        var nameU = users[i].name;
+                        var lastNameU = users[i].lastName;
+                        $('#table tr:last').after('<tr><td>' + nameU+ '</td><td>' + lastNameU + '</td></tr>');
+                        console.log(users[i].name);
+                    }
+                    console.log(users);
+            }})
+        );
+
         function validate() {
             const resultFn = (arr, fn = Boolean) => arr.every(fn);
             answer = 'enter correct data';
@@ -22,7 +38,24 @@
             if (!result) {
                 alert(answer);
             } else {
-                addRow();
+                var jId = $('#id').val();
+                var jName = $('#name').val();
+                var jLastName = $('#lastname').val();
+                var user = {"id":jId, "name":jName, "lastName":jLastName};
+                $.ajax({
+                    url: "http://localhost:8080/chapter_011/json",
+                    type: "POST",
+                    // data: {
+                    //     id:jId,
+                    //     name:jName,
+                    //     lastName:jLastName
+                    // },
+                    // dataType: "text"
+                    data: JSON.stringify(user),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                });
+                alert("user id " + jId + " was added");
             }
             return result;
         }
@@ -37,7 +70,7 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-horizontal" method="post" action="java script:document.location.reload()" onsubmit="return validate()" id="mainform">
+    <form class="form-horizontal" id="mainform">
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-5">
@@ -74,7 +107,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default" id="button" onclick="return validate()">Submit</button>
             </div>
         </div>
     </form>
@@ -91,18 +124,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>John</td>
-            <td>Doe</td>
-        </tr>
-        <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-        </tr>
-        <tr>
-            <td>July</td>
-            <td>Dooley</td>
-        </tr>
         </tbody>
     </table>
     </div>
