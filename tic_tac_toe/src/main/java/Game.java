@@ -33,16 +33,19 @@ public class Game {
         showMenu();
         Scanner sc = new Scanner(System.in);
         consolOut.printBoard();
-        while (!checkWinnerState(consolOut) || !checkDrawState(consolOut)) {
+        while (!(checkWinnerState(consolOut) || checkDrawState(consolOut))) {
             String mv = sc.nextLine();
-            logic.move(new Figure(true), validator.parseMove(mv)[0], validator.parseMove(mv)[1]);
+            while (!logic.move(new Figure(false), validator.parseMove(mv)[0], validator.parseMove(mv)[1])) {
+                consolOut.printAlert("the cell is busy");
+                mv = sc.nextLine();
+            }
             consolOut.printBoard();
         }
     }
 
     public boolean checkWinnerState(IOut consolOut) {
         boolean result = false;
-        if (!logic.isWinnerX()) {
+        if (logic.isWinnerX()) {
             consolOut.printAlert("X is winner");
             result = true;
         } else if (!logic.isWinnerO()) {

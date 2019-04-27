@@ -20,25 +20,27 @@ public class Logic {
     }
 
     public boolean isWinnerX() {
-        return this.fillBy(Figure::getMark, 0, 0, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 1, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 2, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 1, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 2, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 0, 0, 1, 1)
-                || this.fillBy(Figure::getMark, 2, 0, -1, 1);
+        System.out.println("in Logic X winner!!!");
+        return this.fillByX(Figure::getMark, 0, 0, 1, 0)
+                || this.fillByX(Figure::getMark, 0, 1, 1, 0)
+                || this.fillByX(Figure::getMark, 0, 2, 1, 0)
+                || this.fillByX(Figure::getMark, 0, 0, 0, 1)
+                || this.fillByX(Figure::getMark, 1, 0, 0, 1)
+                || this.fillByX(Figure::getMark, 2, 0, 0, 1)
+                || this.fillByX(Figure::getMark, 0, 0, 1, 1)
+                || this.fillByX(Figure::getMark, 2, 0, -1, 1);
     }
 
     public boolean isWinnerO() {
-        return !this.fillBy(Figure::getMark, 0, 0, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 1, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 2, 1, 0)
-                || this.fillBy(Figure::getMark, 0, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 1, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 2, 0, 0, 1)
-                || this.fillBy(Figure::getMark, 0, 0, 1, 1)
-                || this.fillBy(Figure::getMark, 2, 0, -1, 1);
+        System.out.println("in Logic O winner!!!");
+        return !this.fillByO(Figure::getMark, 0, 0, 1, 0)
+                || this.fillByO(Figure::getMark, 0, 1, 1, 0)
+                || this.fillByO(Figure::getMark, 0, 2, 1, 0)
+                || this.fillByO(Figure::getMark, 0, 0, 0, 1)
+                || this.fillByO(Figure::getMark, 1, 0, 0, 1)
+                || this.fillByO(Figure::getMark, 2, 0, 0, 1)
+                || this.fillByO(Figure::getMark, 0, 0, 1, 1)
+                || this.fillByO(Figure::getMark, 2, 0, -1, 1);
     }
 
     public boolean hasGap() {
@@ -47,8 +49,8 @@ public class Logic {
             if (rsl) {
                 break;
             }
-            for (int j = 0; j < this.board.board.length; j++) {
-                if (this.board.board[i][j] != null) {
+            for (int j = 0; j < this.board.board[i].length; j++) {
+                if (this.board.board[i][j] == null) {
                     rsl = true;
                     break;
                 }
@@ -57,13 +59,36 @@ public class Logic {
         return rsl;
     }
 
-    public boolean fillBy(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
-        boolean result = true;
+    public boolean fillByX(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
+        System.out.println("in Logic fillByX");
+        boolean result = false;
+        for (int index = 0; index != this.board.board.length; index++) {
+            System.out.println(board.board.length);
+            Figure figure = this.board.board[startX][startY];
+            startX += deltaX;
+            startY += deltaY;
+            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
+            if (figure != null && predicate.test(figure)) {
+                result = true;
+            } else {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public boolean fillByO(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
+        System.out.println("in Logic fillByO");
+        boolean result = false;
         for (int index = 0; index != this.board.board.length; index++) {
             Figure figure = this.board.board[startX][startY];
             startX += deltaX;
             startY += deltaY;
+            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
             if (figure != null && !predicate.test(figure)) {
+                result = true;
+            } else {
                 result = false;
                 break;
             }
