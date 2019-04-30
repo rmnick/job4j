@@ -1,6 +1,6 @@
-package view;
+package ru.job4j.view;
 
-import model.Board;
+import ru.job4j.model.Board;
 
 public class ConsolOut implements IOut {
     private Board board;

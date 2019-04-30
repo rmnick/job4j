@@ -1,4 +1,4 @@
-package model;
+package ru.job4j.model;
 
 public class Board {
     public final Figure[][] board;

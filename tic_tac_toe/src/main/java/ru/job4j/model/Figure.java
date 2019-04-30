@@ -1,4 +1,4 @@
-package model;
+package ru.job4j.model;
 
 public class Figure {
     public final boolean mark;

@@ -1,4 +1,4 @@
-package view;
+package ru.job4j.view;
 
 public interface IOut {
     void printMenu();
