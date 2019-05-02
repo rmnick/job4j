@@ -19,7 +19,7 @@ public class RootFilter implements Filter {
     private static final Logger LOG = LogManager.getLogger(UsersController.class.getName());
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

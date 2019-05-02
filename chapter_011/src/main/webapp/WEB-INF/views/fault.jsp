@@ -10,8 +10,19 @@
 <html>
 <head>
     <title>fault</title>
+    <style type="text/css">
+        body {
+            background-color:#C0C0C0;
+        }
+        .container {
+            margin-top:20px;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
 <c:out value='${requestScope.message}'/>
+</div>
 </body>
 </html>

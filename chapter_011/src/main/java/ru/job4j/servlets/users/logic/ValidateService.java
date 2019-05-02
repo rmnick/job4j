@@ -30,7 +30,7 @@ public class ValidateService implements Validate {
      * @throws ValidateException RuntimeException
      */
     public User add(User user) throws ValidateException {
-        checkName(user);
+//        checkName(user);
         checkLogin(user);
         checkEmail(user);
         return ds.add(user);
@@ -53,7 +53,7 @@ public class ValidateService implements Validate {
      * @throws ValidateException RuntimeException
      */
     public User update(User user) throws ValidateException {
-        checkName(user);
+//        checkName(user);
         if (!user.getLogin().equals(ds.getUser(user).getLogin())) {
             checkLogin(user);
         }
@@ -121,7 +121,7 @@ public class ValidateService implements Validate {
      * @throws ValidateException RuntimeException
      */
     private void checkLogin(User user) throws ValidateException {
-        validateLogin(user.getLogin());
+//        validateLogin(user.getLogin());
         if (ds.compareLogin(user)) {
             throw new ValidateException("login is already exist");
         }
@@ -134,7 +134,7 @@ public class ValidateService implements Validate {
      * @throws ValidateException RuntimeException
      */
     private void checkEmail(User user) throws ValidateException {
-        validateEmail(user.getEmail());
+//        validateEmail(user.getEmail());
         if (ds.compareEmail(user)) {
             throw new ValidateException("email is already exist");
         }
@@ -156,8 +156,8 @@ public class ValidateService implements Validate {
      * @param email String
      * @return user User
      */
-    public User createUser(final String id, final String name, final String login, final String password, final String email) {
-        User user = new User(name, login, password, email);
+    public User createUser(final String id, final String name, final String login, final String password, final String email, final String country, final String city) {
+        User user = new User(name, login, password, email, country, city);
         if (id != null) {
             user.setId(id);
         }
@@ -173,6 +173,15 @@ public class ValidateService implements Validate {
     public User createUser(final String login, final String password) {
         User user = new User(login, password);
         return user;
+    }
+
+    public List<String> getAllCountries() {
+        return this.ds.getAllCountries();
+    }
+
+    @Override
+    public List<String> getAllCities(String country) {
+        return this.ds.getAllCities(country);
     }
 
     @Override

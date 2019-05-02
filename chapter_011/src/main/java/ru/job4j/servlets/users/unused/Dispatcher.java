@@ -121,8 +121,8 @@ public class Dispatcher {
      * @param email String
      * @return User
      */
-    private User createUser(final String id, final String name, final String login, final String password, final String email) {
-        User user = new User(name, login, password, email);
+    private User createUser(final String id, final String name, final String login, final String password, final String email, final String country, final String city) {
+        User user = new User(name, login, password, email, country, city);
         if (id != null) {
             user.setId(id);
         }
