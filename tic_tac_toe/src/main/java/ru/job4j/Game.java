@@ -1,5 +1,7 @@
 package ru.job4j;
 
+import ru.job4j.controller.ConsolInput;
+import ru.job4j.controller.IInput;
 import ru.job4j.model.*;
 import ru.job4j.view.ConsolOut;
 import ru.job4j.view.IOut;
@@ -8,6 +10,8 @@ import java.util.Scanner;
 
 public class Game {
     private final Logic logic;
+    private IPlayer playerOne;
+    private IPlayer playerTwo;
 
     public Game(final Logic logic) {
         this.logic = logic;
@@ -17,32 +21,30 @@ public class Game {
         Board board = new Board();
         Logic logic = new Logic(board);
         Game game = new Game(logic);
+        IInput consolInput = new ConsolInput();
         IOut consolOut = new ConsolOut(board);
-        Validator validator = new Validator(board, consolOut);
-        IRobot robot = new SillyRobot(board);
-        game.start(validator, consolOut, robot);
+        Validator validator = new Validator(board, consolOut, consolInput);
+        IRobot robot = new SillyRobot(board, logic);
+        User user = new User(validator, consolInput, consolOut, logic);
+        game.start(consolOut, robot, user);
     }
 
     public void showMenu() {
 
     }
 
-    public void start(Validator validator, IOut consolOut, IRobot robot) {
+    public void start(IOut consolOut, IRobot robot, User user) {
+        playerOne = user;
+        playerTwo = robot;
         showMenu();
-        Scanner sc = new Scanner(System.in);
         consolOut.printBoard();
         while (!(checkWinnerState(consolOut) || checkDrawState(consolOut))) {
-            String mv = sc.nextLine();
-            while (!logic.move(new Figure(true), validator.parseMove(mv)[0], validator.parseMove(mv)[1])) {
-                consolOut.printAlert("the cell is busy");
-                mv = sc.nextLine();
-            }
+            playerOne.move();
             consolOut.printBoard();
             if ((checkWinnerState(consolOut) || checkDrawState(consolOut))) {
                 break;
             }
-            int[] robotMoves = robot.move();
-            logic.move(new Figure(false), robotMoves[0], robotMoves[1]);
+            playerTwo.move();
             consolOut.printBoard();
         }
     }

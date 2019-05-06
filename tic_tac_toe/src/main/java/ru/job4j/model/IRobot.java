@@ -1,5 +1,5 @@
 package ru.job4j.model;
 
-public interface IRobot {
-    int[] move();
+public interface IRobot extends IPlayer {
+    int[] findWay();
 }

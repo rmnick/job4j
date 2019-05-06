@@ -1,20 +1,23 @@
 package ru.job4j.model;
 
-import ru.job4j.view.ConsolOut;
+import ru.job4j.controller.IInput;
 import ru.job4j.view.IOut;
 
 public class Validator {
     private Board board;
     private IOut out;
+    private IInput input;
 
-    public Validator(final Board board, IOut out) {
+    public Validator(final Board board, IOut out, IInput input) {
         this.board = board;
         this.out = out;
+        this.input = input;
     }
 
     public int[] parseMove(String str) {
         while (!validateMove(str)) {
             out.printAlert("enter correct coordinate");
+            str = input.input();
         }
         int[] arr = new int[2];
         arr[0] = Integer.valueOf(str.substring(0, 1));
