@@ -1,12 +1,10 @@
 package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.Food;
-import ru.job4j.foodstorage.storage.AbstractStorage;
 import ru.job4j.foodstorage.storage.IStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ControlQuality {
     private final List<IStorage> storage = new ArrayList<>();
