@@ -20,7 +20,7 @@ public class TempTest {
         Board board = new Board();
         Logic logic = new Logic(board);
         logic.move(new Figure(false), 0, 0);
-        System.out.println(board.board[0][1]);
+        System.out.println(board.getBoard()[0][1]);
     }
 
 }

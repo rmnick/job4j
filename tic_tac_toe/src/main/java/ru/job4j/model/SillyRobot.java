@@ -11,12 +11,12 @@ public class SillyRobot implements IRobot {
 
     @Override
     public int[] findWay() {
-        int [] result = {0, 0};
+        int[] result = {0, 0};
         do {
             result[0] = gen();
             result[1] = gen();
             System.out.println("robot move" + " " + result[0] + " " + result[1]);
-        } while (board.board[result[1]][result[0]] != null);
+        } while (board.getBoard()[result[1]][result[0]] != null);
         return result;
     }
 

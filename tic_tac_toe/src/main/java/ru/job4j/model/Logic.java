@@ -12,8 +12,8 @@ public class Logic {
 
     public boolean move(Figure figure, int x, int y) {
         boolean result = false;
-        if (board.board[y][x] == null) {
-            board.board[y][x] = figure;
+        if (board.getBoard()[y][x] == null) {
+            board.getBoard()[y][x] = figure;
             result = true;
         }
         return result;
@@ -45,12 +45,12 @@ public class Logic {
 
     public boolean hasGap() {
         boolean rsl = false;
-        for (int i = 0; i < this.board.board.length; i++) {
+        for (int i = 0; i < this.board.getBoard().length; i++) {
             if (rsl) {
                 break;
             }
-            for (int j = 0; j < this.board.board[i].length; j++) {
-                if (this.board.board[i][j] == null) {
+            for (int j = 0; j < this.board.getBoard()[i].length; j++) {
+                if (this.board.getBoard()[i][j] == null) {
                     rsl = true;
                     break;
                 }
@@ -62,9 +62,9 @@ public class Logic {
     public boolean fillByX(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
 //        System.out.println("in Logic fillByX");
         boolean result = false;
-        for (int index = 0; index != this.board.board.length; index++) {
+        for (int index = 0; index != this.board.getBoard().length; index++) {
 //            System.out.println(board.board.length);
-            Figure figure = this.board.board[startY][startX];
+            Figure figure = this.board.getBoard()[startY][startX];
             startX += deltaX;
             startY += deltaY;
 //            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
@@ -81,8 +81,8 @@ public class Logic {
     public boolean fillByO(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
 //        System.out.println("in Logic fillByO");
         boolean result = false;
-        for (int index = 0; index != this.board.board.length; index++) {
-            Figure figure = this.board.board[startY][startX];
+        for (int index = 0; index != this.board.getBoard().length; index++) {
+            Figure figure = this.board.getBoard()[startY][startX];
             startX += deltaX;
             startY += deltaY;
 //            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
