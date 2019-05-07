@@ -10,4 +10,5 @@ public interface IStorage<T> {
     void add(Food item);
     List<T> getStorage();
     void show();
+    void clearStorage();
 }

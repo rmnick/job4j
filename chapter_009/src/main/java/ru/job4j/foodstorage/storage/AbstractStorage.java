@@ -15,10 +15,12 @@ public abstract class AbstractStorage implements IStorage {
         this.name = name;
     }
 
+    @Override
     public void add(Food food) {
         this.storage.add(food);
     }
 
+    @Override
     public void show() {
         StringBuilder sb = new StringBuilder().append(String.format("%s:%s", name, System.lineSeparator()));
         this.storage.forEach(st -> {
@@ -27,7 +29,13 @@ public abstract class AbstractStorage implements IStorage {
         System.out.println(sb.toString());
     }
 
+    @Override
     public List<Food> getStorage() {
         return this.storage;
+    }
+
+    @Override
+    public void clearStorage() {
+        storage.clear();
     }
 }
