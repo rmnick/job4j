@@ -1,13 +1,28 @@
 package ru.job4j.gc;
 
 public class MemoryUsage {
+    public static Runtime runtime = Runtime.getRuntime();
 
     public static class User {
 
+        @Override
+        public void finalize() throws Throwable {
+            super.finalize();
+            System.out.println("finalize");
+        }
+
     }
     public static void main(String[] args) {
+//        info();
+//        for (int i = 0; i < 1500; i++) {
+//            new User();
+//            System.out.println(i);
+//        }
+        System.out.println(runtime.totalMemory() - runtime.freeMemory());
         User user = new User();
-        info();
+        System.out.println(runtime.totalMemory() - runtime.freeMemory());
+//        System.gc();
+//        info();
     }
 
     public static void info() {
