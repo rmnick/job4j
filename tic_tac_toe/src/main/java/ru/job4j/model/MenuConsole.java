@@ -13,13 +13,19 @@ public class MenuConsole implements IMenu {
     private final IOut out;
     private final Validator validator;
     private final Board board;
+    private final Logic logic;
+    private IPlayer playerOne;
+    private IPlayer playerTwo;
 
 
-    public MenuConsole(final IInput input, final IOut out, final Validator validator, final Board board) {
+    public MenuConsole(final IInput input, final IOut out, final Validator validator, final Board board, final Logic logic) {
         this.input = input;
         this.out = out;
         this.validator = validator;
         this.board = board;
+        this.logic = logic;
+        this.playerOne = new User(validator, input, out, logic, true);
+        this.playerTwo = new SillyRobot(board, logic, false);
         init();
     }
 
@@ -29,6 +35,7 @@ public class MenuConsole implements IMenu {
         map.put(validator.KEY_START, new Start());
         map.put(validator.KEY_HELP, new Help());
         map.put(validator.KEY_SIZE, new Size());
+        map.put(validator.KEY_PLAY_FOR_O, new PlayForO());
     }
 
 
@@ -76,13 +83,33 @@ public class MenuConsole implements IMenu {
         }
     }
 
+    private class PlayForO implements IItem {
+
+        @Override
+        public void run() {
+            playerOne = new SillyRobot(board, logic, true);
+            playerTwo = new User(validator, input, out, logic, false);
+        }
+    }
+
+    public IPlayer getPlayerOne() {
+        return this.playerOne;
+    }
+
+    public IPlayer getPlayerTwo() {
+        return this.playerTwo;
+    }
+
     @Override
     public String toString() {
-        return String.format("start game%splayer one%splayer two%ssize option%shelp%s%sselect item: ",
+        return String.format("%s%s%s%s%s%s%s%s%sselect item: ",
+                validator.KEY_START,
                 System.lineSeparator(),
+                validator.KEY_PLAY_FOR_O,
                 System.lineSeparator(),
+                validator.KEY_SIZE,
                 System.lineSeparator(),
-                System.lineSeparator(),
+                validator.KEY_HELP,
                 System.lineSeparator(),
                 System.lineSeparator()
         );

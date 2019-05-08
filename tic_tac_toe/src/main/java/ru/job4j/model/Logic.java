@@ -20,7 +20,6 @@ public class Logic {
     }
 
     public boolean isWinnerX() {
-//        System.out.println("in Logic X winner!!!");
         return this.fillByX(Figure::getMark, 0, 0, 1, 0)
                 || this.fillByX(Figure::getMark, 0, 1, 1, 0)
                 || this.fillByX(Figure::getMark, 0, 2, 1, 0)
@@ -32,7 +31,6 @@ public class Logic {
     }
 
     public boolean isWinnerO() {
-//        System.out.println("in Logic O winner!!!");
         return this.fillByO(Figure::getMark, 0, 0, 1, 0)
                 || this.fillByO(Figure::getMark, 0, 1, 1, 0)
                 || this.fillByO(Figure::getMark, 0, 2, 1, 0)
@@ -60,14 +58,11 @@ public class Logic {
     }
 
     public boolean fillByX(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
-//        System.out.println("in Logic fillByX");
         boolean result = false;
         for (int index = 0; index != this.board.getBoard().length; index++) {
-//            System.out.println(board.board.length);
             Figure figure = this.board.getBoard()[startY][startX];
             startX += deltaX;
             startY += deltaY;
-//            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
             if (figure != null && predicate.test(figure)) {
                 result = true;
             } else {
@@ -79,13 +74,11 @@ public class Logic {
     }
 
     public boolean fillByO(Predicate<Figure> predicate, int startX, int startY, int deltaX, int deltaY) {
-//        System.out.println("in Logic fillByO");
         boolean result = false;
         for (int index = 0; index != this.board.getBoard().length; index++) {
             Figure figure = this.board.getBoard()[startY][startX];
             startX += deltaX;
             startY += deltaY;
-//            System.out.println(startX + " " + startY + " " + (figure != null ? figure.getMark() : null));
             if (figure != null && !predicate.test(figure)) {
                 result = true;
             } else {

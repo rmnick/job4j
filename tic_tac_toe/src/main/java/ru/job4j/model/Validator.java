@@ -9,8 +9,7 @@ import java.util.Map;
 public class Validator {
     private Map<String, Integer> map = new HashMap<>();
     public static final String KEY_START = "start game";
-    public static final String KEY_PLAYER_ONE = "player one";
-    public static final String KEY_PLAYER_TWO = "player two";
+    public static final String KEY_PLAY_FOR_O = "play for O";
     public static final String KEY_SIZE = "size option";
     public static final String KEY_HELP = "help";
     private Board board;
@@ -26,8 +25,7 @@ public class Validator {
 
     public void init() {
         map.put(KEY_START, 1);
-        map.put(KEY_PLAYER_ONE, 1);
-        map.put(KEY_PLAYER_TWO, 1);
+        map.put(KEY_PLAY_FOR_O, 1);
         map.put(KEY_SIZE, 1);
         map.put(KEY_HELP, 1);
     }

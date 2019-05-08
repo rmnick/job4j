@@ -6,12 +6,9 @@ import ru.job4j.model.*;
 import ru.job4j.view.ConsolOut;
 import ru.job4j.view.IOut;
 
-import java.util.Scanner;
 
 public class Game {
     private final Logic logic;
-    private IPlayer playerOne;
-    private IPlayer playerTwo;
 
     public Game(final Logic logic) {
         this.logic = logic;
@@ -24,20 +21,16 @@ public class Game {
         IInput consolInput = new ConsolInput();
         IOut consolOut = new ConsolOut();
         Validator validator = new Validator(board, consolOut, consolInput);
-        IRobot robot = new SillyRobot(board, logic);
-        User user = new User(validator, consolInput, consolOut, logic);
-        IMenu menu = new MenuConsole(consolInput, consolOut, validator, board);
+        IMenu menu = new MenuConsole(consolInput, consolOut, validator, board, logic);
         game.showMenu(menu);
-        game.start(consolOut, robot, user, board);
+        game.start(consolOut, ((MenuConsole) menu).getPlayerOne(), ((MenuConsole) menu).getPlayerTwo(), board);
     }
 
     public void showMenu(IMenu menu) {
         menu.show();
     }
 
-    public void start(IOut consolOut, IRobot robot, User user, Board board) {
-        playerOne = user;
-        playerTwo = robot;
+    public void start(IOut consolOut, IPlayer playerOne, IPlayer playerTwo, Board board) {
         consolOut.printBoard(board);
         while (!(checkWinnerState(consolOut) || checkDrawState(consolOut))) {
             playerOne.move();

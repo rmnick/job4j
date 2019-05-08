@@ -4,11 +4,6 @@ import ru.job4j.model.Board;
 import ru.job4j.model.IMenu;
 
 public class ConsolOut implements IOut {
-//    private Board board;
-
-//    public ConsolOut(final Board board) {
-//        this.board = board;
-//    }
 
     @Override
     public void printMenu(IMenu menu) {
@@ -38,6 +33,8 @@ public class ConsolOut implements IOut {
 
     public void printHelp(final Board board) {
         StringBuilder sb = new StringBuilder();
+        sb.append(System.lineSeparator());
+        sb.append("X starts");
         sb.append(System.lineSeparator());
         sb.append("field coordinates(enter these numbers to put your mark): ");
         sb.append(System.lineSeparator());

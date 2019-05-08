@@ -18,5 +18,4 @@ public class Board {
     public Figure[][] getBoard() {
         return this.board;
     }
-
 }

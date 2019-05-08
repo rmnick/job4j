@@ -5,22 +5,25 @@ import ru.job4j.view.IOut;
 
 
 public class User implements IPlayer {
-    public final Validator validator;
-    public final IOut out;
-    public final IInput input;
-    public final Logic logic;
+    private final Validator validator;
+    private final IOut out;
+    private final IInput input;
+    private final Logic logic;
+    private final boolean mark;
 
 
-    public User(final Validator validator, final IInput input, final IOut out, final Logic logic) {
+
+    public User(final Validator validator, final IInput input, final IOut out, final Logic logic, final boolean mark) {
         this.validator = validator;
         this.input = input;
         this.out = out;
         this.logic = logic;
+        this.mark = mark;
     }
 
     public void move() {
         String mv = this.input.input();
-        while (!logic.move(new Figure(true), validator.parseMove(mv)[0], validator.parseMove(mv)[1])) {
+        while (!logic.move(new Figure(this.mark), validator.parseMove(mv)[0], validator.parseMove(mv)[1])) {
             out.printAlert("the cell is busy");
             mv = this.input.input();
         }
