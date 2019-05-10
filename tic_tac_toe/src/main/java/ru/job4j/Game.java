@@ -1,9 +1,9 @@
 package ru.job4j;
 
-import ru.job4j.controller.ConsolInput;
+import ru.job4j.controller.ConsoleInput;
 import ru.job4j.controller.IInput;
 import ru.job4j.model.*;
-import ru.job4j.view.ConsolOut;
+import ru.job4j.view.ConsoleOut;
 import ru.job4j.view.IOut;
 
 
@@ -18,28 +18,28 @@ public class Game {
         Board board = new Board();
         Logic logic = new Logic(board);
         Game game = new Game(logic);
-        IInput consolInput = new ConsolInput();
-        IOut consolOut = new ConsolOut();
-        Validator validator = new Validator(board, consolOut, consolInput);
-        IMenu menu = new MenuConsole(consolInput, consolOut, validator, board, logic);
+        IInput consoleInput = new ConsoleInput();
+        IOut consoleOut = new ConsoleOut();
+        Validator validator = new Validator(board, consoleOut, consoleInput);
+        IMenu menu = new MenuConsole(consoleInput, consoleOut, validator, board, logic);
         game.showMenu(menu);
-        game.start(consolOut, ((MenuConsole) menu).getPlayerOne(), ((MenuConsole) menu).getPlayerTwo(), board);
+        game.start(consoleOut, ((MenuConsole) menu).getPlayerOne(), ((MenuConsole) menu).getPlayerTwo(), board);
     }
 
     public void showMenu(IMenu menu) {
         menu.show();
     }
 
-    public void start(IOut consolOut, IPlayer playerOne, IPlayer playerTwo, Board board) {
-        consolOut.printBoard(board);
-        while (!(checkWinnerState(consolOut) || checkDrawState(consolOut))) {
+    public void start(IOut consoleOut, IPlayer playerOne, IPlayer playerTwo, Board board) {
+        consoleOut.printBoard(board);
+        while (!(checkWinnerState(consoleOut) || checkDrawState(consoleOut))) {
             playerOne.move();
-            consolOut.printBoard(board);
-            if ((checkWinnerState(consolOut) || checkDrawState(consolOut))) {
+            consoleOut.printBoard(board);
+            if ((checkWinnerState(consoleOut) || checkDrawState(consoleOut))) {
                 break;
             }
             playerTwo.move();
-            consolOut.printBoard(board);
+            consoleOut.printBoard(board);
         }
     }
 

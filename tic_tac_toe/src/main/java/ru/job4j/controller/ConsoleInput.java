@@ -2,10 +2,10 @@ package ru.job4j.controller;
 
 import java.util.Scanner;
 
-public class ConsolInput implements IInput {
+public class ConsoleInput implements IInput {
     private Scanner sc;
 
-    public ConsolInput() {
+    public ConsoleInput() {
         sc = new Scanner(System.in);
     }
 

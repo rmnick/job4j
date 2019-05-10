@@ -30,6 +30,11 @@ public class Validator {
         map.put(KEY_HELP, 1);
     }
 
+    /**
+     * return int array(coordinate) from input String
+     * @param str String
+     * @return int[]
+     */
     public int[] parseMove(String str) {
         while (!validateMove(str)) {
             out.printAlert("enter correct coordinate: ");
@@ -41,6 +46,11 @@ public class Validator {
         return arr;
     }
 
+    /**
+     * check input for right board coordinate
+     * @param str String
+     * @return boolean
+     */
     public boolean validateMove(String str) {
         boolean result = false;
         int size = board.getBoard().length - 1;
@@ -51,6 +61,11 @@ public class Validator {
         return result;
     }
 
+    /**
+     * check input for right item from menu
+     * @param str String
+     * @return boolean
+     */
     public boolean validateItem(String str) {
         boolean result = false;
         if (map.get(str) != null) {
@@ -59,6 +74,11 @@ public class Validator {
         return result;
     }
 
+    /**
+     * size must be less than 9
+     * @param str String
+     * @return boolean
+     */
     public boolean validateSize(String str) {
         boolean result = false;
         if (str.matches("[0-9]")) {

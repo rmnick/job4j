@@ -3,7 +3,7 @@ package ru.job4j.view;
 import ru.job4j.model.Board;
 import ru.job4j.model.IMenu;
 
-public class ConsolOut implements IOut {
+public class ConsoleOut implements IOut {
 
     @Override
     public void printMenu(IMenu menu) {
@@ -23,7 +23,7 @@ public class ConsolOut implements IOut {
             sb.append(System.lineSeparator());
             if (i != board.getBoard().length - 1) {
                 for (int col = 0; col < board.getBoard().length; col++) {
-                    sb.append("— ");
+                    sb.append("- ");
                 }
             }
             sb.append(System.lineSeparator());
@@ -48,7 +48,7 @@ public class ConsolOut implements IOut {
             sb.append(System.lineSeparator());
             if (i != board.getBoard().length - 1) {
                 for (int col = 0; col < board.getBoard().length; col++) {
-                    sb.append("—— ");
+                    sb.append("-- ");
                 }
             }
             sb.append(System.lineSeparator());

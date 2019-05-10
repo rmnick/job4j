@@ -1,5 +1,8 @@
 package ru.job4j.model;
 
+/**
+ * simple bot with random moving behavior
+ */
 public class SillyRobot implements IRobot {
     private Board board;
     private Logic logic;
@@ -11,6 +14,10 @@ public class SillyRobot implements IRobot {
         this.mark = mark;
     }
 
+    /**
+     * search empty cell
+     * @return int[]
+     */
     @Override
     public int[] findWay() {
         int[] result = {0, 0};

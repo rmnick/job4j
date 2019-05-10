@@ -30,7 +30,9 @@ public class MenuConsole implements IMenu {
     }
 
 
-
+    /**
+     * fill map for dispatching
+     */
     public void init() {
         map.put(validator.KEY_START, new Start());
         map.put(validator.KEY_HELP, new Help());
@@ -76,7 +78,7 @@ public class MenuConsole implements IMenu {
             out.printAlert("input new size: ");
             String answer = input.input();
             while (!validator.validateSize(answer)) {
-                out.printAlert("input coorect size: ");
+                out.printAlert("input correct size: ");
                 answer = input.input();
             }
             board.setSize(Integer.valueOf(answer));
