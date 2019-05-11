@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MenuConsole implements IMenu {
-    private boolean exit = false;
+    private boolean start = false;
     private Map<String, IItem> map = new HashMap<>();
     private final IInput input;
     private final IOut out;
@@ -51,18 +51,20 @@ public class MenuConsole implements IMenu {
                 item = input.input();
             }
             this.map.get(item).run();
-        } while (!exit);
-
+        } while (!start);
     }
 
     private class Start implements IItem {
 
         @Override
         public void run() {
-            exit = true;
+            start = true;
         }
     }
 
+    /**
+     * show help
+     */
     private class Help implements IItem {
 
         @Override
@@ -71,6 +73,9 @@ public class MenuConsole implements IMenu {
         }
     }
 
+    /**
+     * select board size
+     */
     private class Size implements IItem {
 
         @Override
@@ -85,6 +90,10 @@ public class MenuConsole implements IMenu {
         }
     }
 
+    /**
+     * choose figure O
+     * player O steps second
+     */
     private class PlayForO implements IItem {
 
         @Override
@@ -105,13 +114,13 @@ public class MenuConsole implements IMenu {
     @Override
     public String toString() {
         return String.format("%s%s%s%s%s%s%s%s%sselect item: ",
-                validator.KEY_START,
+                Validator.KEY_START,
                 System.lineSeparator(),
-                validator.KEY_PLAY_FOR_O,
+                Validator.KEY_PLAY_FOR_O,
                 System.lineSeparator(),
-                validator.KEY_SIZE,
+                Validator.KEY_SIZE,
                 System.lineSeparator(),
-                validator.KEY_HELP,
+                Validator.KEY_HELP,
                 System.lineSeparator(),
                 System.lineSeparator()
         );

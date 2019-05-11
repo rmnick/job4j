@@ -28,4 +28,9 @@ public class User implements IPlayer {
             mv = this.input.input();
         }
     }
+
+    @Override
+    public boolean getMark() {
+        return this.mark;
+    }
 }

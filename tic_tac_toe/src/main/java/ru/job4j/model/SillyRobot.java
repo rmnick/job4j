@@ -37,4 +37,9 @@ public class SillyRobot implements IRobot {
     public int gen() {
         return (int) (Math.random() * 3);
     }
+
+    @Override
+    public boolean getMark() {
+        return this.mark;
+    }
 }
