@@ -92,6 +92,26 @@ public class MemoryIStore implements IStore<User> {
         return null;
     }
 
+    @Override
+    public List<String> getAllCountries() {
+        return null;
+    }
+
+    @Override
+    public List<String> getAllCities(String str) {
+        return null;
+    }
+
+    @Override
+    public int getCityId(String str) {
+        return 0;
+    }
+
+    @Override
+    public String[] getAddress(int id) {
+        return new String[0];
+    }
+
     /**
      * check if login already exists and return true
      * @param user User

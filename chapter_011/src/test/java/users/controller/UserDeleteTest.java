@@ -38,7 +38,7 @@ public class UserDeleteTest {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
 
-        User user = new User("test", "test", "test", "test");
+        User user = new User("test", "test", "test", "test", "test", "test");
         user.setId("0");
         store.add(user);
         user.setId("1");

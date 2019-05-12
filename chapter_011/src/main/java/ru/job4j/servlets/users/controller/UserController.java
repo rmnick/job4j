@@ -25,8 +25,7 @@ public class UserController extends HttpServlet {
             if (session != null) {
                 login = session.getAttribute("login").toString();
             }
-            User user = vs.createUser(null, null, login, null, null);
-            System.out.println(vs.getUser(user));
+            User user = vs.createUser(null, null, login, null, null, null, null);
             req.setAttribute("user", vs.getUser(user));
             req.getRequestDispatcher("/WEB-INF/views/user.jsp").forward(req, res);
         } catch (ServletException e) {
@@ -39,7 +38,7 @@ public class UserController extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
-        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
+        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"), req.getParameter("country"), req.getParameter("city"));
         try {
             HttpSession session = req.getSession(false);
             user = vs.delete(user);

@@ -9,17 +9,21 @@ public class User {
     private String login;
     private String password;
     private LocalDateTime date;
+    private String country;
+    private String city;
 
     public User(final String login, final String password) {
         this.login = login;
         this.password = password;
     }
 
-    public User(final String name, final String login, final String password, final String email) {
+    public User(final String name, final String login, final String password, final String email, final String country, final String city) {
         this.name = name;
         this.login = login;
         this.email = email;
         this.password = password;
+        this.country = country;
+        this.city = city;
     }
 
     public String getId() {
@@ -70,8 +74,24 @@ public class User {
         this.password = password;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     @Override
     public String toString() {
-        return String.format("id: %s, name: %s, login: %s, email: %s, date: %s", id, name, login, email, date);
+        return String.format("id: %s, name: %s, login: %s, email: %s, country: %s, city: %s, date: %s", id, name, login, email, country, city, date);
     }
 }

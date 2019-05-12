@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #C0C0C0;
+        }
+        .container { margin-top:20px; }
+    </style>
+    <script>
+        $(
+            $.ajax({
+                type: "GET",
+                url: "./json",
+                complete: function (data) {
+                    var users = JSON.parse(data.responseText);
+                    for (var i = 0; i < users.length; i++) {
+                        var nameU = users[i].name;
+                        var lastNameU = users[i].lastName;
+                        $('#table tr:last').after('<tr><td>' + nameU+ '</td><td>' + lastNameU + '</td></tr>');
+                        console.log(users[i].name);
+                    }
+                    console.log(users);
+            }})
+        );
+        function validate() {
+            const resultFn = (arr, fn = Boolean) => arr.every(fn);
+            answer = 'enter correct data';
+            var values = $('input[type="text"], input[type="number"]').map(function(){return $(this).val();}).get();
+            var result = resultFn(values, value=>value!='');
+            if (!result) {
+                alert(answer);
+            } else {
+                addUser();
+            }
+            return result;
+        }
+        
+        function addRow() {
+            if ($('#table tr').length > 3) {
+                $('#table tr')[1].remove();
+            }
+            $('#table tr:last').after('<tr><td>' + $('#name').val() +'</td><td>' + $('#lastname').val() +'</td></tr>');
+        }
+
+        function addUser() {
+            $.ajax('./json', {
+                type: "POST",
+                // date: {id:$('#id').val(), name:$('#name').val(), lastName:$('#lastname').val()}
+                date: {id:document.getElementById('id'), name:document.getElementById('name'), lastName:document.getElementById('lastname')}
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <form class="form-horizontal" method="post" id="mainform">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">Name:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="lastname">Second name:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="lastname" placeholder="Enter second name" name="lastname">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="id">your ID:</label>
+            <div class="col-sm-2">
+                <input type="number" class="form-control" id="id" placeholder="Enter your id" name="id">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="male" value="male" checked>male
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" id="female" value="female">female
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-3">
+                    <label for="desc">Description:</label>
+                    <textarea class="form-control z-depth-1" id="desc" rows="3" placeholder="Write something about you here..."></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" onclick="return validate()">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <div class="col-sm-offset-2 col-sm-5">
+    <h3>last visitors</h3>
+    <table class="table table-bordered" id="table">
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>second name</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+</body>
+</html>

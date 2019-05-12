@@ -12,4 +12,8 @@ public interface IStore<T> extends AutoCloseable {
     boolean authenticate(T t);
     List<T> getAll();
     T getUserByLogin(T t);
+    List<String> getAllCountries();
+    List<String> getAllCities(String str);
+    int getCityId(String str);
+    String[] getAddress(int id);
 }
