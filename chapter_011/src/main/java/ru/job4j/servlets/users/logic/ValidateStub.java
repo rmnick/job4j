@@ -13,8 +13,8 @@ public class ValidateStub implements Validate {
     private int id = 0;
 
     @Override
-    public User createUser(String id, String name, String login, String password, String email) {
-        return new User(name, login, password, email);
+    public User createUser(String id, String name, String login, String password, String email, String country, String city) {
+        return new User(name, login, password, email, country, city);
     }
 
     @Override
@@ -51,6 +51,16 @@ public class ValidateStub implements Validate {
     @Override
     public boolean authenticate(User user) {
         return false;
+    }
+
+    @Override
+    public List<String> getAllCountries() {
+        return null;
+    }
+
+    @Override
+    public List<String> getAllCities(String str) {
+        return null;
     }
 
     @Override

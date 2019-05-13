@@ -64,11 +64,35 @@
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.echo.EchoServlet</servlet-class>
-        <!--<load-on-startup>2</load-on-startup>-->
+<!--        <load-on-startup>2</load-on-startup>-->
     </servlet>
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
         <url-pattern>/echo</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>JsonServlet</servlet-name>
+        <servlet-class>ru.job4j.servlets.json.JsonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JsonServlet</servlet-name>
+        <url-pattern>/json</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LocationServlet</servlet-name>
+        <servlet-class>ru.job4j.servlets.users.controller.LocationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LocationServlet</servlet-name>
+        <url-pattern>/location</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
     </servlet-mapping>
 </web-app>
 

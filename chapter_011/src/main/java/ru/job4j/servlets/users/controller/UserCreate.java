@@ -32,7 +32,7 @@ public class UserCreate extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
-        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
+        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"), req.getParameter("country"), req.getParameter("city"));
         try {
             user = vs.add(user);
             HttpSession session = req.getSession(false);

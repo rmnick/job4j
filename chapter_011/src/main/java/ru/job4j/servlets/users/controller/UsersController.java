@@ -31,7 +31,7 @@ public class UsersController extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) {
         res.setContentType("text/html");
-        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"));
+        User user = vs.createUser(req.getParameter("id"), req.getParameter("name"), req.getParameter("login"), req.getParameter("password"), req.getParameter("email"), req.getParameter("country"), req.getParameter("city"));
         try {
             vs.delete(user);
             res.sendRedirect(String.format("%s/users", req.getContextPath()));
