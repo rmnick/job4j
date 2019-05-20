@@ -7,7 +7,8 @@ public class Seat {
     private boolean booked;
     private int price;
 
-    public Seat(final int number, final int row) {
+    public Seat(final int id, final int number, final int row) {
+        this.id = id;
         this.number = number;
         this.row = row;
     }
@@ -25,9 +26,9 @@ public class Seat {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public boolean isBooked() {
         return booked;
@@ -47,7 +48,7 @@ public class Seat {
 
     @Override
     public String toString() {
-        return String.format("Hall{number=%s, row=%s}",
-                this.number, this.row);
+        return String.format("Hall{number=%d, row=%d, price=%d}",
+                this.number, this.row, this.price);
     }
 }

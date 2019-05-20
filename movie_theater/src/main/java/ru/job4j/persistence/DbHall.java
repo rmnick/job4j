@@ -52,9 +52,9 @@ public class DbHall implements IHall<Seat> {
                 int number = rs.getInt(3);
                 boolean booked = rs.getBoolean(4);
                 int price = rs.getInt(5);
-                Seat seat = (Seat) Service.getInstance().createSeat(number, row);
+                Seat seat = (Seat) Service.getInstance().createSeat(id, number, row);
                 seat.setBooked(booked);
-                seat.setId(id);
+//                seat.setId(id);
                 seat.setPrice(price);
                 result.add(seat);
             }
@@ -72,6 +72,24 @@ public class DbHall implements IHall<Seat> {
             LOG.error(e.getMessage(), e);
         }
         return seat;
+    }
+
+    public Seat getSeat(Seat seat) {
+        String select = String.format("select h.id, h.row, h.number, h.price from hall as h where h.id = %d;", seat.getId());
+        Seat result = null;
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                int row = rs.getInt(2);
+                int number = rs.getInt(3);
+                int price = rs.getInt(4);
+                result = (Seat) Service.getInstance().createSeat(id, row, number);
+                result.setPrice(price);
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
     }
 
 }

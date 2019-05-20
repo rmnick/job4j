@@ -40,8 +40,8 @@ public class HallServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.setAttribute("id", req.getParameter("id"));
-        Seat seat = (Seat) service.createSeat(0, 0);
-        seat.setId(Integer.parseInt(req.getParameter("id")));
+        Seat seat = (Seat) service.createSeat(Integer.valueOf(req.getParameter("id")), 0, 0);
+//        seat.setId(Integer.parseInt(req.getParameter("id")));
         service.reserve(seat);
     }
 }

@@ -9,10 +9,9 @@ import java.util.stream.Collectors;
 
 public class Service implements IService<Seat> {
     private static final IService INSTANCE = new Service();
-    private final IHall hall = DbHall.getInstance();
+    private final IHall<Seat> hall = DbHall.getInstance();
 
     private Service() {
-
     }
 
     public static IService getInstance() {
@@ -20,15 +19,19 @@ public class Service implements IService<Seat> {
     }
 
     public Map<Integer, List<Seat>> getAll() {
-        return (Map<Integer, List<Seat>>) hall.getAll().stream().collect(Collectors.groupingBy(Seat::getRow));
+        return hall.getAll().stream().collect(Collectors.groupingBy(Seat::getRow));
     }
 
-    public Seat createSeat(final int number, final int row) {
-        return new Seat(number, row);
+    public Seat createSeat(final int id, final int number, final int row) {
+        return new Seat(id, number, row);
     }
 
     public Seat reserve(Seat seat) {
-        return (Seat) hall.reserve(seat);
+        return hall.reserve(seat);
+    }
+
+    public Seat getSeat(Seat seat) {
+        return hall.getSeat(seat);
     }
 
 }

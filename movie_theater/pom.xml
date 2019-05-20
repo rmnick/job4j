@@ -93,7 +93,7 @@
                     <version>3.6.2</version>
                     <configuration>
                         <changeLogFile>${basedir}/db/master.xml</changeLogFile>
-                        <url>jdbc:postgresql://127.0.0.1:5432/movie_theatre</url>
+                        <url>jdbc:postgresql://127.0.0.1:5432/movie_theater</url>
                         <driver>org.postgresql.Driver</driver>
                         <username>postgres</username>
                         <password>password</password>
