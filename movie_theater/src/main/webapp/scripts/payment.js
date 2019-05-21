@@ -1,13 +1,18 @@
 
-$(document).ready(function () {
+$(function getSeat() {
     $.ajax({
         url: "../payment",
         dataType: "json",
         method: "get",
         success : function (data) {
-            $('.pt-3').append(
-                "<h3 id='"+ data.id +"'>" + "you have chosen row " + data.row + " seat "
-                + data.number +", price : " + data.price + " rub." + "</h3>");
+            if (data.id === 0) {
+                    alert("The ticket has been already reserved");
+                window.location.href = "../index.html";
+            } else {
+                $('.pt-3').append(
+                    "<h3 id='"+ data.id +"'>" + "you have chosen row " + data.row + " seat "
+                    + data.number +", price : " + data.price + " rub." + "</h3>");
+            }
         }
     });
 });
@@ -18,13 +23,23 @@ function buy() {
     console.log(name);
     console.log(phone);
     if (!validName(name)) {
-        alert("enter correct name");
+        alert("please enter correct name");
     } else if (!validPhone(phone)) {
-        alert("enter correct phone");
+        alert("please enter correct phone");
     } else {
-        alert("success");
+        var account = {"name": name, "phone": phone};
+        $.ajax({
+            type: 'POST',
+            url: "../payment",
+            data: JSON.stringify(account),
+            contentType: "application/json",
+            dataType: "text",
+            success: function (data) {
+                alert("success");
+                window.location.href = "../index.html";
+            }
+        });
     }
-
 }
 
 function validName(name) {

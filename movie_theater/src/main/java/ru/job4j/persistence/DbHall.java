@@ -3,6 +3,7 @@ package ru.job4j.persistence;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import ru.job4j.service.Account;
 import ru.job4j.service.Seat;
 import ru.job4j.service.Service;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DbHall implements IHall<Seat> {
+public class DbHall implements IHall<Seat, Account> {
     private final static BasicDataSource SOURCE = new BasicDataSource();
     private static final IHall INSTANCE = new DbHall();
     public static final Logger LOG = LogManager.getLogger(DbHall.class.getName());
@@ -54,7 +55,6 @@ public class DbHall implements IHall<Seat> {
                 int price = rs.getInt(5);
                 Seat seat = (Seat) Service.getInstance().createSeat(id, number, row);
                 seat.setBooked(booked);
-//                seat.setId(id);
                 seat.setPrice(price);
                 result.add(seat);
             }
@@ -75,7 +75,7 @@ public class DbHall implements IHall<Seat> {
     }
 
     public Seat getSeat(Seat seat) {
-        String select = String.format("select h.id, h.row, h.number, h.price from hall as h where h.id = %d;", seat.getId());
+        String select = String.format("select h.id, h.row, h.number, h.price, h.booked from hall as h where h.id = %d;", seat.getId());
         Seat result = null;
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
             while (rs.next()) {
@@ -83,13 +83,20 @@ public class DbHall implements IHall<Seat> {
                 int row = rs.getInt(2);
                 int number = rs.getInt(3);
                 int price = rs.getInt(4);
+                boolean booked = rs.getBoolean(5);
                 result = (Seat) Service.getInstance().createSeat(id, row, number);
                 result.setPrice(price);
+                result.setBooked(booked);
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
         return result;
+    }
+
+    @Override
+    public Account buy(Account account) {
+        return null;
     }
 
 }

@@ -7,6 +7,7 @@ public class Seat {
     private boolean booked;
     private int price;
 
+
     public Seat(final int id, final int number, final int row) {
         this.id = id;
         this.number = number;

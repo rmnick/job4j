@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Service implements IService<Seat> {
+public class Service implements IService<Seat, Account> {
     private static final IService INSTANCE = new Service();
-    private final IHall<Seat> hall = DbHall.getInstance();
+    private final IHall<Seat, Account> hall = DbHall.getInstance();
 
     private Service() {
     }
@@ -32,6 +32,11 @@ public class Service implements IService<Seat> {
 
     public Seat getSeat(Seat seat) {
         return hall.getSeat(seat);
+    }
+
+    @Override
+    public Account buy(Account account) {
+        return hall.buy(account);
     }
 
 }

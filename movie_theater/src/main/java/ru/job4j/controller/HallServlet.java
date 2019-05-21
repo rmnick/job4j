@@ -3,6 +3,7 @@ package ru.job4j.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import ru.job4j.service.Account;
 import ru.job4j.service.IService;
 import ru.job4j.service.Seat;
 import ru.job4j.service.Service;
@@ -21,8 +22,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HallServlet extends HttpServlet {
+    public static final Object RESERVED = new Object();
     public static final Logger LOG = LogManager.getLogger(HallServlet.class.getName());
-    private final IService service = Service.getInstance();
+    private final IService<Seat, Account> service = Service.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,10 +40,13 @@ public class HallServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Seat seat = service.getSeat(service.createSeat(Integer.valueOf(req.getParameter("id")), 0, 0));
         HttpSession session = req.getSession();
-        session.setAttribute("id", req.getParameter("id"));
-        Seat seat = (Seat) service.createSeat(Integer.valueOf(req.getParameter("id")), 0, 0);
-//        seat.setId(Integer.parseInt(req.getParameter("id")));
-        service.reserve(seat);
+        synchronized (RESERVED) {
+            if (!service.getSeat(seat).isBooked()) {
+                session.setAttribute("id", req.getParameter("id"));
+                service.reserve(seat);
+            }
+        }
     }
 }

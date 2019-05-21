@@ -6,7 +6,7 @@ import java.util.List;
 public class Account {
     private final String name;
     private final String phone;
-    private final List<Seat> seats = new ArrayList<>();
+    private Seat seat;
 
     public Account(final String name, final String phone) {
         this.name = name;
@@ -21,12 +21,17 @@ public class Account {
         return this.phone;
     }
 
-    public Seat addSeat(final Seat seat) {
-        this.seats.add(seat);
-        return seat;
+    public void setSeat(final Seat seat) {
+        this.seat = seat;
+
     }
 
-    public List<Seat> getSeats() {
-        return this.seats;
+    public Seat getSeat() {
+        return this.seat;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("name: %s, phone: %s", this.name, this.phone);
     }
 }

@@ -14,6 +14,6 @@ public class MySessionListener implements HttpSessionListener {
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-
+        System.out.println(se.getSession().getAttribute("id"));
     }
 }
