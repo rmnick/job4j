@@ -7,6 +7,7 @@ public interface IService<T, V> {
     Map<Integer, List<T>> getAll();
     T createSeat(int id, int firstArg, int secondArg);
     T reserve(T item);
+    T cancelReservation(T item);
     T getSeat(T item);
     V buy(V item);
 }

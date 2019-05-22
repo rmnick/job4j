@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 public class PaymentServlet extends HttpServlet {
     public static final Logger LOG = LogManager.getLogger(PaymentServlet.class.getName());
     private final IService<Seat, Account> service = Service.getInstance();
+    private static final String FAIL = "something went wrong, please try again";
+    private static final String SUCCESS = "thank you for your purchase";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,13 +40,22 @@ public class PaymentServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        ObjectMapper mapper = new ObjectMapper();
         BufferedReader reader = req.getReader();
         PrintWriter writer = resp.getWriter();
-        Account account = new ObjectMapper().readValue(reader.readLine(), Account.class);
-//        writer.append(service.buy(accounts).toString());
+        String json = reader.readLine();
+        Account account = mapper.readValue(json, Account.class);
+        account = service.buy(account);
+        if (account == null) {
+            writer.append(FAIL);
+        } else {
+            writer.append(SUCCESS);
+        }
         reader.close();
-        System.out.println(account);
-//        writer.flush();
-        req.getSession().invalidate();
+        writer.flush();
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }

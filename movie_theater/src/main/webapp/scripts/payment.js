@@ -18,25 +18,24 @@ $(function getSeat() {
 });
 
 function buy() {
-    var name = $('#username').val();
-    var phone = $('#phone').val();
-    console.log(name);
-    console.log(phone);
-    if (!validName(name)) {
+    var userName = $('#username').val();
+    var userPhone = $('#phone').val();
+    var seatId = $("h3").attr("id");
+    if (!validName(userName)) {
         alert("please enter correct name");
-    } else if (!validPhone(phone)) {
+    } else if (!validPhone(userPhone)) {
         alert("please enter correct phone");
     } else {
-        var account = {"name": name, "phone": phone};
+        var account = {"name": userName, "phone": userPhone, "seatId": seatId};
         $.ajax({
-            type: 'POST',
-            url: "../payment",
-            data: JSON.stringify(account),
-            contentType: "application/json",
-            dataType: "text",
-            success: function (data) {
-                alert("success");
-                window.location.href = "../index.html";
+            method : "post",
+            url :  "../payment",
+            data : JSON.stringify(account),
+            contentType : "application/json",
+            dataType : "text",
+            success : function (data) {
+                alert(data);
+                window.location.href = '../index.html';
             }
         });
     }

@@ -30,6 +30,10 @@ public class Service implements IService<Seat, Account> {
         return hall.reserve(seat);
     }
 
+    public Seat cancelReservation(Seat seat) {
+        return hall.cancelReservation(seat);
+    }
+
     public Seat getSeat(Seat seat) {
         return hall.getSeat(seat);
     }

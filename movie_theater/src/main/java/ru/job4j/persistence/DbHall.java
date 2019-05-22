@@ -74,8 +74,18 @@ public class DbHall implements IHall<Seat, Account> {
         return seat;
     }
 
+    public Seat cancelReservation(Seat seat) {
+        String update = String.format("update hall set booked = false where id = %d", seat.getId());
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
+            st.execute(update);
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return seat;
+    }
+
     public Seat getSeat(Seat seat) {
-        String select = String.format("select h.id, h.row, h.number, h.price, h.booked from hall as h where h.id = %d;", seat.getId());
+        String select = String.format("select h.id, h.row, h.number, h.price, h.booked, h.id_account from hall as h where h.id = %d;", seat.getId());
         Seat result = null;
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
             while (rs.next()) {
@@ -84,6 +94,7 @@ public class DbHall implements IHall<Seat, Account> {
                 int number = rs.getInt(3);
                 int price = rs.getInt(4);
                 boolean booked = rs.getBoolean(5);
+                int accountId = rs.getInt(6);
                 result = (Seat) Service.getInstance().createSeat(id, row, number);
                 result.setPrice(price);
                 result.setBooked(booked);

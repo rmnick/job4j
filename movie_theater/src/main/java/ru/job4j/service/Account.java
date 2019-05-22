@@ -1,16 +1,19 @@
 package ru.job4j.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.StringJoiner;
 
 public class Account {
-    private final String name;
-    private final String phone;
-    private Seat seat;
+    private String name;
+    private String phone;
+    private String seatId;
 
-    public Account(final String name, final String phone) {
+    public Account() {
+    }
+
+    public Account(final String name, final String phone, final String seatId) {
         this.name = name;
         this.phone = phone;
+        this.seatId = seatId;
     }
 
     public String getName() {
@@ -21,17 +24,16 @@ public class Account {
         return this.phone;
     }
 
-    public void setSeat(final Seat seat) {
-        this.seat = seat;
-
-    }
-
-    public Seat getSeat() {
-        return this.seat;
+    public String getSeatId() {
+        return this.seatId;
     }
 
     @Override
     public String toString() {
-        return String.format("name: %s, phone: %s", this.name, this.phone);
+        StringJoiner sj = new StringJoiner(", ", "{", "}");
+        sj.add(name);
+        sj.add(phone);
+        sj.add(seatId);
+        return sj.toString();
     }
 }
