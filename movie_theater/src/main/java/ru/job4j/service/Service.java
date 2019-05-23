@@ -40,7 +40,13 @@ public class Service implements IService<Seat, Account> {
 
     @Override
     public Account buy(Account account) {
-        return hall.buy(account);
+        Account result;
+        if (hall.getAccount(account) == null) {
+            result = hall.createBuy(account);
+        } else {
+            result = hall.bindBuy(account);
+        }
+        return result;
     }
 
 }

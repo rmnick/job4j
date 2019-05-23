@@ -6,6 +6,7 @@ public class Account {
     private String name;
     private String phone;
     private String seatId;
+    private String id;
 
     public Account() {
     }
@@ -13,6 +14,18 @@ public class Account {
     public Account(final String name, final String phone, final String seatId) {
         this.name = name;
         this.phone = phone;
+        this.seatId = seatId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setSeatId(String seatId) {
         this.seatId = seatId;
     }
 
@@ -26,6 +39,14 @@ public class Account {
 
     public String getSeatId() {
         return this.seatId;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = String.valueOf(id);
     }
 
     @Override

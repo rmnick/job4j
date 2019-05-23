@@ -7,5 +7,7 @@ public interface IHall<T, V> {
     T reserve(T item);
     T cancelReservation(T item);
     T getSeat(T item);
-    V buy(V item);
+    V getAccount(V item);
+    V createBuy(V item);
+    V bindBuy(V item);
 }

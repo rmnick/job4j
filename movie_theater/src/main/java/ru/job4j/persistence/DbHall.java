@@ -9,18 +9,16 @@ import ru.job4j.service.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 public class DbHall implements IHall<Seat, Account> {
     private final static BasicDataSource SOURCE = new BasicDataSource();
     private static final IHall INSTANCE = new DbHall();
-    public static final Logger LOG = LogManager.getLogger(DbHall.class.getName());
+    private static final Logger LOG = LogManager.getLogger(DbHall.class.getName());
 
 
     private DbHall() {
@@ -43,6 +41,7 @@ public class DbHall implements IHall<Seat, Account> {
         return INSTANCE;
     }
 
+    @Override
     public List<Seat> getAll() {
         List<Seat> result = new ArrayList<>();
         String select = "select h.id, h.row, h.number, h.booked, h.price from hall as h order by id;";
@@ -64,8 +63,9 @@ public class DbHall implements IHall<Seat, Account> {
         return result;
     }
 
+    @Override
     public Seat reserve(Seat seat) {
-        String update = String.format("update hall set booked = true where id = %d", seat.getId());
+        String update = String.format("update hall set booked = true where id = %d;", seat.getId());
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
             st.execute(update);
         } catch (SQLException e) {
@@ -74,8 +74,9 @@ public class DbHall implements IHall<Seat, Account> {
         return seat;
     }
 
+    @Override
     public Seat cancelReservation(Seat seat) {
-        String update = String.format("update hall set booked = false where id = %d", seat.getId());
+        String update = String.format("update hall set booked = false where id = %d;", seat.getId());
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
             st.execute(update);
         } catch (SQLException e) {
@@ -84,6 +85,7 @@ public class DbHall implements IHall<Seat, Account> {
         return seat;
     }
 
+    @Override
     public Seat getSeat(Seat seat) {
         String select = String.format("select h.id, h.row, h.number, h.price, h.booked, h.id_account from hall as h where h.id = %d;", seat.getId());
         Seat result = null;
@@ -98,6 +100,7 @@ public class DbHall implements IHall<Seat, Account> {
                 result = (Seat) Service.getInstance().createSeat(id, row, number);
                 result.setPrice(price);
                 result.setBooked(booked);
+                result.setAccountId(accountId);
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -106,8 +109,108 @@ public class DbHall implements IHall<Seat, Account> {
     }
 
     @Override
-    public Account buy(Account account) {
-        return null;
+    public Account getAccount(Account account) {
+        String select = String.format("select a.id, a.name, a.phone from accounts as a where a.phone = '%s';", account.getPhone());
+        Account result = null;
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                String phone = rs.getString(3);
+                account.setName(name);
+                account.setPhone(phone);
+                account.setId(id);
+                result = account;
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
+    }
+
+    @Override
+    public Account bindBuy(Account account) {
+        Account result;
+        String update = String.format("update hall set id_account = %s where id = %s;", account.getId(), account.getSeatId());
+        Connection con = null;
+        try {
+            con = SOURCE.getConnection();
+            con.setAutoCommit(false);
+            try (Statement st = con.createStatement()) {
+                st.execute(update);
+            }
+            con.commit();
+            LOG.info(String.format("bindBuy account %s ticket %s;", account.getPhone(), account.getSeatId()));
+            result = account;
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            result = null;
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Account createBuy(Account account) {
+        Account result;
+        String insert = "insert into accounts (name, phone) values (?, ?);";
+        Connection con = null;
+        try {
+            con = SOURCE.getConnection();
+            con.setAutoCommit(false);
+            int id;
+            try (PreparedStatement ps = con.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, account.getName());
+                ps.setString(2, account.getPhone());
+                ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                if (!rs.next()) {
+                    throw new NoSuchElementException();
+                }
+                id = rs.getInt(1);
+                account.setId(id);
+            }
+            String update = String.format("update hall set id_account = %d where id = %s;", id, account.getSeatId());
+            try (Statement st = con.createStatement()) {
+                st.execute(update);
+            }
+            con.commit();
+            LOG.info(String.format("createBuy account %s ticket %s", account.getPhone(), account.getSeatId()));
+            result = account;
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            result = null;
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        }
+        return result;
     }
 
 }

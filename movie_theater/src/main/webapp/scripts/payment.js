@@ -25,6 +25,8 @@ function buy() {
         alert("please enter correct name");
     } else if (!validPhone(userPhone)) {
         alert("please enter correct phone");
+    } else if (!userCheck(userName, userPhone)) {
+        alert("!!!!");
     } else {
         var account = {"name": userName, "phone": userPhone, "seatId": seatId};
         $.ajax({
@@ -49,4 +51,23 @@ function validName(name) {
 function validPhone(phone) {
     var regExp =  /^(7){1}(9){1}(\d){9}$/;
     return regExp.test(phone);
+}
+
+function userCheck(userName, userPhone) {
+    console.log("in check");
+    var result = false;
+    $.ajax({
+        method : "post",
+        url :  "../check",
+        data : {name:userName, phone: userPhone},
+        dataType : "text",
+        success : function (data) {
+           if (data != null && data.toString() == "success") {
+                   result = true;
+           }
+           console.log(data);
+        }
+    });
+    console.log(result);
+    return result;
 }

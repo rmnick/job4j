@@ -20,6 +20,14 @@
         <servlet-name>Payment</servlet-name>
         <url-pattern>/payment</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Check</servlet-name>
+        <servlet-class>ru.job4j.controller.CheckServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Check</servlet-name>
+        <url-pattern>/check</url-pattern>
+    </servlet-mapping>
     <listener>
         <listener-class>ru.job4j.controller.MySessionListener</listener-class>
     </listener>
