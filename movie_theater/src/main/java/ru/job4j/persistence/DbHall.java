@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import ru.job4j.service.Account;
+import ru.job4j.service.MyException;
 import ru.job4j.service.Seat;
 import ru.job4j.service.Service;
 
@@ -41,6 +42,10 @@ public class DbHall implements IHall<Seat, Account> {
         return INSTANCE;
     }
 
+    /**
+     * return all seats from DB
+     * @return List<Seat>
+     */
     @Override
     public List<Seat> getAll() {
         List<Seat> result = new ArrayList<>();
@@ -63,6 +68,11 @@ public class DbHall implements IHall<Seat, Account> {
         return result;
     }
 
+    /**
+     * seat reservation for the time of purchase
+     * @param seat Seat
+     * @return Seat
+     */
     @Override
     public Seat reserve(Seat seat) {
         String update = String.format("update hall set booked = true where id = %d;", seat.getId());
@@ -74,6 +84,11 @@ public class DbHall implements IHall<Seat, Account> {
         return seat;
     }
 
+    /**
+     * canceling reservation if session time's out
+     * @param seat Seat
+     * @return Seat
+     */
     @Override
     public Seat cancelReservation(Seat seat) {
         String update = String.format("update hall set booked = false where id = %d;", seat.getId());
@@ -85,6 +100,11 @@ public class DbHall implements IHall<Seat, Account> {
         return seat;
     }
 
+    /**
+     * return Seat from DB, find by seat id
+     * @param seat Seat
+     * @return Seat
+     */
     @Override
     public Seat getSeat(Seat seat) {
         String select = String.format("select h.id, h.row, h.number, h.price, h.booked, h.id_account from hall as h where h.id = %d;", seat.getId());
@@ -108,6 +128,11 @@ public class DbHall implements IHall<Seat, Account> {
         return result;
     }
 
+    /**
+     * find and return account from DB, find by phone
+     * @param account Account
+     * @return Account
+     */
     @Override
     public Account getAccount(Account account) {
         String select = String.format("select a.id, a.name, a.phone from accounts as a where a.phone = '%s';", account.getPhone());
@@ -128,6 +153,11 @@ public class DbHall implements IHall<Seat, Account> {
         return result;
     }
 
+    /**
+     * buy ticket if account is already exist, bind seat to account
+     * @param account Account
+     * @return Account
+     */
     @Override
     public Account bindBuy(Account account) {
         Account result;
@@ -164,6 +194,11 @@ public class DbHall implements IHall<Seat, Account> {
         return result;
     }
 
+    /**
+     * buy ticket if account doesn't exist, create account, bind seat to account
+     * @param account Account
+     * @return Account
+     */
     @Override
     public Account createBuy(Account account) {
         Account result;
@@ -212,5 +247,4 @@ public class DbHall implements IHall<Seat, Account> {
         }
         return result;
     }
-
 }

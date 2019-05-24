@@ -1,3 +1,4 @@
+var success = "success";
 
 $(function getSeat() {
     $.ajax({
@@ -26,7 +27,7 @@ function buy() {
     } else if (!validPhone(userPhone)) {
         alert("please enter correct phone");
     } else if (!userCheck(userName, userPhone)) {
-        alert("!!!!");
+        alert("the phone number is already registered in another name");
     } else {
         var account = {"name": userName, "phone": userPhone, "seatId": seatId};
         $.ajax({
@@ -56,18 +57,20 @@ function validPhone(phone) {
 function userCheck(userName, userPhone) {
     console.log("in check");
     var result = false;
+    var msg;
     $.ajax({
         method : "post",
         url :  "../check",
         data : {name:userName, phone: userPhone},
         dataType : "text",
+        async : false,
         success : function (data) {
-           if (data != null && data.toString() == "success") {
-                   result = true;
-           }
-           console.log(data);
+           msg = data;
         }
     });
-    console.log(result);
+    console.log(msg);
+    if (msg == success) {
+        result = true;
+    }
     return result;
 }

@@ -38,6 +38,20 @@ public class Service implements IService<Seat, Account> {
         return hall.getSeat(seat);
     }
 
+    /**
+     * return account from DB
+     * @param account Account
+     * @return Account
+     */
+    public Account getAccount(Account account) {
+        return hall.getAccount(account);
+    }
+
+    /**
+     * buy ticket according account and seat id
+     * @param account Account
+     * @return Account
+     */
     @Override
     public Account buy(Account account) {
         Account result;
