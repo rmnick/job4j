@@ -22,7 +22,7 @@ function buy() {
     var userName = $('#username').val();
     var userPhone = $('#phone').val();
     var seatId = $("h3").attr("id");
-    if (!validName(userName)) {
+    if (!validName(userName.split(" "))) {
         alert("please enter correct name");
     } else if (!validPhone(userPhone)) {
         alert("please enter correct phone");
@@ -46,7 +46,14 @@ function buy() {
 
 function validName(name) {
     var regExp =  /^[A-Z]{1}[a-z]{0,15}$/;
-    return regExp.test(name);
+    var result = true;
+    for (var index in name) {
+        if (!regExp.test(name[index])) {
+            result = false;
+            break;
+        }
+    }
+    return result && name.length == 3;
 }
 
 function validPhone(phone) {

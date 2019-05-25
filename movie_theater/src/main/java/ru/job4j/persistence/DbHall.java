@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-public class DbHall implements IHall<Seat, Account> {
+public class DbHall implements IHall<Seat, Account>, AutoCloseable {
     private final static BasicDataSource SOURCE = new BasicDataSource();
     private static final IHall INSTANCE = new DbHall();
     private static final Logger LOG = LogManager.getLogger(DbHall.class.getName());
@@ -246,5 +246,29 @@ public class DbHall implements IHall<Seat, Account> {
             }
         }
         return result;
+    }
+
+    /**
+     * canceling all reservation(if it's not purchased) when DB close
+     */
+    public void cancelAll() {
+        String update = "update hall set booked = false where id_account is null;";
+        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
+            st.execute(update);
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            cancelAll();
+            if (SOURCE != null) {
+                SOURCE.close();
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 }

@@ -26,6 +26,5 @@ public class MySessionListener implements HttpSessionListener {
         if (service.getSeat(seat).getAccountId() == 0) {
             service.cancelReservation(seat);
         }
-
     }
 }

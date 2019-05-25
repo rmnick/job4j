@@ -23,21 +23,38 @@ public class PaymentServlet extends HttpServlet {
     private static final String FAIL = "something went wrong, please try again";
     private static final String SUCCESS = "thank you for your purchase";
 
+    /**
+     * send information about chosen seat
+     * @param req HttpRequest
+     * @param resp HttpResponse
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Seat seat = service.createSeat(0, 0, 0);
-        HttpSession session = req.getSession(false);
-        if (session.getAttribute("id") != null) {
-            String id = req.getSession(false).getAttribute("id").toString();
-            seat = service.getSeat(service.createSeat(Integer.valueOf(id), 0, 0));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Seat seat = service.createSeat(0, 0, 0);
+            HttpSession session = req.getSession(false);
+            if (session.getAttribute("id") != null) {
+                String id = req.getSession(false).getAttribute("id").toString();
+                seat = service.getSeat(service.createSeat(Integer.valueOf(id), 0, 0));
+            }
+            resp.setContentType("text/json");
+            PrintWriter pw = resp.getWriter();
+            mapper.writeValue(pw, seat);
+            LOG.info("send json seat");
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
         }
-        resp.setContentType("text/json");
-        PrintWriter pw = resp.getWriter();
-        mapper.writeValue(pw, seat);
-        LOG.info("send json seat");
     }
 
+    /**
+     * buy ticket (chosen seat)
+     * send to browser result operation
+     * @param req HttpRequest
+     * @param resp HttpResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
