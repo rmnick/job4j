@@ -50,6 +50,30 @@ public class Account {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
+        Account account = (Account) o;
+        return this.name.equals(account.getName())
+                && this.phone.equals(account.getPhone())
+                && this.id.equals(account.getId())
+                && this.seatId.equals(account.getSeatId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = result * 31 + name.hashCode();
+        result = result * 31 + phone.hashCode();
+        result = result * 31 + id.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringJoiner sj = new StringJoiner(", ", "{", "}");
         sj.add(name);
