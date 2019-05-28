@@ -26,9 +26,9 @@ public class CheckServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         String result = FAIL;
         try {
-            Account account = new Account(req.getParameter("name"), req.getParameter("phone"), "0");
+            Account account = new Account(req.getParameter("name"), req.getParameter("phone"));
             account = service.getAccount(account);
-            if (account == null || account.getName() == req.getParameter("name")) {
+            if (account == null || account.getName().equals(req.getParameter("name"))) {
                 result = SUCCESS;
             }
             PrintWriter pw = resp.getWriter();

@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 public class PaymentServlet extends HttpServlet {
     public static final Logger LOG = LogManager.getLogger(PaymentServlet.class.getName());
     private final IService<Seat, Account> service = Service.getInstance();
+    private static final String TIME_IS_UP = "sorry your time's up";
     private static final String FAIL = "something went wrong, please try again";
     private static final String SUCCESS = "thank you for your purchase";
 
@@ -36,6 +37,7 @@ public class PaymentServlet extends HttpServlet {
             HttpSession session = req.getSession(false);
             if (session.getAttribute("id") != null) {
                 String id = req.getSession(false).getAttribute("id").toString();
+                System.out.println("session id from servlet payment " + id);
                 seat = service.getSeat(service.createSeat(Integer.valueOf(id), 0, 0));
             }
             resp.setContentType("text/json");
@@ -56,23 +58,32 @@ public class PaymentServlet extends HttpServlet {
      * @throws IOException
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        ObjectMapper mapper = new ObjectMapper();
-        BufferedReader reader = req.getReader();
-        PrintWriter writer = resp.getWriter();
-        String json = reader.readLine();
-        Account account = mapper.readValue(json, Account.class);
-        account = service.buy(account);
-        if (account == null) {
-            writer.append(FAIL);
-        } else {
-            writer.append(SUCCESS);
-        }
-        reader.close();
-        writer.flush();
-        if (session != null) {
-            session.invalidate();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            HttpSession session = req.getSession(false);
+            ObjectMapper mapper = new ObjectMapper();
+            BufferedReader reader = req.getReader();
+            PrintWriter writer = resp.getWriter();
+            String json = reader.readLine();
+            if (req.getSession(false) != null && req.getSession(false).getAttribute("id") != null) {
+                String seatId = req.getSession(false).getAttribute("id").toString();
+                Account account = mapper.readValue(json, Account.class);
+                account = service.buy(account, service.createSeat(Integer.valueOf(seatId), 0, 0));
+                if (account == null) {
+                    writer.append(FAIL);
+                } else {
+                    writer.append(SUCCESS);
+                }
+            } else {
+                writer.append(TIME_IS_UP);
+            }
+            reader.close();
+            writer.flush();
+            if (session != null) {
+                session.invalidate();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 }

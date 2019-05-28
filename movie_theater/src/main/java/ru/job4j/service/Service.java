@@ -79,12 +79,12 @@ public class Service implements IService<Seat, Account> {
      * @return Account
      */
     @Override
-    public Account buy(Account account) {
+    public Account buy(Account account, Seat seat) {
         Account result;
         if (hall.getAccount(account) == null) {
-            result = hall.createBuy(account);
+            result = hall.createBuy(account, seat);
         } else {
-            result = hall.bindBuy(account);
+            result = hall.bindBuy(account, seat);
         }
         return result;
     }

@@ -29,7 +29,7 @@ function buy() {
     } else if (!userCheck(userName, userPhone)) {
         alert("the phone number is already registered in another name");
     } else {
-        var account = {"name": userName, "phone": userPhone, "seatId": seatId};
+        var account = {"name": userName, "phone": userPhone};
         $.ajax({
             method : "post",
             url :  "../payment",
@@ -75,7 +75,6 @@ function userCheck(userName, userPhone) {
            msg = data;
         }
     });
-    console.log(msg);
     if (msg == success) {
         result = true;
     }

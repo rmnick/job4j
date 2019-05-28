@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-public class DbHall implements IHall<Seat, Account>, AutoCloseable {
+public class DbHall implements IHall<Seat, Account> {
     private final static BasicDataSource SOURCE = new BasicDataSource();
     private static final IHall INSTANCE = new DbHall();
     private static final Logger LOG = LogManager.getLogger(DbHall.class.getName());
@@ -70,18 +70,57 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
 
     /**
      * seat reservation for the time of purchase
+     * using "select for update"
      * @param seat Seat
      * @return Seat
      */
     @Override
     public Seat reserve(Seat seat) {
+        String selectForUpdate = String.format("select h.id, h.row, h.number, h.price, h.booked, h.id_account from hall as h where h.id = %d and h.booked = false for update;", seat.getId());
         String update = String.format("update hall set booked = true where id = %d;", seat.getId());
-        try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
-            st.execute(update);
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+        Connection con = null;
+        Seat result = null;
+        try {
+            con = SOURCE.getConnection();
+            con.setAutoCommit(false);
+            try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(selectForUpdate)) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    int row = rs.getInt(2);
+                    int number = rs.getInt(3);
+                    int price = rs.getInt(4);
+                    boolean booked = rs.getBoolean(5);
+                    int accountId = rs.getInt(6);
+                    result = (Seat) Service.getInstance().createSeat(id, number, row);
+                    result.setPrice(price);
+                    result.setBooked(booked);
+                    result.setAccountId(accountId);
+                    st.execute(update);
+                    con.commit();
+                    result.setBooked(true);
+                    LOG.info(String.format("reserve place with id %d", id));
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            result = null;
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
-        return seat;
+        return result;
     }
 
     /**
@@ -117,7 +156,7 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
                 int price = rs.getInt(4);
                 boolean booked = rs.getBoolean(5);
                 int accountId = rs.getInt(6);
-                result = (Seat) Service.getInstance().createSeat(id, row, number);
+                result = (Seat) Service.getInstance().createSeat(id, number, row);
                 result.setPrice(price);
                 result.setBooked(booked);
                 result.setAccountId(accountId);
@@ -159,9 +198,9 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
      * @return Account
      */
     @Override
-    public Account bindBuy(Account account) {
+    public Account bindBuy(Account account, Seat seat) {
         Account result;
-        String update = String.format("update hall set id_account = %s where id = %s;", account.getId(), account.getSeatId());
+        String update = String.format("update hall set id_account = %s where id = %s and id_account is null;", account.getId(), seat.getId());
         Connection con = null;
         try {
             con = SOURCE.getConnection();
@@ -170,7 +209,7 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
                 st.execute(update);
             }
             con.commit();
-            LOG.info(String.format("bindBuy account %s ticket %s;", account.getPhone(), account.getSeatId()));
+            LOG.info(String.format("bindBuy account %s ticket %s;", account.getPhone(), seat.getId()));
             result = account;
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
@@ -200,7 +239,7 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
      * @return Account
      */
     @Override
-    public Account createBuy(Account account) {
+    public Account createBuy(Account account, Seat seat) {
         Account result;
         String insert = "insert into accounts (name, phone) values (?, ?);";
         Connection con = null;
@@ -219,12 +258,12 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
                 id = rs.getInt(1);
                 account.setId(id);
             }
-            String update = String.format("update hall set id_account = %d where id = %s;", id, account.getSeatId());
+            String update = String.format("update hall set id_account = %d where id = %s and id_account is null;", id, seat.getId());
             try (Statement st = con.createStatement()) {
                 st.execute(update);
             }
             con.commit();
-            LOG.info(String.format("createBuy account %s ticket %s", account.getPhone(), account.getSeatId()));
+            LOG.info(String.format("createBuy account %s ticket %s", account.getPhone(), seat.getId()));
             result = account;
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
@@ -255,6 +294,7 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
         String update = "update hall set booked = false where id_account is null;";
         try (Connection con = SOURCE.getConnection(); Statement st = con.createStatement()) {
             st.execute(update);
+            LOG.info("canceling all items");
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
@@ -263,6 +303,7 @@ public class DbHall implements IHall<Seat, Account>, AutoCloseable {
     @Override
     public void close() {
         try {
+            LOG.info("in close method");
             cancelAll();
             if (SOURCE != null) {
                 SOURCE.close();

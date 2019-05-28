@@ -53,13 +53,10 @@ public class HallServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        Seat seat = service.getSeat(service.createSeat(Integer.valueOf(req.getParameter("id")), 0, 0));
+        Seat seat = service.reserve(service.createSeat(Integer.valueOf(req.getParameter("id")), 0, 0));
         HttpSession session = req.getSession();
-        synchronized (RESERVED) {
-            if (!service.getSeat(seat).isBooked()) {
-                session.setAttribute("id", req.getParameter("id"));
-                service.reserve(seat);
-            }
+        if (seat != null) {
+            session.setAttribute("id", String.valueOf(seat.getId()));
         }
     }
 }
