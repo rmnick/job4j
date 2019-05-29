@@ -68,6 +68,7 @@
         <module>chapter_011</module>
         <module>chapter_010</module>
         <module>tic_tac_toe</module>
+        <module>movie_theater</module>
     </modules>
 	 
 	<build>
