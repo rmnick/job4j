@@ -1,5 +1,6 @@
-
-$(document).ready(function () {
+$(loadHall());
+window.setInterval(loadHall, 30000);
+function loadHall() {
     $.ajax({
         type : "GET",
         url : "./seats",
@@ -28,7 +29,7 @@ $(document).ready(function () {
             });
         }
     });
-});
+}
 
 function checkChoose(input) {
     var result = true;

@@ -31,6 +31,10 @@ public class HallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
+            HttpSession session = req.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
             ObjectMapper mapper = new ObjectMapper();
             Map<Integer, List<Seat>> hall = service.getAll();
 //            List<Seat> seats = hall.values().stream().flatMap(x -> x.stream()).collect(Collectors.toList());
