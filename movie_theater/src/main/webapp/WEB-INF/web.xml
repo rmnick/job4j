@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+<servlet>
+    <servlet-name>Hall</servlet-name>
+    <servlet-class>ru.job4j.controller.HallServlet</servlet-class>
+</servlet>
+    <servlet-mapping>
+        <servlet-name>Hall</servlet-name>
+        <url-pattern>/seats</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Payment</servlet-name>
+        <servlet-class>ru.job4j.controller.PaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Payment</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Check</servlet-name>
+        <servlet-class>ru.job4j.controller.CheckServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Check</servlet-name>
+        <url-pattern>/check</url-pattern>
+    </servlet-mapping>
+    <listener>
+        <listener-class>ru.job4j.controller.MySessionListener</listener-class>
+    </listener>
+    <session-config>
+        <session-timeout>1</session-timeout>
+    </session-config>
+</web-app>
+
+
