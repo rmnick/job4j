@@ -1,83 +1,79 @@
 [![Build Status](https://travis-ci.org/rmnick/job4j.svg?branch=master)](https://travis-ci.org/rmnick/job4j)
 [![codecov](https://codecov.io/gh/rmnick/job4j/branch/master/graph/badge.svg)](https://codecov.io/gh/rmnick/job4j)
 
-#job4j
+# job4j
  http://job4j.ru/
  It's my repository. I'm going to finish this course in 2 months... hell no
 
-chapter_001
+## chapter_001
 
-Базовый синтаксис:
-1. типы данных
-2. массивы
-3. циклы
-4. операторы ветвления
+Base syntax:
+1. data type
+2. arrays
+3. cycles(loops)
+4. statements
  
- chapter_002
+## chapter_002
  
- ООП:
- 1. классы и объекты
- 2. наследование
- 3. инкапсуляция
- 4. полиморфизм
- 5. абстракция
- 6. исключения
- 7. внутренние классы
- 8. паттерны(стратегия синглтон фабрика)
-
- chapter_003
+ OOP:
+ 1. class, object
+ 2. inheritance
+ 3. encapsulation
+ 4. polymorphism
+ 5. abstraction
+ 6. exception
+ 7. inner class
+ 8. patterns(strategy, singleton, fabric)
  
-Коллекции первый уровень(знакомство):
-1. фреймворк коллекций общее представление
-2. алгоритмы сортировок, поиска
+## chapter_003
+ 
+Collections(intro):
+1. Collections framework overview
+2. algorithms
 
-chapter_004
+## chapter_004
 
-Функциональное программирование:
-1. лямбда выражения
+Functional programming:
+1. Lambda expressions
 2. Stream API
 
-chapter_005
+## chapter_005
 
-Коллекции, глубокий уровень:
-1. разбор основных классов и создание самостоятельно аналогов(List, Set, Map)
-2. итераторы
-3. Деревья
-4. обобщения(generics)
+Collections framework pro-level:
+1. creating custom classes(List, Set, Map)
+2. iterators
+3. Tree
+4. Generics
 
-chapter_006
+## chapter_006
 
-Многопоточность
-1. треды(потоки), создание, закрытие, приостановка
-2. безопасное использование(синхронизация, атомарные сущности, избежание локов и пр.)
-3. пулы тредов(сервисы, потребители и производители)
-4. потокобезопасные коллекции
+Concurrency, multi-threading
+1. threads (creating, closing, interrupting, sleeping) 
+2. safety(synchronized, atomic, volatile, race condition, lock etc)
+3. threadPool(executorService, producer and consumer)
+4. Concurrent collection
 
-chapter_007
+## chapter_007
 
-Ввод-вывод, сокеты
+Input-Output Java(IO, NIO), sockets
 
-chapter_008
-SQL, JDBC
+## chapter_008
 
-chapter_009
+SQL, JDBC, PostgreSQl
 
-Объектно ориентированный дизайн(S.O.L.I.D)
+## chapter_009
 
-chapter_010
+Object-oriented design (S.O.L.I.D)
 
-тут будет модель памяти и уборщик мусора
+## chapter_010
 
-chapter_011
+GC
 
-Сервлеты 
+## chapter_011
 
-....
+Web container TomCat, Servlets(HTTP, filters, session...), JSP, JS, JQuery, Bootstrap, AJAX 
 
-git practice 29.03.19
-
+## git practice 
 
 
-"Объединение зафиксированных изменений"
-create new branch "task_125026"
 
