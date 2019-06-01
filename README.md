@@ -2,10 +2,12 @@
 [![codecov](https://codecov.io/gh/rmnick/job4j/branch/master/graph/badge.svg)](https://codecov.io/gh/rmnick/job4j)
 
 # job4j
- http://job4j.ru/
- It's my repository. I'm going to finish this course in 2 months... hell no
 
-## chapter_001
+ http://job4j.ru/
+ 
+ It's my repository. I'm going to finish this course in 6 months... hell no
+
+## [chapter_001](https://github.com/rmnick/job4j/tree/master/chapter_001)
 
 Base syntax:
 1. data type
@@ -13,7 +15,7 @@ Base syntax:
 3. cycles(loops)
 4. statements
  
-## chapter_002
+## [chapter_002](https://github.com/rmnick/job4j/tree/master/chapter_002)
  
  OOP:
  1. class, object
@@ -26,21 +28,21 @@ Base syntax:
  8. patterns(strategy, singleton, fabric)
  
  #### additional modules on the subject:
- - ##### chess
+ - ##### [chess](https://github.com/rmnick/job4j/tree/master/chess)
  
-## chapter_003
+## [chapter_003](https://github.com/rmnick/job4j/tree/master/chapter_003)
  
 Collections(intro):
 1. Collections framework overview
 2. algorithms
 
-## chapter_004
+## [chapter_004](https://github.com/rmnick/job4j/tree/master/chapter_004)
 
 Functional programming:
 1. Lambda expressions
 2. Stream API
 
-## chapter_005
+## [chapter_005](https://github.com/rmnick/job4j/tree/master/chapter_005)
 
 Collections framework pro-level:
 1. creating custom classes(List, Set, Map)
@@ -48,7 +50,7 @@ Collections framework pro-level:
 3. Tree
 4. Generics
 
-## chapter_006
+## [chapter_006](https://github.com/rmnick/job4j/tree/master/chapter_006)
 
 Concurrency, multi-threading
 1. threads (creating, closing, interrupting, sleeping) 
@@ -57,17 +59,17 @@ Concurrency, multi-threading
 4. Concurrent collection
 
 #### additional modules on the subject:
-- ##### pingpong
-- ##### bomberman
+- ##### [pingpong](https://github.com/rmnick/job4j/tree/master/pingpong)
+- ##### [bomberman](https://github.com/rmnick/job4j/tree/master/bomberman)
 
-## chapter_007
+## [chapter_007](https://github.com/rmnick/job4j/tree/master/chapter_007)
 
 Input-Output Java(IO, NIO), sockets
 
 #### additional modules on the subject:
-- ##### wise_oracle
-- ##### searcher_light
-- ##### searcher
+- ##### [wise_oracle](https://github.com/rmnick/job4j/tree/master/wise_oracle)
+- ##### [searcher_light](https://github.com/rmnick/job4j/tree/master/searcher_light)
+- ##### [searcher](https://github.com/rmnick/job4j/tree/master/searcher)
 
 ## [chapter_008](https://github.com/rmnick/job4j/tree/master/chapter_008)
 
@@ -84,18 +86,18 @@ SQL, XML, JDBC, PostgreSQl
 Object-oriented design (S.O.L.I.D)
 
 #### additional modules on the subject:
-- ##### tic_tac_toe
+- ##### [tic_tac_toe](https://github.com/rmnick/job4j/tree/master/tic_tac_toe)
 
-## chapter_010
+## [chapter_010](https://github.com/rmnick/job4j/tree/master/chapter_010)
 
 GC
 
-## chapter_011
+## [chapter_011](https://github.com/rmnick/job4j/tree/master/chapter_011)
 
 Web container TomCat, Servlets(HTTP, filters, session...), JSP, JS, JQuery, Bootstrap, AJAX 
 
 #### additional modules on the subject:
-- ##### movie_theater
+- ##### [movie_theater](https://github.com/rmnick/job4j/tree/master/movie_theater)
 
 
 ## git practice 
