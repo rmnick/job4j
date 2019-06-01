@@ -25,6 +25,9 @@ Base syntax:
  7. inner class
  8. patterns(strategy, singleton, fabric)
  
+ #### additional modules on the subject:
+ - ##### chess
+ 
 ## chapter_003
  
 Collections(intro):
@@ -53,17 +56,35 @@ Concurrency, multi-threading
 3. threadPool(executorService, producer and consumer)
 4. Concurrent collection
 
+#### additional modules on the subject:
+- ##### pingpong
+- ##### bomberman
+
 ## chapter_007
 
 Input-Output Java(IO, NIO), sockets
 
+#### additional modules on the subject:
+- ##### wise_oracle
+- ##### searcher_light
+- ##### searcher
+
 ## chapter_008
 
-SQL, JDBC, PostgreSQl
+SQL, XML, JDBC, PostgreSQl
+
+#### additional modules on the subject:
+- ##### tracker
+- ##### sql
+- ##### magnit
+- ##### job_parser
 
 ## chapter_009
 
 Object-oriented design (S.O.L.I.D)
+
+#### additional modules on the subject:
+- ##### tic_tac_toe
 
 ## chapter_010
 
@@ -72,6 +93,10 @@ GC
 ## chapter_011
 
 Web container TomCat, Servlets(HTTP, filters, session...), JSP, JS, JQuery, Bootstrap, AJAX 
+
+#### additional modules on the subject:
+- ##### movie_theater
+
 
 ## git practice 
 
