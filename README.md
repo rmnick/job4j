@@ -69,17 +69,17 @@ Input-Output Java(IO, NIO), sockets
 - ##### searcher_light
 - ##### searcher
 
-## chapter_008
+## [chapter_008](https://github.com/rmnick/job4j/tree/master/chapter_008)
 
 SQL, XML, JDBC, PostgreSQl
 
 #### additional modules on the subject:
-- ##### tracker
-- ##### sql
-- ##### magnit
-- ##### job_parser
+- ##### [tracker](https://github.com/rmnick/job4j/tree/master/tracker)
+- ##### [sql](https://github.com/rmnick/job4j/tree/master/sql)
+- ##### [magnit](https://github.com/rmnick/job4j/tree/master/magnit)
+- ##### [job_parser](https://github.com/rmnick/job4j/tree/master/job_parser)
 
-## chapter_009
+## [chapter_009](https://github.com/rmnick/job4j/tree/master/chapter_009)
 
 Object-oriented design (S.O.L.I.D)
 
