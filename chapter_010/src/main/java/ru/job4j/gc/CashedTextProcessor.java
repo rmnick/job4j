@@ -13,7 +13,7 @@ import java.util.StringJoiner;
 public class CashedTextProcessor {
     public static final String PATH = CashedTextProcessor.class.getResource("/textfiles/").getPath();
     public static final String EXIT = "exit";
-    public final Map<String, String> cash = new HashMap<>();
+    public final Map<String, SoftReference<String>> cash = new HashMap<>();
 
     public static void main(String[] args) {
         CashedTextProcessor pr = new CashedTextProcessor();
@@ -31,20 +31,19 @@ public class CashedTextProcessor {
                 File file = new File(String.format("%s%s.txt", PATH, answer));
                 if (file.exists() && !file.isDirectory()) {
                     //check reference existing
-                    result = pr.cash.get(answer);
-                    if (result == null) {
+                    if (pr.cash.get(answer) == null) {
                         System.out.println("from file: ");
                         StringJoiner sj = new StringJoiner(System.lineSeparator());
                         Files.lines(Paths.get(String.format("%s%s.txt", PATH, answer))).forEach(line -> sj.add(line));
                         String value = sj.toString();
                         //create softReference as value for map
                         SoftReference<String> sr = new SoftReference<>(value);
-                        pr.cash.put(answer, sr.get());
+                        pr.cash.put(answer, sr);
                         result = value;
                     } else {
                         System.out.println("from cash: ");
                         //get strong reference from soft
-                        result = pr.cash.get(answer);
+                        result = pr.cash.get(answer).get();
                     }
                     System.out.println(result);
                 } else {
