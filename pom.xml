@@ -102,7 +102,7 @@
            <plugin>
                <groupId>org.jacoco</groupId>
                <artifactId>jacoco-maven-plugin</artifactId>
-               <version>0.7.9</version>
+               <version>0.8.2</version>
                <executions>
                    <execution>
                        <goals>
@@ -150,6 +150,12 @@
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
             <scope>pageParser</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>12.0.1</version>
         </dependency>
     </dependencies>
 </project>
